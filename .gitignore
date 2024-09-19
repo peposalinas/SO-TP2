@@ -1,0 +1,10 @@
+.git
+.vscode
+.DS_STORE
+.idea
+compile.sh
+init.sh
+clean_objects.sh
+run.sh
+*.o
+*.bin
