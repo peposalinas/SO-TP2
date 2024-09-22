@@ -3,7 +3,7 @@
 struct Block
 {
     size_t size;
-    void *next;
+    struct Block *next;
 };
 
 struct MemoryManagerCDT
@@ -20,18 +20,23 @@ MemoryManagerADT createMemoryManager(void *const memoryForMemoryManager, void *c
     mm->mem_start = managedMemory;
     mm->total_size = TOTAL_MEM;
     mm->free_blocks = (struct Block *)managedMemory + sizeof(struct MemoryManagerCDT); // + sizeof(struct MemoryManagerCDT) ?
-    mm->free_blocks->size = BLOCK_SIZE;
-    mm->free_blocks->next = mm->free_blocks + sizeof(struct Block) + BLOCK_SIZE; //+1?
+    mm->free_blocks->next = NULL;                                                      // mm->free_blocks + sizeof(struct Block) + BLOCK_SIZE; //+1?
 }
 
 void *allocMemory(MemoryManagerADT memoryManager, size_t memoryToAllocate)
 {
-    struct Block *blockToGive = memoryManager->free_blocks;
-    memoryManager->free_blocks = (struct Block *)memoryManager->free_blocks->next; // + sizeof(struct MemoryManagerCDT) ?
+    struct Block *currentBlock = memoryManager->free_blocks;
+
+    // if (memoryManager->free_blocks->next != NULL)
+    //     memoryManager->free_blocks = (struct Block *)memoryManager->free_blocks->next;
+    // else
+    //     memoryManager->free_blocks += sizeof(struct Block) + BLOCK_SIZE;
     memoryManager->free_blocks->size = BLOCK_SIZE;
+
     memoryManager->free_blocks->next = memoryManager->free_blocks + sizeof(struct Block) + BLOCK_SIZE; //+1?
 
-    return (void *)blockToGive + sizeof(struct Block);
+    // return (void *)(blockToGive + sizeof(struct Block));
+    return NULL;
 }
 
 void freeMemory(MemoryManagerADT mm, void *ptr)
@@ -44,3 +49,9 @@ void freeMemory(MemoryManagerADT mm, void *ptr)
     returnedBlock->next = mm->free_blocks;
     mm->free_blocks = returnedBlock;
 }
+
+//@TODO: Insertar ordenado en lista
+
+//@TODO: Iterar por lista ordenada
+
+//@TODO:
