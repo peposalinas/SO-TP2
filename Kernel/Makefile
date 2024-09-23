@@ -24,7 +24,12 @@ $(KERNEL): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM)
 $(LOADEROBJECT):
 	$(ASM) $(ASMFLAGS) $(LOADERSRC) -o $(LOADEROBJECT)
 
+docker-test:
+	#!/bin/bash
+	docker start TP2
+	docker exec -it TP2 bash -c "cd /root/SO-TP2/Kernel && gcc test_util.c MemoryManagerCDT.c test_mm.c -o testeo"
+
 clean:
 	rm -rf asm/*.o *.o *.bin
 
-.PHONY: all clean
+.PHONY: all clean docker-test

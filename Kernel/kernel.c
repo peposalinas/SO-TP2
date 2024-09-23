@@ -7,6 +7,7 @@
 #include <videoDriver.h>
 #include <idtLoader.h>
 #include <time.h>
+#include "./include/test_util.h"
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -82,9 +83,9 @@ void *initializeKernelBinary()
 
 int main()
 {
-
 	load_idt();
 	setTimerTick(1000);
-	((EntryPoint)sampleCodeModuleAddress)();
+	//((EntryPoint)sampleCodeModuleAddress)();
+	testMM("1");
 	return 0;
 }
