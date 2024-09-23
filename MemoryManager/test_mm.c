@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include "MemoryManagerADT.h"
 
+#define MEMTOALLOC 128 * 1024 * 1024
+#define MEMFORMM 128
 #define MAX_BLOCKS 128
 
 typedef struct MM_rq
@@ -27,8 +29,8 @@ void *memset(void *destiation, int32_t c, uint64_t length)
 
 uint64_t main(uint64_t argc, char *argv[])
 {
-    void *dir1 = malloc(1000);
-    void *dir2 = malloc(1000);
+    void *dir1 = malloc(MEMFORMM);
+    void *dir2 = malloc(MEMTOALLOC);
 
     printf("dir1:%p dir2:%p\n", dir1, dir2);
     MemoryManagerADT mm = createMemoryManager(dir1, dir2);
@@ -49,7 +51,7 @@ uint64_t main(uint64_t argc, char *argv[])
     int j = 0;
     while (1)
     {
-        printf("\n---------------------------------------%d--------------------------------------\n", j++);
+        printf("\n-----------------------------------Loop N°%d-----------------------------------\n", j++);
         rq = 0;
         total = 0;
 
@@ -62,7 +64,7 @@ uint64_t main(uint64_t argc, char *argv[])
                 total += mm_rqs[rq].size;
                 rq++;
             }
-            printf("request:%d total:%d address:%p\n", rq, total, mm_rqs[rq - 1].address);
+            printf("Request:%d Total:%d Address:%p\n", rq, total, mm_rqs[rq - 1].address);
         }
 
         printf("\n");
@@ -75,7 +77,7 @@ uint64_t main(uint64_t argc, char *argv[])
             {
                 memset(mm_rqs[i].address, i, mm_rqs[i].size);
             }
-            printf("i:%d adress:%p size:%d\n", i, mm_rqs[i].address, mm_rqs[i].size);
+            printf("Set:%d Size:%d Address:%p\n", i, mm_rqs[i].size, mm_rqs[i].address);
         }
 
         printf("\n");
@@ -83,7 +85,7 @@ uint64_t main(uint64_t argc, char *argv[])
         // Check
         for (i = 0; i < rq; i++)
         {
-            printf("i:%d adress:%p size:%d\n", i, mm_rqs[i].address, mm_rqs[i].size);
+            printf("Check:%d Size:%d Address:%p\n", i, mm_rqs[i].size, mm_rqs[i].address);
             if (mm_rqs[i].address)
                 if (!memcheck(mm_rqs[i].address, i, mm_rqs[i].size))
                 {
@@ -92,10 +94,13 @@ uint64_t main(uint64_t argc, char *argv[])
                 }
         }
 
+        printf("\n");
+
         // Free
         for (i = 0; i < rq; i++)
             if (mm_rqs[i].address)
             {
+                printf("Freed:%d Size:%d Address:%p\n", i, mm_rqs[i].size, mm_rqs[i].address);
                 freeMemory(mm, mm_rqs[i].address);
             }
     }

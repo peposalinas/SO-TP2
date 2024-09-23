@@ -6,6 +6,9 @@
 #include "./include/MemoryManagerADT.h"
 
 #define MAX_BLOCKS 128
+#define TICKS 100
+
+static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base);
 
 // Random
 static uint32_t m_z = 362436069;
@@ -111,35 +114,14 @@ uint64_t testMM(char *c)
         return -1;
     }
 
-    int j = 80, x = 0, y = 0, ene = 0;
-    int color1 = 0x00FFFFFF;
-    int color2 = 0x00000000;
+    int j = 0;
 
+    ncClear();
     while (1)
     {
-        // Testeo
-        if (ene == 7000)
-        {
-            x = 0;
-            y = 0;
-            ene = 0;
-            color1 -= 0x000004FF;
-            color2 += 0x000004FF;
-        }
-
-        printChar(j, x, y, color1, color2);
-
-        x += 1;
-        if (ene % 128 == 0)
-        {
-            x = 0;
-            y += 1;
-        }
-
-        ene += 1;
-        rq = 0;
-        total = 0;
-        // Fintesteo
+        j++;
+        timer_wait(TICKS);
+        ncPrintDec(j);
 
         while (rq < MAX_BLOCKS && total < max_memory)
         {
@@ -179,4 +161,36 @@ uint64_t testMM(char *c)
                 freeMemory(mm, mm_rqs[i].address);
             }
     }
+}
+
+static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base)
+{
+    char *p = buffer;
+    char *p1, *p2;
+    uint32_t digits = 0;
+
+    // Calculate characters for each digit
+    do
+    {
+        uint32_t remainder = value % base;
+        *p++ = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
+        digits++;
+    } while (value /= base);
+
+    // Terminate string in buffer.
+    *p = 0;
+
+    // Reverse string in buffer.
+    p1 = buffer;
+    p2 = p - 1;
+    while (p1 < p2)
+    {
+        char tmp = *p1;
+        *p1 = *p2;
+        *p2 = tmp;
+        p1++;
+        p2--;
+    }
+
+    return digits;
 }

@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <naiveConsole.h>
 
 uint32_t GetUint();
 uint32_t Gs(uint32_t max);

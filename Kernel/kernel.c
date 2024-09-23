@@ -86,6 +86,6 @@ int main()
 	load_idt();
 	setTimerTick(1000);
 	//((EntryPoint)sampleCodeModuleAddress)();
-	testMM("1");
+	testMM("100000");
 	return 0;
 }
