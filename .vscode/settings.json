@@ -2,6 +2,10 @@
   "files.associations": {
     "memorymanageradt.h": "c",
     "stdlib.h": "c",
-    "cutest.h": "c"
+    "cutest.h": "c",
+    "syscall.h": "c",
+    "string.h": "c",
+    "stdint.h": "c",
+    "test_util.h": "c"
   }
 }

@@ -1,11 +1,12 @@
-#ifndef MEMORY_MANAGER_ADT_ H
+#ifndef MEMORY_MANAGER_ADT_H
 #define MEMORY_MANAGER_ADT_H
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "syscall.h"
+#include "test_util.h"
 
-#define TOTAL_MEM 1000 // @TODO: Cambiar magic number
-#define BLOCK_SIZE 8   // @TODO: Decidir magic number (tamaño 1 bloque)
+#define TOTAL_MEM 1024 * 1024 * 128 // @TODO: Cambiar magic number
 
 typedef struct MemoryManagerCDT *MemoryManagerADT;
 
@@ -13,8 +14,8 @@ MemoryManagerADT createMemoryManager(void *const memoryForMemoryManager, void *c
 
 void *allocMemory(MemoryManagerADT memoryManager, size_t memoryToAllocate);
 
-void *freeMemory(); // Que le paso a este
+void freeMemory(MemoryManagerADT mm, void *ptr); // Que le paso a este
 
-char *memStatus(); // Char pointer?
+// char *memStatus(); // Char pointer?
 
 #endif
