@@ -6,7 +6,8 @@
 #include "syscall.h"
 #include "test_util.h"
 
-#define TOTAL_MEM 1024 * 1024 * 128 // @TODO: Cambiar magic number
+#define KB *1024 * 1024
+#define TOTAL_MEM 128 KB // @TODO: Cambiar magic number
 
 typedef struct MemoryManagerCDT *MemoryManagerADT;
 
@@ -14,7 +15,7 @@ MemoryManagerADT createMemoryManager(void *const memoryForMemoryManager, void *c
 
 void *allocMemory(MemoryManagerADT memoryManager, size_t memoryToAllocate);
 
-void freeMemory(MemoryManagerADT mm, void *ptr); // Que le paso a este
+void freeMemory(MemoryManagerADT mm, void *ptr);
 
 // char *memStatus(); // Char pointer?
 
