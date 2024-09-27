@@ -5,6 +5,9 @@
          Sacar continuous_free_space
 */
 
+static void declareFreeMem(MemoryManagerADT mm, size_t size);
+static void declareAllocMemory(MemoryManagerADT mm, size_t size);
+
 struct Block
 {
     size_t size;
@@ -72,8 +75,7 @@ void *allocMemory(MemoryManagerADT memoryManager, size_t memoryToAllocate)
                 previousBlock->next = currentBlock->next; // Enlaza el bloque anterior al siguiente
             }
 
-            memoryManager->free_mem = memoryManager->free_mem - currentBlock->size - sizeof(struct Block);
-            memoryManager->occupied_mem = memoryManager->occupied_mem + currentBlock->size + sizeof(struct Block);
+            declareAllocMemory(memoryManager, currentBlock->size);
 
             return (void *)((char *)currentBlock + sizeof(struct Block));
         }
@@ -97,6 +99,7 @@ void freeMemory(MemoryManagerADT mm, void *ptr)
     {
         toAdd->next = mm->free_blocks;
         mm->free_blocks = toAdd;
+        declareFreeMem(mm, toAdd->size);
     }
     else
     {
@@ -108,6 +111,8 @@ void freeMemory(MemoryManagerADT mm, void *ptr)
             previous = current;
             current = current->next;
         }
+
+        declareFreeMem(mm, toAdd->size);
 
         if (previous)
         {
@@ -128,15 +133,24 @@ void freeMemory(MemoryManagerADT mm, void *ptr)
             toAdd->next = current->next;
         }
     }
-
-    mm->free_mem = mm->free_mem + toAdd->size + sizeof(struct Block);
-    mm->occupied_mem = mm->occupied_mem - toAdd->size - sizeof(struct Block);
 }
 
 char *memStatus(MemoryManagerADT mm)
 {
     // Uso espacio después de todos los bloques
     char *mem_status = (char *)(mm->mem_start + TOTAL_MEM);
-    sprintf(mem_status, "Free memory: %d bytes\nOccupied memory: %d bytes\n", mm->free_mem, mm->occupied_mem);
+    sprintf(mem_status, "Free memory: %ld bytes\nOccupied memory: %ld bytes", mm->free_mem, mm->occupied_mem);
     return mem_status;
+}
+
+static void declareFreeMem(MemoryManagerADT mm, size_t size)
+{
+    mm->free_mem = mm->free_mem + size + sizeof(struct Block);
+    mm->occupied_mem = mm->occupied_mem - size - sizeof(struct Block);
+}
+
+static void declareAllocMemory(MemoryManagerADT mm, size_t size)
+{
+    mm->free_mem = mm->free_mem - size - sizeof(struct Block);
+    mm->occupied_mem = mm->occupied_mem + size + sizeof(struct Block);
 }
