@@ -1,6 +1,10 @@
 #include "MemoryManagerADT.h"
 #include "test_util.h"
 
+/*@TODO: Chequear casteos a (char*)
+         Sacar continuous_free_space
+*/
+
 struct Block
 {
     size_t size;
@@ -13,9 +17,14 @@ struct MemoryManagerCDT
     void *mem_start;
     size_t total_size;
     size_t continuous_free_space;
+    size_t free_mem;
+    size_t occupied_mem;
 };
 
-//@TODO: modularizar líneas 20-22 / 29-31 (asignado de variables de struct Block)
+/*
+@TODO: Modularizar líneas 20-22 / 29-31 (asignado de variables de struct Block)
+       Hace falta managedmemory? O usamos solo 1 parámetro?
+*/
 MemoryManagerADT createMemoryManager(void *const memoryForMemoryManager, void *const managedMemory) //@TODO: Chequear si le tenemos que pasar parámetro size
 {
     MemoryManagerADT mm = (MemoryManagerADT)memoryForMemoryManager;
@@ -24,6 +33,8 @@ MemoryManagerADT createMemoryManager(void *const memoryForMemoryManager, void *c
     mm->free_blocks = (struct Block *)mm->mem_start;
     mm->free_blocks->size = TOTAL_MEM;
     mm->free_blocks->next = NULL;
+    mm->free_mem = TOTAL_MEM;
+    mm->occupied_mem = 0;
     return mm;
 }
 
@@ -60,6 +71,9 @@ void *allocMemory(MemoryManagerADT memoryManager, size_t memoryToAllocate)
             {
                 previousBlock->next = currentBlock->next; // Enlaza el bloque anterior al siguiente
             }
+
+            memoryManager->free_mem = memoryManager->free_mem - currentBlock->size - sizeof(struct Block);
+            memoryManager->occupied_mem = memoryManager->occupied_mem + currentBlock->size + sizeof(struct Block);
 
             return (void *)((char *)currentBlock + sizeof(struct Block));
         }
@@ -114,4 +128,15 @@ void freeMemory(MemoryManagerADT mm, void *ptr)
             toAdd->next = current->next;
         }
     }
+
+    mm->free_mem = mm->free_mem + toAdd->size + sizeof(struct Block);
+    mm->occupied_mem = mm->occupied_mem - toAdd->size - sizeof(struct Block);
+}
+
+char *memStatus(MemoryManagerADT mm)
+{
+    // Uso espacio después de todos los bloques
+    char *mem_status = (char *)(mm->mem_start + TOTAL_MEM);
+    sprintf(mem_status, "Free memory: %d bytes\nOccupied memory: %d bytes\n", mm->free_mem, mm->occupied_mem);
+    return mem_status;
 }

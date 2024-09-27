@@ -7,7 +7,8 @@
 #include "test_util.h"
 
 #define KB *1024 * 1024
-#define TOTAL_MEM 128 KB // @TODO: Cambiar magic number
+#define AMOUNT_OF_KB 128
+#define TOTAL_MEM AMOUNT_OF_KB KB // @TODO: Cambiar magic number
 
 typedef struct MemoryManagerCDT *MemoryManagerADT;
 
@@ -17,6 +18,10 @@ void *allocMemory(MemoryManagerADT memoryManager, size_t memoryToAllocate);
 
 void freeMemory(MemoryManagerADT mm, void *ptr);
 
-// char *memStatus(); // Char pointer?
+/*
+    @Returns: el estado actual de la memoria manejada por el Memory Manager
+    (memoria ocupada y libre)
+*/
+char *memStatus(MemoryManagerADT mm); //@TODO: Chequear qué retornamos
 
 #endif
