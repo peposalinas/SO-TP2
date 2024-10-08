@@ -81,11 +81,13 @@ void *initializeKernelBinary()
 	return getStackBase();
 }
 
+// Por ahora no se si no llega a bootear bien o si el scheduler devuelve cualquier cosa
+
 int main()
 {
 	load_idt();
 	setTimerTick(1000);
 	//((EntryPoint)sampleCodeModuleAddress)();
-	testMM("100000");
+	// testMM("100000");
 	return 0;
 }

@@ -6,6 +6,9 @@
     "syscall.h": "c",
     "string.h": "c",
     "stdint.h": "c",
-    "test_util.h": "c"
+    "test_util.h": "c",
+    "interrupts.h": "c",
+    "processes.h": "c",
+    "idtloader.h": "c"
   }
 }
