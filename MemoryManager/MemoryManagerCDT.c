@@ -8,6 +8,8 @@
 static void declareFreeMem(MemoryManagerADT mm, size_t size);
 static void declareAllocMemory(MemoryManagerADT mm, size_t size);
 
+static MemoryManagerADT kernel_mm;
+
 struct Block
 {
     size_t size;
@@ -38,7 +40,102 @@ MemoryManagerADT createMemoryManager(void *const memoryForMemoryManager, void *c
     mm->free_blocks->next = NULL;
     mm->free_mem = TOTAL_MEM;
     mm->occupied_mem = 0;
+    kernel_mm = mm;
     return mm;
+}
+
+void *allocMemoryKernel(size_t memoryToAllocate)
+{
+    if (memoryToAllocate == 0)
+    {
+        return NULL;
+    }
+
+    struct Block *currentBlock = kernel_mm->free_blocks;
+    struct Block *previousBlock = NULL;
+
+    while (currentBlock != NULL)
+    {
+        // Verificar si hay suficiente espacio en el bloque actual
+        if (currentBlock->size >= memoryToAllocate + sizeof(struct Block))
+        {
+            // Crear un nuevo bloque
+            struct Block *newBlock = (struct Block *)((char *)currentBlock + sizeof(struct Block) + memoryToAllocate);
+            newBlock->size = currentBlock->size - sizeof(struct Block) - memoryToAllocate;
+            newBlock->next = currentBlock->next;
+
+            // Actualizar el bloque actual
+            currentBlock->size = memoryToAllocate;
+            currentBlock->next = newBlock;
+
+            // Si no hay bloque anterior, estamos en el primer bloque
+            if (previousBlock == NULL)
+            {
+                kernel_mm->free_blocks = currentBlock->next; // Actualiza la cabeza de la lista
+            }
+            else
+            {
+                previousBlock->next = currentBlock->next; // Enlaza el bloque anterior al siguiente
+            }
+
+            declareAllocMemory(kernel_mm, currentBlock->size);
+
+            return (void *)((char *)currentBlock + sizeof(struct Block));
+        }
+
+        previousBlock = currentBlock;
+        currentBlock = currentBlock->next;
+    }
+
+    return NULL;
+}
+
+void freeMemoryKernel(void *ptr)
+{
+    if (!ptr || (ptr < kernel_mm->mem_start || ptr >= (kernel_mm->mem_start + kernel_mm->total_size)))
+    {
+        return;
+    }
+
+    struct Block *toAdd = (struct Block *)((char *)ptr - sizeof(struct Block));
+    if (toAdd < kernel_mm->free_blocks)
+    {
+        toAdd->next = kernel_mm->free_blocks;
+        kernel_mm->free_blocks = toAdd;
+        declareFreeMem(kernel_mm, toAdd->size);
+    }
+    else
+    {
+        struct Block *current = kernel_mm->free_blocks;
+        struct Block *previous = NULL;
+
+        while (current != NULL && current < toAdd)
+        {
+            previous = current;
+            current = current->next;
+        }
+
+        declareFreeMem(kernel_mm, toAdd->size);
+
+        if (previous)
+        {
+            previous->next = toAdd;
+        }
+        toAdd->next = current;
+
+        if (previous && (char *)previous + sizeof(struct Block) + previous->size == (char *)toAdd)
+        {
+            previous->size += sizeof(struct Block) + toAdd->size;
+            previous->next = toAdd->next;
+            toAdd = previous;
+        }
+
+        if (current && (char *)toAdd + sizeof(struct Block) + toAdd->size == (char *)current)
+        {
+            toAdd->size += sizeof(struct Block) + current->size;
+            toAdd->next = current->next;
+        }
+    }
 }
 
 void *allocMemory(MemoryManagerADT memoryManager, size_t memoryToAllocate)
