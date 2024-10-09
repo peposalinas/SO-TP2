@@ -49,11 +49,14 @@ uint64_t main(uint64_t argc, char *argv[])
         return -1;
     }
     int j = 0;
+
     while (1)
     {
         printf("\n-----------------------------------Loop N°%d-----------------------------------\n", j++);
         rq = 0;
         total = 0;
+
+        printf("%s\n", memStatus(mm));
 
         while (rq < MAX_BLOCKS && total < max_memory)
         {
@@ -65,6 +68,7 @@ uint64_t main(uint64_t argc, char *argv[])
                 rq++;
             }
             printf("Request:%d Total:%d Address:%p\n", rq, total, mm_rqs[rq - 1].address);
+            printf("%s\n", memStatus(mm));
         }
 
         printf("\n");
@@ -102,6 +106,8 @@ uint64_t main(uint64_t argc, char *argv[])
             {
                 printf("Freed:%d Size:%d Address:%p\n", i, mm_rqs[i].size, mm_rqs[i].address);
                 freeMemory(mm, mm_rqs[i].address);
+                printf("%s\n", memStatus(mm));
             }
     }
+    return 0;
 }
