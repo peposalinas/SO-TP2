@@ -6,6 +6,8 @@
     "syscall.h": "c",
     "string.h": "c",
     "stdint.h": "c",
-    "test_util.h": "c"
+    "test_util.h": "c",
+    "processes.h": "c",
+    "naiveconsole.h": "c"
   }
 }

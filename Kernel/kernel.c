@@ -8,6 +8,8 @@
 #include <idtLoader.h>
 #include <time.h>
 #include "./include/test_util.h"
+#include <interrupts.h>
+#include <scheduler.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -83,9 +85,14 @@ void *initializeKernelBinary()
 
 int main()
 {
+	_cli();
+	void *dir1 = (void *)0x600000;
+	void *dir2 = (void *)0x700000;
+	createMemoryManager(dir1, dir2);
 	load_idt();
-	setTimerTick(1000);
+	schedulerInit();
+	// setTimerTick(1000);
 	//((EntryPoint)sampleCodeModuleAddress)();
-	testMM("100000");
+	// testMM("100000");
 	return 0;
 }
