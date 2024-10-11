@@ -7,10 +7,6 @@
 #define STACK_SIZE 4 * 1024
 #define PRIORITY_AMOUNT 4
 
-#define CHECK_NOT_NULL(ptr) \
-    if (ptr == NULL)        \
-        return 0;
-
 typedef enum
 {
     RUNNING,

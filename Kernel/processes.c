@@ -26,7 +26,6 @@ typedef struct stack_frame
     uint64_t rflags;
     uint64_t rsp;
     uint64_t ss;
-
 } stack_frame;
 
 int createProcess(process memoryForProcess, char *process_name, int process_pid, int process_priority, void (*entry_point)(void), int argc, char *argv[]) // veamos si el entry_point puede recibir argumentos
@@ -36,10 +35,19 @@ int createProcess(process memoryForProcess, char *process_name, int process_pid,
     memoryForProcess->state = READY; // Arranca en ready??
 
     memoryForProcess->stack = (uint64_t)(allocMemoryKernel(STACK_SIZE) + STACK_SIZE) & ~ALIGN;
-    stack_frame stackFrame = memoryForProcess->stack - sizeof(stack_frame);
-    CHECK_NOT_NULL(memoryForProcess->stack)
-    memoryForProcess->stack_pointer = memoryForProcess->stack;
-    memoryForProcess->name = process_name; //??
+    stack_frame *stackFrame = memoryForProcess->stack - sizeof(stack_frame);
+    // Llenar el stack
+
+    stackFrame->ss = 0x0;
+    stackFrame->rsp = memoryForProcess->stack; // Chequeado
+    stackFrame->rflags = 0x202;
+    stackFrame->cs = 0x8;
+    stackFrame->rip = entry_point;
+    stackFrame->rdi = argv;
+    stackFrame->rsi = argc;
+
+    memoryForProcess->stack_pointer = stackFrame; // memoryForProcess->stack; // Cambiar por =stackFrame?
+    memoryForProcess->name = process_name;        //??
     memoryForProcess->priority = process_priority;
 
     // Hacer funcion idle aca?

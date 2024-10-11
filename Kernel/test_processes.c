@@ -1,12 +1,13 @@
-#include <stdio.h>
 #include "syscall.h"
-#include "include/test_util.h"
+#include "./include/test_util.h"
+#include "./include/processes.h"
+#include "./include/scheduler.h"
 
 enum State
 {
-    RUNNING,
-    BLOCKED,
-    KILLED
+    RUNNING_T,
+    BLOCKED_T,
+    KILLED_T
 };
 
 typedef struct P_rq
@@ -37,16 +38,16 @@ int64_t test_processes(uint64_t argc, char *argv[])
         // Create max_processes processes
         for (rq = 0; rq < max_processes; rq++)
         {
-            p_rqs[rq].pid = my_create_process("endless_loop", 0, argvAux);
+            p_rqs[rq].pid = schedulerAddProcess("endless_loop", 4, endless_loop, 0, argvAux);
 
             if (p_rqs[rq].pid == -1)
             {
-                printf("test_processes: ERROR creating process\n");
+                ncPrint("test_processes: ERROR creating process\n");
                 return -1;
             }
             else
             {
-                p_rqs[rq].state = RUNNING;
+                p_rqs[rq].state = RUNNING_T;
                 alive++;
             }
         }
@@ -62,27 +63,27 @@ int64_t test_processes(uint64_t argc, char *argv[])
                 switch (action)
                 {
                 case 0:
-                    if (p_rqs[rq].state == RUNNING || p_rqs[rq].state == BLOCKED)
+                    if (p_rqs[rq].state == RUNNING_T || p_rqs[rq].state == BLOCKED_T)
                     {
-                        if (my_kill(p_rqs[rq].pid) == -1)
+                        if (schedulerKillProcess(p_rqs[rq].pid) == -1)
                         {
-                            printf("test_processes: ERROR killing process\n");
+                            ncPrint("test_processes: ERROR killing process\n");
                             return -1;
                         }
-                        p_rqs[rq].state = KILLED;
+                        p_rqs[rq].state = KILLED_T;
                         alive--;
                     }
                     break;
 
                 case 1:
-                    if (p_rqs[rq].state == RUNNING)
+                    if (p_rqs[rq].state == RUNNING_T)
                     {
-                        if (my_block(p_rqs[rq].pid) == -1)
+                        if (schedulerBlockProcess(p_rqs[rq].pid) == -1)
                         {
-                            printf("test_processes: ERROR blocking process\n");
+                            ncPrint("test_processes: ERROR blocking process\n");
                             return -1;
                         }
-                        p_rqs[rq].state = BLOCKED;
+                        p_rqs[rq].state = BLOCKED_T;
                     }
                     break;
                 }
@@ -90,14 +91,14 @@ int64_t test_processes(uint64_t argc, char *argv[])
 
             // Randomly unblocks processes
             for (rq = 0; rq < max_processes; rq++)
-                if (p_rqs[rq].state == BLOCKED && GetUniform(100) % 2)
+                if (p_rqs[rq].state == BLOCKED_T && GetUniform(100) % 2)
                 {
-                    if (my_unblock(p_rqs[rq].pid) == -1)
+                    if (schedulerUnblockProcess(p_rqs[rq].pid) == -1)
                     {
-                        printf("test_processes: ERROR unblocking process\n");
+                        ncPrint("test_processes: ERROR unblocking process\n");
                         return -1;
                     }
-                    p_rqs[rq].state = RUNNING;
+                    p_rqs[rq].state = RUNNING_T;
                 }
         }
     }

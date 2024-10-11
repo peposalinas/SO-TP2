@@ -23,6 +23,9 @@ static const uint64_t PageSize = 0x1000;
 static void *const sampleCodeModuleAddress = (void *)0x400000;
 static void *const sampleDataModuleAddress = (void *)0x500000;
 
+int idle(int argc, char *argv[]);
+int64_t test_processes(uint64_t argc, char *argv[]);
+
 typedef int (*EntryPoint)();
 
 void clearBSS(void *bssAddress, uint64_t bssSize)
@@ -90,9 +93,24 @@ int main()
 	void *dir2 = (void *)0x700000;
 	createMemoryManager(dir1, dir2);
 	load_idt();
+	setTimerTick(1000);
 	schedulerInit();
-	// setTimerTick(1000);
+	char *argvAux[2] = {"idle", NULL};
+	schedulerAddProcess("idle", 0, idle, 1, argvAux);
+	_sti();
+	char *argvTestProc[1] = {"100", NULL};
+	test_processes(1, argvTestProc);
+
 	//((EntryPoint)sampleCodeModuleAddress)();
 	// testMM("100000");
+	return 0;
+}
+
+int idle(int argc, char *argv[])
+{
+	while (1)
+	{
+		idle_asm();
+	}
 	return 0;
 }

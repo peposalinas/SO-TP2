@@ -8,6 +8,10 @@
     "stdint.h": "c",
     "test_util.h": "c",
     "processes.h": "c",
-    "naiveconsole.h": "c"
+    "naiveconsole.h": "c",
+    "listadtuser.h": "c",
+    "scheduler.h": "c",
+    "listadt.h": "c",
+    "stdio.h": "c"
   }
 }

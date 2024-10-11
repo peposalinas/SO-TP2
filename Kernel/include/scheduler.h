@@ -11,14 +11,19 @@
 
 typedef struct schedulerCDT *schedulerADT;
 
-/*Por ahora no hace nada*/
+/*Inicializa los recursos necesarios para la creación del scheduler*/
 void schedulerInit();
 
 /**
  * Añade un proceso con la prioridad más alta
- * @param proc puntero a un struct process_t
+ * @param process_name nombre del proceso
+ * @param process_priority prioridad del proceso
+ * @param entry_point función a ejecutar, del tipo void (*e_p)(void)
+ * @param argc cantidad de args
+ * @param argv arreglo de args
+ * @return pid del proceso agregado
  */
-void schedulerAddProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
+int schedulerAddProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
 
 /**
  * Decide qué proceso correr
@@ -30,8 +35,22 @@ uint32_t *schedulerRun(uint32_t *current_stack_pointer);
 /**
  * Quita del scheduler el proceso de pid indicado (no libera sus recursos)
  * @param pid pid del proceso a matar
- * @return 0 si no pudo matarlo, 1 caso contrario
+ * @return pid del proceso si tiene éxito, -1 si no
  */
 int schedulerKillProcess(uint32_t pid);
+
+/**
+ * Bloquea un proceso
+ * @param pid pid del proceso a bloquear
+ * @return pid del proceso si tiene éxito, -1 si no
+ */
+int schedulerBlockProcess(uint32_t pid);
+
+/**
+ * Bloquea un proceso
+ * @param pid pid del proceso a bloquear
+ * @return pid del proceso si tiene éxito, -1 si no
+ */
+int schedulerUnblockProcess(uint32_t pid);
 
 #endif

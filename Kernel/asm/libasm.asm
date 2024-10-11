@@ -7,6 +7,7 @@ GLOBAL inb
 GLOBAL getCurrentTime
 
 GLOBAL setTimerTick
+GLOBAL idle_asm
 
 section .text
 
@@ -222,6 +223,14 @@ setTimerTick:
 
 	mov rsp, rbp
 	pop rbp
+    ret
+
+;===============================================================================
+; idle_asm - gasta tiempo
+;===============================================================================
+idle_asm:
+    sti
+    hlt
     ret
 
 section .bss
