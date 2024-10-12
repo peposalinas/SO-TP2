@@ -94,23 +94,21 @@ int main()
 	void *dir1 = (void *)0x600000;
 	void *dir2 = (void *)0x700000;
 	createMemoryManager(dir1, dir2);
-	setTimerTick(1);
+	setTimerTick(1000);
 	schedulerInit();
 	char *argvIdle[2] = {"idle", NULL};
 	char *argvTest[2] = {"10", NULL};
 	char *argvTestPrio[1] = {NULL};
 	schedulerAddProcess("idle", 0, idle, 1, argvIdle);
-	// schedulerAddProcess("test", 4, test_processes, 1, argvTest);
+	// schedulerAddProcess("test", 0, test_processes, 1, argvTest);
 	uint64_t test_pid = schedulerAddProcess("test", 4, test_prio, 0, argvTestPrio);
-	wait_pid(test_pid);
+	//  wait_pid(test_pid);
 	load_idt();
 	_sti();
 
 	while (1)
 	{
 	};
-	// char *argvTestProc[1] = {"100", NULL};
-	// test_processes(1, argvTestProc);
 
 	//((EntryPoint)sampleCodeModuleAddress)();
 	// testMM("100000");
@@ -119,6 +117,11 @@ int main()
 
 int idle(int argc, char *argv[])
 {
+	int i = 0;
 	while (1)
-		;
+	{
+		// i++;
+		// ncPrint("  Idle running");
+		// ncPrintDec(i);
+	};
 }

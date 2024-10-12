@@ -86,7 +86,7 @@ void bussy_wait(uint64_t wait_time)
         _nop();
     }
     _sti();
-    ncPrint("Waiting");
+    // ncPrint("Waiting");
     return;
 }
 
@@ -102,7 +102,8 @@ void endless_loop_print(uint64_t wait)
 
     while (1)
     {
-        bussy_wait(wait);
+        // bussy_wait(wait);
+        ncPrintDec(pid);
     }
 }
 

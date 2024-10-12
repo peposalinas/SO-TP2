@@ -22,7 +22,7 @@ int test1(int argc, char *argv[])
 {
     while (1)
     {
-        ncPrint("123");
+        ncPrint("111");
     }
     return 0;
 }
@@ -31,10 +31,9 @@ int test2(int argc, char *argv[])
 {
     while (1)
     {
-        ncPrint("231");
-
-        return 0;
+        ncPrint("222");
     }
+    return 0;
 }
 
 int64_t test_processes(uint64_t argc, char *argv[])

@@ -130,7 +130,8 @@ uint32_t *schedulerRun(uint32_t *current_stack_pointer)
     }
     if (toRun == NULL)
     {
-        ncPrint("No hay ningún proceso en el scheduler (??)");
+        ncPrint("No hay ningún proceso en el scheduler!!");
+        return current_stack_pointer;
     }
     scheduler_kernel->running_process_pid = toRun->pid;
     toRun->state = RUNNING;
@@ -201,16 +202,19 @@ void exitProcess(uint64_t returnVal)
     scheduler_kernel->priority[scheduler_kernel->processes[scheduler_kernel->running_process_pid]->priority]->ready_process_count--;
     if (scheduler_kernel->processes[scheduler_kernel->running_process_pid]->isBeingWaited == 0)
     {
-
+        ncPrint("I should enter here");
         schedulerKillProcess(scheduler_kernel->running_process_pid);
     }
+    ncPrint("I got before the tick");
+    while (1)
+        ;
     asm_timer_tick();
 }
 
 uint64_t wait_pid(uint64_t pid)
 {
 
-        if (checkPID(pid) == -1 || scheduler_kernel->processes[pid]->parent_pid != scheduler_kernel->running_process_pid)
+    if (checkPID(pid) == -1 || scheduler_kernel->processes[pid]->parent_pid != scheduler_kernel->running_process_pid)
     {
         return -1;
     }
