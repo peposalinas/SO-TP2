@@ -4,6 +4,11 @@
 #include "./include/test_util.h"
 #include "./include/syscalls.h"
 #include "./include/MemoryManagerADT.h"
+#include "./include/naiveConsole.h"
+#include "./include/scheduler.h"
+#include "./include/processes.h"
+#include "./include/lib.h"
+#include "./include/interrupts.h"
 
 #define MAX_BLOCKS 128
 #define TICKS 100
@@ -73,12 +78,16 @@ int64_t satoi(char *str)
     return res * sign;
 }
 
-// Dummies
-void bussy_wait(uint64_t n)
+void bussy_wait(uint64_t wait_time)
 {
-    uint64_t i;
-    for (i = 0; i < n; i++)
-        ;
+    _cli();
+    for (uint64_t i = 0; i < wait_time; i++)
+    {
+        _nop();
+    }
+    _sti();
+    ncPrint("Waiting");
+    return;
 }
 
 void endless_loop()
@@ -87,16 +96,15 @@ void endless_loop()
         ;
 }
 
-// void endless_loop_print(uint64_t wait)
-// {
-//     int64_t pid = my_getpid();
+void endless_loop_print(uint64_t wait)
+{
+    int64_t pid = getRunningPid();
 
-//     while (1)
-//     {
-//         printf("%d ", pid);
-//         bussy_wait(wait);
-//     }
-// }
+    while (1)
+    {
+        bussy_wait(wait);
+    }
+}
 
 uint64_t testMM(char *c)
 {

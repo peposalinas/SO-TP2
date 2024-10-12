@@ -66,7 +66,7 @@ void *removeElem(LinkedList *list, void *data, bool (*compare)(void *, void *))
     }
 
     if (temp == NULL)
-        return; // El elemento no fue encontrado
+        return NULL; // El elemento no fue encontrado
 
     if (prev == NULL)
     {

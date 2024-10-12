@@ -19,11 +19,14 @@ typedef struct process_t
 {
     uint64_t pid;
     process_state_t state;
-    uint32_t *stack;         // base stack pointer
-    uint32_t *stack_pointer; // stack pointer
+    uint32_t *stack;
+    uint32_t *stack_pointer;
     char **argv;
     char *name;
     int priority;
+    uint64_t parent_pid;
+    uint64_t return_value; // Como hago para que retorne un string o void*
+    int isBeingWaited;
 } process_t;
 
 typedef process_t *process;
@@ -36,7 +39,7 @@ typedef process_t *process;
  * @param argv argumentos de entry_point
  * @return pid del proceso si es exitoso, 0 caso contrario
  */
-int createProcess(process memoryForProcess, char *process_name, uint64_t process_pid, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
+int createProcess(process memoryForProcess, char *process_name, uint64_t process_pid, int process_priority, void (*entry_point)(void), int argc, char *argv[], uint64_t parent_pid);
 
 /**
  * Mata un proceso

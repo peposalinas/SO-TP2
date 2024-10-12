@@ -8,6 +8,7 @@ GLOBAL getCurrentTime
 
 GLOBAL setTimerTick
 GLOBAL idle_asm
+GLOBAL _nop
 
 section .text
 
@@ -232,6 +233,16 @@ idle_asm:
     sti
     hlt
     ret
+
+;===============================================================================
+; _nop- No hace nada
+;===============================================================================
+
+_nop:
+    nop
+    ret
+
+
 
 section .bss
 IRQ0_frequency:          resd 1          ; Actual frequency of PIT

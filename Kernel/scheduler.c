@@ -1,7 +1,4 @@
 #include "scheduler.h"
-#include "processes.h"
-#include "listADT.h"
-#include "./include/naiveConsole.h"
 
 #define QTY_PRIORITIES 5
 #define MAX_PROCESSES 100
@@ -20,7 +17,6 @@ typedef struct schedulerCDT
     process processes[MAX_PROCESSES];       // Inicializar en NULL? (checkPID)
     process_list *priority[QTY_PRIORITIES]; // Vector de listas de procesos
     uint64_t running_process_pid;
-    uint64_t pid;
 } schedulerCDT;
 
 schedulerADT scheduler_kernel;
@@ -47,7 +43,7 @@ static int checkPID(uint32_t pid)
 
 void schedulerInit()
 {
-    schedulerADT scheduler = (schedulerADT)SCHEDULER_ADDRESS;
+    schedulerADT scheduler = allocMemoryKernel(sizeof(schedulerCDT));
     for (int i = 0; i < MAX_PROCESSES; i++)
     {
         scheduler->processes[i] = NULL;
@@ -58,20 +54,31 @@ void schedulerInit()
         scheduler->priority[i]->processList = createLinkedList();
         scheduler->priority[i]->ready_process_count = 0;
     }
-    scheduler->pid = 0;
     scheduler_kernel = scheduler;
     uint32_t running_process_pid = 0;
     return;
 }
 
+int chooseNextPID()
+{
+    for (int i = 0; i < MAX_PROCESSES; i++)
+    {
+        if (scheduler_kernel->processes[i] == NULL || scheduler_kernel->processes[i]->state == TERMINATED)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 int schedulerAddProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[])
 {
     process newProcess = (process)allocMemoryKernel(sizeof(process_t));
-    createProcess(newProcess, process_name, scheduler_kernel->pid, process_priority, entry_point, argc, argv); // Esta bien el pasaje de argv y entrypoint??
-    scheduler_kernel->pid++;
-    insertLast(scheduler_kernel->priority[newProcess->priority]->processList, newProcess);
+    int next_pid = chooseNextPID();
+    createProcess(newProcess, process_name, next_pid, process_priority, entry_point, argc, argv, scheduler_kernel->running_process_pid); // Chequear  si esta bien lo del parent
     scheduler_kernel->priority[newProcess->priority]->ready_process_count++;
     scheduler_kernel->processes[newProcess->pid] = newProcess;
+    insertLast(scheduler_kernel->priority[newProcess->priority]->processList, newProcess);
     return newProcess->pid;
 }
 
@@ -121,16 +128,10 @@ uint32_t *schedulerRun(uint32_t *current_stack_pointer)
             }
         }
     }
-
     if (toRun == NULL)
     {
         ncPrint("No hay ningún proceso en el scheduler (??)");
     }
-
-    // ncPrint("I am runnin");
-    // ncNewline();
-    // ncPrint(toRun->name);
-
     scheduler_kernel->running_process_pid = toRun->pid;
     toRun->state = RUNNING;
     return toRun->stack_pointer;
@@ -142,30 +143,25 @@ int schedulerKillProcess(uint32_t pid)
     {
         return -1;
     }
-
-    // Saco al proceso de la lista
-    int prio = scheduler_kernel->processes[pid]->priority;
-    process compareProc = allocMemoryKernel(sizeof(process_t));
-    compareProc->pid = pid;
-    process toKill = removeElem(scheduler_kernel->priority[prio]->processList, compareProc, compareProcesses);
-    freeMemoryKernel(compareProc);
+    int priority = scheduler_kernel->processes[pid]->priority;
+    process toKill = scheduler_kernel->processes[pid];
+    if (removeElem(scheduler_kernel->priority[priority]->processList, toKill, compareProcesses) == NULL)
+    {
+        return -1;
+    }
     killProcess(toKill);
+    scheduler_kernel->processes[pid] = NULL;
     return pid;
 }
 
 int schedulerBlockProcess(uint32_t pid)
 {
-    ncPrintDec(timeBlocking);
-    timeBlocking++;
     if (checkPID(pid) == -1)
     {
-        ncPrintDec(timeBlocking);
-        ncPrintDec(pid);
-        while (1)
-            ;
         return -1;
     }
     scheduler_kernel->processes[pid]->state = BLOCKED;
+    scheduler_kernel->priority[scheduler_kernel->processes[pid]->priority]->ready_process_count--;
     return pid;
 }
 
@@ -176,10 +172,58 @@ int schedulerUnblockProcess(uint32_t pid)
         return -1;
     }
     scheduler_kernel->processes[pid]->state = READY;
+    scheduler_kernel->priority[scheduler_kernel->processes[pid]->priority]->ready_process_count++;
     return pid;
 }
 
-process getRunningProcess()
+uint64_t schedulerChangePriority(uint64_t pid, int priority)
 {
-    return scheduler_kernel->priority[0]->processList->head->data;
+    if (checkPID(pid) == -1 || priority < 0 || priority >= QTY_PRIORITIES || scheduler_kernel->processes[pid]->state == RUNNING) // VOS DECIS????
+    {
+        return -1;
+    }
+    process toChange = scheduler_kernel->processes[pid];
+    removeElem(scheduler_kernel->priority[toChange->priority]->processList, toChange, compareProcesses);
+    toChange->priority = priority;
+    insertLast(scheduler_kernel->priority[priority]->processList, toChange);
+    return pid;
+}
+
+uint64_t getRunningPid()
+{
+    return scheduler_kernel->running_process_pid;
+}
+
+void exitProcess(uint64_t returnVal)
+{
+    scheduler_kernel->processes[scheduler_kernel->running_process_pid]->state = TERMINATED;
+    scheduler_kernel->processes[scheduler_kernel->running_process_pid]->return_value = returnVal;
+    scheduler_kernel->priority[scheduler_kernel->processes[scheduler_kernel->running_process_pid]->priority]->ready_process_count--;
+    if (scheduler_kernel->processes[scheduler_kernel->running_process_pid]->isBeingWaited == 0)
+    {
+
+        schedulerKillProcess(scheduler_kernel->running_process_pid);
+    }
+    asm_timer_tick();
+}
+
+uint64_t wait_pid(uint64_t pid)
+{
+
+        if (checkPID(pid) == -1 || scheduler_kernel->processes[pid]->parent_pid != scheduler_kernel->running_process_pid)
+    {
+        return -1;
+    }
+    scheduler_kernel->processes[scheduler_kernel->running_process_pid]->isBeingWaited = 1;
+    while (scheduler_kernel->processes[pid]->state != TERMINATED)
+    {
+        _nop();
+    }
+    uint64_t return_value = scheduler_kernel->processes[pid]->return_value;
+    scheduler_kernel->processes[pid]->isBeingWaited = 0;
+    if (scheduler_kernel->processes[pid]->isBeingWaited == 0)
+    {
+        schedulerKillProcess(pid);
+    }
+    return return_value;
 }

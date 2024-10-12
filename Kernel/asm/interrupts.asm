@@ -17,6 +17,8 @@ GLOBAL _irq80Handler
 GLOBAL _exception0Handler
 GLOBAL _exception06Handler
 
+GLOBAL asm_timer_tick
+
 GLOBAL regs
 
 
@@ -210,6 +212,12 @@ haltcpu:
 	cli
 	hlt
 	ret
+
+asm_timer_tick:
+	mov rdi,0
+	int 80h
+	ret
+	
 
 
 

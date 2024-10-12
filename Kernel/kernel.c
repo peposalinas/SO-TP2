@@ -23,8 +23,9 @@ static const uint64_t PageSize = 0x1000;
 static void *const sampleCodeModuleAddress = (void *)0x400000;
 static void *const sampleDataModuleAddress = (void *)0x500000;
 
-int firstProc(int argc, char *argv[]);
+int idle(int argc, char *argv[]);
 int64_t test_processes(uint64_t argc, char *argv[]);
+void test_prio(uint64_t argc, char *argvTestPrio[]);
 
 typedef int (*EntryPoint)();
 
@@ -95,12 +96,16 @@ int main()
 	createMemoryManager(dir1, dir2);
 	setTimerTick(1);
 	schedulerInit();
-	char *argvAux[2] = {"idleVol2", NULL};
-	char *argvTest[2] = {"97", NULL};
-	schedulerAddProcess("firstProc", 0, firstProc, 1, argvAux);
-	schedulerAddProcess("test", 4, test_processes, 1, argvTest);
+	char *argvIdle[2] = {"idle", NULL};
+	char *argvTest[2] = {"10", NULL};
+	char *argvTestPrio[1] = {NULL};
+	schedulerAddProcess("idle", 0, idle, 1, argvIdle);
+	// schedulerAddProcess("test", 4, test_processes, 1, argvTest);
+	uint64_t test_pid = schedulerAddProcess("test", 4, test_prio, 0, argvTestPrio);
+	wait_pid(test_pid);
 	load_idt();
 	_sti();
+
 	while (1)
 	{
 	};
@@ -112,7 +117,7 @@ int main()
 	return 0;
 }
 
-int firstProc(int argc, char *argv[])
+int idle(int argc, char *argv[])
 {
 	while (1)
 		;

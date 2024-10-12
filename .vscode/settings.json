@@ -13,6 +13,7 @@
     "scheduler.h": "c",
     "listadt.h": "c",
     "stdio.h": "c",
-    "unistd.h": "c"
+    "unistd.h": "c",
+    "interrupts.h": "c"
   }
 }

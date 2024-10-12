@@ -18,6 +18,25 @@ typedef struct P_rq
     enum State state;
 } p_rq;
 
+int test1(int argc, char *argv[])
+{
+    while (1)
+    {
+        ncPrint("123");
+    }
+    return 0;
+}
+
+int test2(int argc, char *argv[])
+{
+    while (1)
+    {
+        ncPrint("231");
+
+        return 0;
+    }
+}
+
 int64_t test_processes(uint64_t argc, char *argv[])
 {
     uint8_t rq;
@@ -30,16 +49,24 @@ int64_t test_processes(uint64_t argc, char *argv[])
         return -1;
 
     if ((max_processes = satoi(argv[0])) <= 0)
+    {
         return -1;
+    }
 
     p_rq p_rqs[max_processes];
+    int i = 0;
     while (1)
     {
-
-        // Create max_processes processes
         for (rq = 0; rq < max_processes; rq++)
         {
-            p_rqs[rq].pid = schedulerAddProcess("endless_loop", 4, endless_loop, 0, argvAux);
+            if (rq % 2 == 0)
+            {
+                p_rqs[rq].pid = schedulerAddProcess("test1", 4, test1, 0, argvAux);
+            }
+            else
+            {
+                p_rqs[rq].pid = schedulerAddProcess("test2", 4, test2, 0, argvAux);
+            }
 
             if (p_rqs[rq].pid == -1)
             {
@@ -60,10 +87,6 @@ int64_t test_processes(uint64_t argc, char *argv[])
             for (rq = 0; rq < max_processes; rq++)
             {
                 action = GetUniform(100) % 2;
-                // ncPrint("Tasty");
-                // while (1)
-                // {
-                // };
 
                 switch (action)
                 {
@@ -108,6 +131,5 @@ int64_t test_processes(uint64_t argc, char *argv[])
                     p_rqs[rq].state = RUNNING_T;
                 }
         }
-        ncPrint("       Pase unblock");
     }
 }

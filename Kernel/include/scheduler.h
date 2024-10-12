@@ -1,11 +1,14 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include "processes.h"
 #include <stddef.h>
 #include "time.h"
 #include "MemoryManagerADT.h"
 #include "listADT.h"
+#include "processes.h"
+#include "lib.h"
+#include "naiveConsole.h"
+#include "interrupts.h"
 
 #define QUANTUM_IN_MS 20
 #define PRIORITY_AMOUNT 4
@@ -54,8 +57,12 @@ int schedulerBlockProcess(uint32_t pid);
  */
 int schedulerUnblockProcess(uint32_t pid);
 
-process getRunningProcess();
-
+uint64_t schedulerChangePriority(uint64_t pid, int priority);
 // process_list getRunningProcessList();
 
+uint64_t getRunningPid();
+
+void exitProcess(uint64_t returnVal);
+
+uint64_t wait_pid(uint64_t pid);
 #endif
