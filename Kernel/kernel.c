@@ -88,16 +88,28 @@ void *initializeKernelBinary()
 
 int main()
 {
+	ncClear();
 	_cli();
 	void *dir1 = (void *)0x600000;
 	void *dir2 = (void *)0x700000;
 	createMemoryManager(dir1, dir2);
-	load_idt();
 	setTimerTick(1000);
 	schedulerInit();
 	char *argvAux[2] = {"idle", NULL};
 	schedulerAddProcess("idle", 0, idle, 1, argvAux);
-	_sti();
+	load_idt();
+	// process_list firstList = getRunningProcessList();
+	process weHopeThisIsIdle = getRunningProcess();
+	if (weHopeThisIsIdle == NULL || weHopeThisIsIdle->name == NULL)
+	{
+		ncPrint("It's null dumbass");
+	}
+	// char *toPrint = weHopeThisIsIdle->name;
+
+	ncPrint(weHopeThisIsIdle->name);
+	while (1)
+		;
+	//_sti();
 	char *argvTestProc[1] = {"100", NULL};
 	test_processes(1, argvTestProc);
 

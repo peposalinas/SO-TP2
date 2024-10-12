@@ -19,8 +19,8 @@ typedef struct schedulerCDT
 {
     process processes[MAX_PROCESSES];       // Inicializar en NULL? (checkPID)
     process_list *priority[QTY_PRIORITIES]; // Vector de listas de procesos
-    uint32_t running_process_pid;
-    uint32_t pid;
+    uint64_t running_process_pid;
+    uint64_t pid;
 } schedulerCDT;
 
 schedulerADT scheduler_kernel;
@@ -156,4 +156,9 @@ int schedulerUnblockProcess(uint32_t pid)
     }
     scheduler_kernel->processes[pid]->state = READY;
     return pid;
+}
+
+process getRunningProcess()
+{
+    return scheduler_kernel->processes[scheduler_kernel->running_process_pid];
 }

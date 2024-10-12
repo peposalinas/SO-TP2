@@ -1,11 +1,13 @@
 #include <time.h>
 #include <lib.h>
 #include <interrupts.h>
+#include <naiveConsole.h>
 
 static unsigned long ticks = 0;
 
 void timer_handler()
 {
+	ncPrint("Tick puto");
 	ticks++;
 }
 

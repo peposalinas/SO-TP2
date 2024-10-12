@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include "time.h"
 #include "MemoryManagerADT.h"
+#include "listADT.h"
 
 #define QUANTUM_IN_MS 20
 #define PRIORITY_AMOUNT 4
@@ -52,5 +53,9 @@ int schedulerBlockProcess(uint32_t pid);
  * @return pid del proceso si tiene éxito, -1 si no
  */
 int schedulerUnblockProcess(uint32_t pid);
+
+process getRunningProcess();
+
+// process_list getRunningProcessList();
 
 #endif
