@@ -12,6 +12,7 @@
     "listadtuser.h": "c",
     "scheduler.h": "c",
     "listadt.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "unistd.h": "c"
   }
 }

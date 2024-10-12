@@ -23,7 +23,7 @@ static const uint64_t PageSize = 0x1000;
 static void *const sampleCodeModuleAddress = (void *)0x400000;
 static void *const sampleDataModuleAddress = (void *)0x500000;
 
-int idle(int argc, char *argv[]);
+int firstProc(int argc, char *argv[]);
 int64_t test_processes(uint64_t argc, char *argv[]);
 
 typedef int (*EntryPoint)();
@@ -93,36 +93,27 @@ int main()
 	void *dir1 = (void *)0x600000;
 	void *dir2 = (void *)0x700000;
 	createMemoryManager(dir1, dir2);
-	setTimerTick(1000);
+	setTimerTick(1);
 	schedulerInit();
-	char *argvAux[2] = {"idle", NULL};
-	schedulerAddProcess("idle", 0, idle, 1, argvAux);
+	char *argvAux[2] = {"idleVol2", NULL};
+	char *argvTest[2] = {"97", NULL};
+	schedulerAddProcess("firstProc", 0, firstProc, 1, argvAux);
+	schedulerAddProcess("test", 4, test_processes, 1, argvTest);
 	load_idt();
-	// process_list firstList = getRunningProcessList();
-	process weHopeThisIsIdle = getRunningProcess();
-	if (weHopeThisIsIdle == NULL || weHopeThisIsIdle->name == NULL)
-	{
-		ncPrint("It's null dumbass");
-	}
-	// char *toPrint = weHopeThisIsIdle->name;
-
-	ncPrint(weHopeThisIsIdle->name);
+	_sti();
 	while (1)
-		;
-	//_sti();
-	char *argvTestProc[1] = {"100", NULL};
-	test_processes(1, argvTestProc);
+	{
+	};
+	// char *argvTestProc[1] = {"100", NULL};
+	// test_processes(1, argvTestProc);
 
 	//((EntryPoint)sampleCodeModuleAddress)();
 	// testMM("100000");
 	return 0;
 }
 
-int idle(int argc, char *argv[])
+int firstProc(int argc, char *argv[])
 {
 	while (1)
-	{
-		idle_asm();
-	}
-	return 0;
+		;
 }

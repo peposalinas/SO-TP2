@@ -25,6 +25,9 @@ typedef struct schedulerCDT
 
 schedulerADT scheduler_kernel;
 
+static int firstTime = 1;
+static int timeBlocking = 1;
+
 static int checkPID(uint32_t pid);
 bool compareProcesses(process p1, process p2);
 
@@ -51,6 +54,7 @@ void schedulerInit()
     }
     for (size_t i = 0; i < QTY_PRIORITIES; i++)
     {
+        scheduler->priority[i] = allocMemoryKernel(sizeof(process_list));
         scheduler->priority[i]->processList = createLinkedList();
         scheduler->priority[i]->ready_process_count = 0;
     }
@@ -77,7 +81,14 @@ uint32_t *schedulerRun(uint32_t *current_stack_pointer)
     int foundToRun = 0;
     process toRun;
     process current = scheduler_kernel->processes[scheduler_kernel->running_process_pid];
-    current->stack_pointer = current_stack_pointer;
+    if (firstTime)
+    {
+        firstTime--;
+    }
+    else
+    {
+        current->stack_pointer = current_stack_pointer;
+    }
     current->state = READY;
 
     for (int i = QTY_PRIORITIES - 1; i >= 0 && !foundToRun; i--)
@@ -116,6 +127,10 @@ uint32_t *schedulerRun(uint32_t *current_stack_pointer)
         ncPrint("No hay ningún proceso en el scheduler (??)");
     }
 
+    // ncPrint("I am runnin");
+    // ncNewline();
+    // ncPrint(toRun->name);
+
     scheduler_kernel->running_process_pid = toRun->pid;
     toRun->state = RUNNING;
     return toRun->stack_pointer;
@@ -140,8 +155,14 @@ int schedulerKillProcess(uint32_t pid)
 
 int schedulerBlockProcess(uint32_t pid)
 {
+    ncPrintDec(timeBlocking);
+    timeBlocking++;
     if (checkPID(pid) == -1)
     {
+        ncPrintDec(timeBlocking);
+        ncPrintDec(pid);
+        while (1)
+            ;
         return -1;
     }
     scheduler_kernel->processes[pid]->state = BLOCKED;
@@ -160,5 +181,5 @@ int schedulerUnblockProcess(uint32_t pid)
 
 process getRunningProcess()
 {
-    return scheduler_kernel->processes[scheduler_kernel->running_process_pid];
+    return scheduler_kernel->priority[0]->processList->head->data;
 }

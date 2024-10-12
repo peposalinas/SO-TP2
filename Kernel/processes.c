@@ -43,8 +43,8 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
     stackFrame->rflags = 0x202;
     stackFrame->cs = 0x8;
     stackFrame->rip = entry_point;
-    stackFrame->rdi = argv;
-    stackFrame->rsi = argc;
+    stackFrame->rdi = argc; // Así o al revés?
+    stackFrame->rsi = argv;
 
     memoryForProcess->stack_pointer = stackFrame; // memoryForProcess->stack; // Cambiar por =stackFrame?
     memoryForProcess->name = process_name;        //??

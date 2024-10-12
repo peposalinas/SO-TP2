@@ -2,6 +2,8 @@
 #include "./include/test_util.h"
 #include "./include/processes.h"
 #include "./include/scheduler.h"
+#include "./include/naiveConsole.h"
+#include "stdlib.h"
 
 enum State
 {
@@ -12,7 +14,7 @@ enum State
 
 typedef struct P_rq
 {
-    int32_t pid;
+    uint64_t pid;
     enum State state;
 } p_rq;
 
@@ -31,7 +33,6 @@ int64_t test_processes(uint64_t argc, char *argv[])
         return -1;
 
     p_rq p_rqs[max_processes];
-
     while (1)
     {
 
@@ -59,10 +60,15 @@ int64_t test_processes(uint64_t argc, char *argv[])
             for (rq = 0; rq < max_processes; rq++)
             {
                 action = GetUniform(100) % 2;
+                // ncPrint("Tasty");
+                // while (1)
+                // {
+                // };
 
                 switch (action)
                 {
                 case 0:
+                    // ncPrint("Mato");
                     if (p_rqs[rq].state == RUNNING_T || p_rqs[rq].state == BLOCKED_T)
                     {
                         if (schedulerKillProcess(p_rqs[rq].pid) == -1)
@@ -76,6 +82,7 @@ int64_t test_processes(uint64_t argc, char *argv[])
                     break;
 
                 case 1:
+                    // ncPrint("Bloqueo");
                     if (p_rqs[rq].state == RUNNING_T)
                     {
                         if (schedulerBlockProcess(p_rqs[rq].pid) == -1)
@@ -101,5 +108,6 @@ int64_t test_processes(uint64_t argc, char *argv[])
                     p_rqs[rq].state = RUNNING_T;
                 }
         }
+        ncPrint("       Pase unblock");
     }
 }
