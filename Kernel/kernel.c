@@ -90,22 +90,22 @@ void *initializeKernelBinary()
 int main()
 {
 	ncClear();
+	setTimerTick(1000);
 	_cli();
 	void *dir1 = (void *)0x600000;
 	void *dir2 = (void *)0x700000;
 	createMemoryManager(dir1, dir2);
-	setTimerTick(1000);
 	schedulerInit();
 	char *argvIdle[2] = {"idle", NULL};
-	char *argvTest[2] = {"10", NULL};
-	char *argvTestPrio[2] = {"test_prio", NULL};
+	// char *argvTest[2] = {"10", NULL};
+	// char *argvTestPrio[2] = {"test_prio", NULL};
 	schedulerAddProcess("idle", HIGHEST_PRIO, idle, 1, argvIdle);
 	// schedulerAddProcess("test", 0, test_processes, 1, argvTest);
-	uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
+	// uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
 	//  wait_pid(test_pid);
 	load_idt();
+	listProcesses();
 	_sti();
-
 	while (1)
 	{
 	};
@@ -117,11 +117,6 @@ int main()
 
 int idle(int argc, char *argv[])
 {
-	int i = 0;
 	while (1)
-	{
-		i++;
-		ncPrint("  Idle running");
-		ncPrintDec(i);
-	};
+		;
 }

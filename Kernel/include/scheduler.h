@@ -72,4 +72,6 @@ void exitProcess(uint64_t returnVal);
 
 uint64_t wait_pid(uint64_t pid);
 
+void listProcesses();
+
 #endif

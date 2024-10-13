@@ -238,3 +238,33 @@ uint64_t wait_pid(uint64_t pid)
     }
     return return_value;
 }
+
+void listProcesses()
+{
+    for (int i = 0; i < MAX_PROCESSES; i++)
+    {
+        if (scheduler_kernel->processes[i] != NULL)
+        {
+            ncPrint(" PID: ");
+            ncPrint(" Name: ");
+            ncPrint(" Priority: ");
+            ncPrint(" State: ");
+            ncPrint(" Stack:");
+            ncPrint(" Stack pointer: ");
+            ncNewline();
+            ncPrintDec(scheduler_kernel->processes[i]->pid);
+            ncPrint("     ");
+            ncPrint(scheduler_kernel->processes[i]->name);
+            ncPrint("     ");
+            ncPrintDec(scheduler_kernel->processes[i]->priority);
+            ncPrint("          ");
+            ncPrintDec(scheduler_kernel->processes[i]->state);
+            ncPrint("     ");
+            ncPrintHex((uint64_t)scheduler_kernel->processes[i]->stack);
+            ncPrint("     ");
+            ncPrintHex((uint64_t)scheduler_kernel->processes[i]->stack_pointer);
+            ncPrint("     ");
+            ncNewline();
+        }
+    }
+}
