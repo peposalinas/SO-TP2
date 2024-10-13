@@ -27,12 +27,6 @@ void test_prio(uint64_t argc, char *argv1[])
     int64_t pids[TOTAL_PROCESSES];
     char *argv[] = {0};
     uint64_t i;
-    int it = 0;
-    // while (1)
-    //{
-    it++;
-    ncPrintDec(it);
-    bussy_wait(WAIT);
 
     ncClear();
     ncPrint("CREATING PROCESSES...");
@@ -77,6 +71,5 @@ void test_prio(uint64_t argc, char *argv1[])
     ncClear();
     ncPrint("Got after killin");
     bussy_wait(WAIT);
-    //}
     exitProcess(0);
 }

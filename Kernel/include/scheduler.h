@@ -12,7 +12,7 @@
 
 #define QUANTUM_IN_MS 20
 #define QTY_PRIORITIES 5
-#define MAX_PROCESSES 100
+#define MAX_PROCESSES 1000
 #define SCHEDULER_ADDRESS 0x900000 // Chequear
 #define HIGHEST_PRIO 4
 #define HIGH_PRIO 3

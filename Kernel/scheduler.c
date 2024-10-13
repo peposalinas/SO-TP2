@@ -57,7 +57,7 @@ void schedulerInit()
 
 int chooseNextPID()
 {
-    for (int i = 1; i < MAX_PROCESSES; i++)
+    for (int i = 0; i < MAX_PROCESSES; i++)
     {
         if (scheduler_kernel->processes[i] == NULL)
         {
@@ -69,14 +69,12 @@ int chooseNextPID()
 
 int schedulerAddProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[])
 {
-    _cli();
     process newProcess = (process)allocMemoryKernel(sizeof(process_t));
     int next_pid = chooseNextPID();
     createProcess(newProcess, process_name, next_pid, process_priority, entry_point, argc, argv, scheduler_kernel->running_process_pid); // Chequear  si esta bien lo del parent
     scheduler_kernel->priority[newProcess->priority]->ready_process_count++;
     scheduler_kernel->processes[newProcess->pid] = newProcess;
     insertLast(scheduler_kernel->priority[newProcess->priority]->processList, newProcess);
-    _sti();
     return newProcess->pid;
 }
 
@@ -98,29 +96,21 @@ uint32_t *schedulerRun(uint32_t *current_stack_pointer)
 
     current->state = READY;
 
+    removeFirst(scheduler_kernel->priority[current->priority]->processList);
+    insertLast(scheduler_kernel->priority[current->priority]->processList, current);
+
     for (int i = QTY_PRIORITIES - 1; i >= 0 && !foundToRun; i--)
     {
         if (scheduler_kernel->priority[i]->ready_process_count > 0)
         {
-
             toRun = removeFirst(scheduler_kernel->priority[i]->processList);
-            if (toRun->pid != scheduler_kernel->running_process_pid || scheduler_kernel->priority[i]->ready_process_count == 1)
-            {
-                insertFirst(scheduler_kernel->priority[i]->processList, toRun);
-                foundToRun++;
-            }
-            else if (scheduler_kernel->priority[i]->ready_process_count > 1)
+            while (toRun->state != READY)
             {
                 insertLast(scheduler_kernel->priority[i]->processList, toRun);
                 toRun = removeFirst(scheduler_kernel->priority[i]->processList);
-                while (toRun->state != READY)
-                {
-                    insertLast(scheduler_kernel->priority[i]->processList, toRun);
-                    toRun = removeFirst(scheduler_kernel->priority[i]->processList);
-                }
-                insertFirst(scheduler_kernel->priority[i]->processList, toRun);
-                foundToRun++;
             }
+            insertFirst(scheduler_kernel->priority[i]->processList, toRun);
+            foundToRun++;
         }
     }
     if (toRun == NULL)
@@ -135,48 +125,41 @@ uint32_t *schedulerRun(uint32_t *current_stack_pointer)
 
 int schedulerKillProcess(uint32_t pid)
 {
-    _cli();
     if (checkPID(pid) == -1)
     {
-        _sti();
         return -1;
     }
     int priority = scheduler_kernel->processes[pid]->priority;
     process toKill = scheduler_kernel->processes[pid];
+    scheduler_kernel->priority[priority]->ready_process_count--;
     if (removeElem(scheduler_kernel->priority[priority]->processList, toKill, compareProcesses) == NULL)
     {
-        _sti();
         return -1;
     }
     killProcess(toKill);
     scheduler_kernel->processes[pid] = NULL;
-    _sti();
     return pid;
 }
 
 int schedulerBlockProcess(uint32_t pid)
 {
-    _cli();
     if (checkPID(pid) == -1)
     {
         return -1;
     }
     scheduler_kernel->processes[pid]->state = BLOCKED;
     scheduler_kernel->priority[scheduler_kernel->processes[pid]->priority]->ready_process_count--;
-    _sti();
     return pid;
 }
 
 int schedulerUnblockProcess(uint32_t pid)
 {
-    _cli();
     if (checkPID(pid) == -1)
     {
         return -1;
     }
     scheduler_kernel->processes[pid]->state = READY;
     scheduler_kernel->priority[scheduler_kernel->processes[pid]->priority]->ready_process_count++;
-    _sti();
     return pid;
 }
 
@@ -203,18 +186,13 @@ uint64_t getRunningPid()
 
 void exitProcess(uint64_t returnVal)
 {
-    _cli();
     scheduler_kernel->processes[scheduler_kernel->running_process_pid]->state = TERMINATED;
     scheduler_kernel->processes[scheduler_kernel->running_process_pid]->return_value = returnVal;
     scheduler_kernel->priority[scheduler_kernel->processes[scheduler_kernel->running_process_pid]->priority]->ready_process_count--;
     if (scheduler_kernel->processes[scheduler_kernel->running_process_pid]->isBeingWaited == 0)
     {
         schedulerKillProcess(scheduler_kernel->running_process_pid);
-        ncPrint("I got here");
-        while (1)
-            ;
     }
-    _sti();
     // asm_timer_tick();
 }
 

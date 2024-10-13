@@ -90,7 +90,7 @@ void *initializeKernelBinary()
 int main()
 {
 	ncClear();
-	setTimerTick(1000);
+	setTimerTick(20000);
 	_cli();
 	void *dir1 = (void *)0x600000;
 	void *dir2 = (void *)0x700000;
@@ -98,13 +98,12 @@ int main()
 	schedulerInit();
 	char *argvIdle[2] = {"idle", NULL};
 	// char *argvTest[2] = {"10", NULL};
-	// char *argvTestPrio[2] = {"test_prio", NULL};
-	schedulerAddProcess("idle", HIGHEST_PRIO, idle, 1, argvIdle);
+	char *argvTestPrio[2] = {"test_prio", NULL};
+	schedulerAddProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
 	// schedulerAddProcess("test", 0, test_processes, 1, argvTest);
-	// uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
+	uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
 	//  wait_pid(test_pid);
 	load_idt();
-	listProcesses();
 	_sti();
 	while (1)
 	{
@@ -118,5 +117,8 @@ int main()
 int idle(int argc, char *argv[])
 {
 	while (1)
-		;
+	{
+		ncNewline();
+		ncPrint("RUNNING MFS");
+	};
 }
