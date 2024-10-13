@@ -59,7 +59,7 @@ int chooseNextPID()
 {
     for (int i = 1; i < MAX_PROCESSES; i++)
     {
-        if (scheduler_kernel->processes[i] == NULL || scheduler_kernel->processes[i]->state == TERMINATED)
+        if (scheduler_kernel->processes[i] == NULL)
         {
             return i;
         }
@@ -86,6 +86,7 @@ uint32_t *schedulerRun(uint32_t *current_stack_pointer)
     int foundToRun = 0;
     process toRun;
     process current = scheduler_kernel->processes[scheduler_kernel->running_process_pid];
+
     if (firstTime)
     {
         firstTime--;
@@ -94,26 +95,22 @@ uint32_t *schedulerRun(uint32_t *current_stack_pointer)
     {
         current->stack_pointer = current_stack_pointer;
     }
+
     current->state = READY;
 
     for (int i = QTY_PRIORITIES - 1; i >= 0 && !foundToRun; i--)
     {
-        // Si hay algún proceso ready de esta prioridad
         if (scheduler_kernel->priority[i]->ready_process_count > 0)
         {
 
             toRun = removeFirst(scheduler_kernel->priority[i]->processList);
-
-            // Si el proceso no es el que estábamos corriendo o  lo es y solo ese está ready
             if (toRun->pid != scheduler_kernel->running_process_pid || scheduler_kernel->priority[i]->ready_process_count == 1)
             {
                 insertFirst(scheduler_kernel->priority[i]->processList, toRun);
                 foundToRun++;
             }
-            // Si era el que se estaba corriendo y hay otro proceso distinto ready
             else if (scheduler_kernel->priority[i]->ready_process_count > 1)
             {
-                //"Iteramos" hasta encontrar al otro
                 insertLast(scheduler_kernel->priority[i]->processList, toRun);
                 toRun = removeFirst(scheduler_kernel->priority[i]->processList);
                 while (toRun->state != READY)
