@@ -98,10 +98,10 @@ int main()
 	schedulerInit();
 	char *argvIdle[2] = {"idle", NULL};
 	char *argvTest[2] = {"10", NULL};
-	char *argvTestPrio[1] = {NULL};
-	schedulerAddProcess("idle", 0, idle, 1, argvIdle);
+	char *argvTestPrio[2] = {"test_prio", NULL};
+	schedulerAddProcess("idle", HIGHEST_PRIO, idle, 1, argvIdle);
 	// schedulerAddProcess("test", 0, test_processes, 1, argvTest);
-	uint64_t test_pid = schedulerAddProcess("test", 4, test_prio, 0, argvTestPrio);
+	uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
 	//  wait_pid(test_pid);
 	load_idt();
 	_sti();
@@ -120,8 +120,8 @@ int idle(int argc, char *argv[])
 	int i = 0;
 	while (1)
 	{
-		// i++;
-		// ncPrint("  Idle running");
-		// ncPrintDec(i);
+		i++;
+		ncPrint("  Idle running");
+		ncPrintDec(i);
 	};
 }

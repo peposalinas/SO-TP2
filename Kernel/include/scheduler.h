@@ -11,7 +11,14 @@
 #include "interrupts.h"
 
 #define QUANTUM_IN_MS 20
-#define PRIORITY_AMOUNT 4
+#define QTY_PRIORITIES 5
+#define MAX_PROCESSES 100
+#define SCHEDULER_ADDRESS 0x900000 // Chequear
+#define HIGHEST_PRIO 4
+#define HIGH_PRIO 3
+#define MEDIUM_PRIO 2
+#define LOW_PRIO 1
+#define LOWEST_PRIO 0
 
 typedef struct schedulerCDT *schedulerADT;
 
@@ -58,11 +65,11 @@ int schedulerBlockProcess(uint32_t pid);
 int schedulerUnblockProcess(uint32_t pid);
 
 uint64_t schedulerChangePriority(uint64_t pid, int priority);
-// process_list getRunningProcessList();
 
 uint64_t getRunningPid();
 
 void exitProcess(uint64_t returnVal);
 
 uint64_t wait_pid(uint64_t pid);
+
 #endif

@@ -9,7 +9,7 @@
 #include "./include/interrupts.h"
 
 #define MINOR_WAIT 1000000 // TODO: Change this value to prevent a process from flooding the screen
-#define WAIT 100000000     // TODO: Change this value to make the wait long enough to see theese processes beeing run at least twice
+#define WAIT 10000000      // TODO: Change this value to make the wait long enough to see theese processes beeing run at least twice
 
 #define TOTAL_PROCESSES 5
 
@@ -28,55 +28,55 @@ void test_prio(uint64_t argc, char *argv1[])
     char *argv[] = {0};
     uint64_t i;
     int it = 0;
-    while (1)
+    // while (1)
+    //{
+    it++;
+    ncPrintDec(it);
+    bussy_wait(WAIT);
+
+    ncClear();
+    ncPrint("CREATING PROCESSES...");
+    bussy_wait(WAIT);
+    for (i = 0; i < TOTAL_PROCESSES; i++)
+        pids[i] = schedulerAddProcess("endless_loop_print", prio[4], endless_loop_print, 0, argv);
+    ncClear();
+    ncPrint("Got after adding");
+
+    ncClear();
+    ncPrint("CHANGING PRIORITIES...");
+    bussy_wait(WAIT);
+    for (i = 0; i < TOTAL_PROCESSES; i++)
+        schedulerChangePriority(pids[i], prio[i]);
+
+    ncClear();
+    ncPrint("BLOCKING...");
+    bussy_wait(WAIT);
+    for (i = 0; i < TOTAL_PROCESSES; i++)
+        schedulerBlockProcess(pids[i]);
+
+    ncClear();
+    ncPrint("CHANGING PRIORITIES WHILE BLOCKED...");
+    bussy_wait(WAIT);
+    for (i = 0; i < TOTAL_PROCESSES; i++)
+        schedulerChangePriority(pids[i], MEDIUM);
+
+    ncClear();
+    ncPrint("UNBLOCKING...");
+    bussy_wait(WAIT);
+    for (i = 0; i < TOTAL_PROCESSES; i++)
+        schedulerUnblockProcess(pids[i]);
+
+    ncClear();
+    ncPrint("KILLING...");
+    bussy_wait(WAIT);
+    for (i = 0; i < TOTAL_PROCESSES; i++)
     {
-        it++;
-        ncPrintDec(it);
-        bussy_wait(WAIT);
-
-        ncClear();
-        ncPrint("CREATING PROCESSES...");
-        bussy_wait(WAIT);
-        for (i = 0; i < TOTAL_PROCESSES; i++)
-            pids[i] = schedulerAddProcess("endless_loop_print", prio[4], endless_loop_print, 0, argv);
-        ncClear();
-        ncPrint("Got after adding");
-
-        ncClear();
-        ncPrint("CHANGING PRIORITIES...");
-        bussy_wait(WAIT);
-        for (i = 0; i < TOTAL_PROCESSES; i++)
-            schedulerChangePriority(pids[i], prio[i]);
-
-        ncClear();
-        ncPrint("BLOCKING...");
-        bussy_wait(WAIT);
-        for (i = 0; i < TOTAL_PROCESSES; i++)
-            schedulerBlockProcess(pids[i]);
-
-        ncClear();
-        ncPrint("CHANGING PRIORITIES WHILE BLOCKED...");
-        bussy_wait(WAIT);
-        for (i = 0; i < TOTAL_PROCESSES; i++)
-            schedulerChangePriority(pids[i], MEDIUM);
-
-        ncClear();
-        ncPrint("UNBLOCKING...");
-        bussy_wait(WAIT);
-        for (i = 0; i < TOTAL_PROCESSES; i++)
-            schedulerUnblockProcess(pids[i]);
-
-        ncClear();
-        ncPrint("KILLING...");
-        bussy_wait(WAIT);
-        for (i = 0; i < TOTAL_PROCESSES; i++)
-        {
-            schedulerKillProcess(pids[i]);
-        }
-
-        ncClear();
-        ncPrint("Got after killin");
-        bussy_wait(WAIT);
+        schedulerKillProcess(pids[i]);
     }
+
+    ncClear();
+    ncPrint("Got after killin");
+    bussy_wait(WAIT);
+    //}
     exitProcess(0);
 }
