@@ -32,22 +32,20 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
 {
 
     memoryForProcess->pid = process_pid;
-    memoryForProcess->state = READY; // Arranca en ready??
-
+    memoryForProcess->state = READY;
     memoryForProcess->stack = (uint64_t)(allocMemoryKernel(STACK_SIZE) + STACK_SIZE) & ~ALIGN;
     stack_frame *stackFrame = memoryForProcess->stack - sizeof(stack_frame);
-    // Llenar el stack
 
     stackFrame->ss = 0x0;
-    stackFrame->rsp = memoryForProcess->stack; // Chequeado
+    stackFrame->rsp = memoryForProcess->stack;
     stackFrame->rflags = 0x202;
     stackFrame->cs = 0x8;
     stackFrame->rip = entry_point;
     stackFrame->rdi = argc; // Así o al revés?
     stackFrame->rsi = argv;
 
-    memoryForProcess->stack_pointer = stackFrame; // memoryForProcess->stack; // Cambiar por =stackFrame?
-    memoryForProcess->name = process_name;        //??
+    memoryForProcess->stack_pointer = stackFrame;
+    memoryForProcess->name = process_name;
     memoryForProcess->priority = process_priority;
     memoryForProcess->parent_pid = parent_pid;
     memoryForProcess->isBeingWaited = 0;

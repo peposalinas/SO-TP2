@@ -84,33 +84,43 @@ void *initializeKernelBinary()
 	ncPrint("[Done]");
 	ncNewline();
 	ncNewline();
+	ncClear();
 	return getStackBase();
 }
 
 int main()
 {
-	ncClear();
 	setTimerTick(20000);
 	_cli();
+
 	void *dir1 = (void *)0x600000;
 	void *dir2 = (void *)0x700000;
+
 	createMemoryManager(dir1, dir2);
 	schedulerInit();
+
 	char *argvIdle[2] = {"idle", NULL};
-	// char *argvTest[2] = {"10", NULL};
-	char *argvTestPrio[2] = {"test_prio", NULL};
 	schedulerAddProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
-	// schedulerAddProcess("test", 0, test_processes, 1, argvTest);
-	uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
-	//  wait_pid(test_pid);
+
+	// Testeo 1
+	char *argvTest[2] = {"10", NULL};
+	schedulerAddProcess("test", HIGHEST_PRIO, test_processes, 1, argvTest);
+
+	// Testeo 2
+	//  char *argvTestPrio[2] = {"test_prio", NULL};
+	//  uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
+	//   int val = wait_pid(test_pid);
+	//   ncPrintDec(val);
+
+	// char *argvShell[2] = {"shell", NULL};
+	// uint64_t shell_pid = schedulerAddProcess("shell", HIGHEST_PRIO, (EntryPoint)sampleCodeModuleAddress, 1, argvShell);
+	// ncPrint("Anda a modo video crack");
 	load_idt();
+
 	_sti();
-	while (1)
-	{
-	};
 
 	//((EntryPoint)sampleCodeModuleAddress)();
-	// testMM("100000");
+	//  testMM("100000");
 	return 0;
 }
 
@@ -118,7 +128,5 @@ int idle(int argc, char *argv[])
 {
 	while (1)
 	{
-		ncNewline();
-		ncPrint("RUNNING MFS");
 	};
 }

@@ -86,7 +86,6 @@ void bussy_wait(uint64_t wait_time)
         _nop();
     }
     _sti();
-    // ncPrint("Waiting");
     return;
 }
 

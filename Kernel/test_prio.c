@@ -8,8 +8,8 @@
 #include "./include/lib.h"
 #include "./include/interrupts.h"
 
-#define MINOR_WAIT 1000000 // TODO: Change this value to prevent a process from flooding the screen
-#define WAIT 10000000      // TODO: Change this value to make the wait long enough to see theese processes beeing run at least twice
+#define MINOR_WAIT 10000000 // TODO: Change this value to prevent a process from flooding the screen
+#define WAIT 50000000       // TODO: Change this value to make the wait long enough to see theese processes beeing run at least twice
 
 #define TOTAL_PROCESSES 5
 
@@ -25,51 +25,47 @@ void test_prio(uint64_t argc, char *argv1[])
 {
 
     int64_t pids[TOTAL_PROCESSES];
-    char *argv[] = {0};
+    char *argv[] = {100000000};
     uint64_t i;
 
-    ncClear();
+    ncNewline();
     ncPrint("CREATING PROCESSES...");
     bussy_wait(WAIT);
     for (i = 0; i < TOTAL_PROCESSES; i++)
         pids[i] = schedulerAddProcess("endless_loop_print", prio[4], endless_loop_print, 0, argv);
-    ncClear();
-    ncPrint("Got after adding");
 
-    ncClear();
+    ncNewline();
     ncPrint("CHANGING PRIORITIES...");
     bussy_wait(WAIT);
     for (i = 0; i < TOTAL_PROCESSES; i++)
         schedulerChangePriority(pids[i], prio[i]);
 
-    ncClear();
+    ncNewline();
     ncPrint("BLOCKING...");
     bussy_wait(WAIT);
     for (i = 0; i < TOTAL_PROCESSES; i++)
         schedulerBlockProcess(pids[i]);
 
-    ncClear();
+    ncNewline();
     ncPrint("CHANGING PRIORITIES WHILE BLOCKED...");
     bussy_wait(WAIT);
     for (i = 0; i < TOTAL_PROCESSES; i++)
         schedulerChangePriority(pids[i], MEDIUM);
 
-    ncClear();
+    ncNewline();
     ncPrint("UNBLOCKING...");
     bussy_wait(WAIT);
     for (i = 0; i < TOTAL_PROCESSES; i++)
         schedulerUnblockProcess(pids[i]);
 
-    ncClear();
+    ncNewline();
     ncPrint("KILLING...");
     bussy_wait(WAIT);
     for (i = 0; i < TOTAL_PROCESSES; i++)
     {
         schedulerKillProcess(pids[i]);
     }
-
-    ncClear();
-    ncPrint("Got after killin");
     bussy_wait(WAIT);
+
     exitProcess(0);
 }
