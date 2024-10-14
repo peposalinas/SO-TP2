@@ -9,7 +9,7 @@
 #include "./include/interrupts.h"
 
 #define MINOR_WAIT 10000000 // TODO: Change this value to prevent a process from flooding the screen
-#define WAIT 50000000       // TODO: Change this value to make the wait long enough to see theese processes beeing run at least twice
+#define WAIT 25000000       // TODO: Change this value to make the wait long enough to see theese processes beeing run at least twice
 
 #define TOTAL_PROCESSES 5
 
@@ -66,6 +66,6 @@ void test_prio(uint64_t argc, char *argv1[])
         schedulerKillProcess(pids[i]);
     }
     bussy_wait(WAIT);
-
+    ncClear();
     exitProcess(0);
 }

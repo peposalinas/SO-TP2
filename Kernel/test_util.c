@@ -102,7 +102,7 @@ void endless_loop_print(uint64_t wait)
     while (1)
     {
         // bussy_wait(wait);
-        ncPrintDec(pid);
+        // ncPrintDec(pid);
     }
 }
 

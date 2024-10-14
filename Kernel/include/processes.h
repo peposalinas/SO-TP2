@@ -19,8 +19,8 @@ typedef struct process_t
 {
     uint64_t pid;
     process_state_t state;
-    uint32_t *stack;
-    uint32_t *stack_pointer;
+    uint64_t *stack;
+    uint64_t *stack_pointer;
     char **argv;
     char *name;
     int priority;

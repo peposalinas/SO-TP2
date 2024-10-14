@@ -90,7 +90,7 @@ void *initializeKernelBinary()
 
 int main()
 {
-	setTimerTick(20000);
+	setTimerTick(10000);
 	_cli();
 
 	void *dir1 = (void *)0x600000;
@@ -103,12 +103,13 @@ int main()
 	schedulerAddProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
 
 	// Testeo 1
+
 	char *argvTest[2] = {"10", NULL};
 	schedulerAddProcess("test", HIGHEST_PRIO, test_processes, 1, argvTest);
 
 	// Testeo 2
-	//  char *argvTestPrio[2] = {"test_prio", NULL};
-	//  uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
+	// char *argvTestPrio[2] = {"test_prio", NULL};
+	// uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
 	//   int val = wait_pid(test_pid);
 	//   ncPrintDec(val);
 

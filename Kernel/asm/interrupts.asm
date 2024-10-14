@@ -170,6 +170,7 @@ _irq00Handler:
    out 20h, al
 
    popState
+
    iretq
 
 ;Keyboard

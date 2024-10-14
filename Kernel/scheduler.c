@@ -67,12 +67,14 @@ int chooseNextPID()
 
 int schedulerAddProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[])
 {
+    _cli();
     process newProcess = (process)allocMemoryKernel(sizeof(process_t));
     int next_pid = chooseNextPID();
     createProcess(newProcess, process_name, next_pid, process_priority, entry_point, argc, argv, scheduler_kernel->running_process_pid); // Chequear  si esta bien lo del parent
-    scheduler_kernel->priority[newProcess->priority]->ready_process_count++;
     scheduler_kernel->processes[newProcess->pid] = newProcess;
     insertLast(scheduler_kernel->priority[newProcess->priority]->processList, newProcess);
+    scheduler_kernel->priority[newProcess->priority]->ready_process_count++;
+    _sti();
     return newProcess->pid;
 }
 
@@ -201,6 +203,7 @@ uint64_t getRunningPid()
 
 int schedulerBlockProcess(uint32_t pid)
 {
+    _cli();
     if (checkPID(pid) == -1)
     {
         return -1;
@@ -208,11 +211,13 @@ int schedulerBlockProcess(uint32_t pid)
 
     scheduler_kernel->processes[pid]->state = BLOCKED;
     scheduler_kernel->priority[scheduler_kernel->processes[pid]->priority]->ready_process_count--;
+    _sti();
     return pid;
 }
 
 int schedulerUnblockProcess(uint32_t pid)
 {
+    _cli();
     if (checkPID(pid) == -1)
     {
         return -1;
@@ -220,6 +225,7 @@ int schedulerUnblockProcess(uint32_t pid)
 
     scheduler_kernel->processes[pid]->state = READY;
     scheduler_kernel->priority[scheduler_kernel->processes[pid]->priority]->ready_process_count++;
+    _sti();
     return pid;
 }
 
@@ -246,7 +252,34 @@ uint64_t schedulerChangePriority(uint64_t pid, int priority)
     }
 
     _sti();
+
     return pid;
+}
+
+void listProcessesByPrio()
+{
+    for (int i = 0; i < QTY_PRIORITIES; i++)
+    {
+        ncPrint("[ ");
+        ncPrintDec(i);
+        ncPrint(" ]");
+        ncPrint("(");
+        ncPrintDec(scheduler_kernel->priority[i]->processList->size);
+        ncPrint(")");
+        process_list *list = scheduler_kernel->priority[i];
+        LinkedList *processList = list->processList;
+        Node *current = processList->head;
+        while (current != NULL)
+        {
+            process p = current->data;
+            ncPrint(" -> ");
+            ncPrintDec(p->pid);
+            ncPrint(":");
+            ncPrint(p->name);
+            current = current->next;
+        }
+        ncNewline();
+    }
 }
 
 void listProcesses()
