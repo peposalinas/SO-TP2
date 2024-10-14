@@ -203,7 +203,7 @@ uint64_t getRunningPid()
 
 int schedulerBlockProcess(uint32_t pid)
 {
-    _cli();
+
     if (checkPID(pid) == -1)
     {
         return -1;
@@ -211,13 +211,13 @@ int schedulerBlockProcess(uint32_t pid)
 
     scheduler_kernel->processes[pid]->state = BLOCKED;
     scheduler_kernel->priority[scheduler_kernel->processes[pid]->priority]->ready_process_count--;
-    _sti();
+
     return pid;
 }
 
 int schedulerUnblockProcess(uint32_t pid)
 {
-    _cli();
+
     if (checkPID(pid) == -1)
     {
         return -1;
@@ -225,17 +225,15 @@ int schedulerUnblockProcess(uint32_t pid)
 
     scheduler_kernel->processes[pid]->state = READY;
     scheduler_kernel->priority[scheduler_kernel->processes[pid]->priority]->ready_process_count++;
-    _sti();
+
     return pid;
 }
 
 uint64_t schedulerChangePriority(uint64_t pid, int priority)
 {
-    _cli();
 
     if (checkPID(pid) == -1 || priority < 0 || priority >= QTY_PRIORITIES || scheduler_kernel->processes[pid]->state == RUNNING) // VOS DECIS????
     {
-        _sti();
         return -1;
     }
 
@@ -250,8 +248,6 @@ uint64_t schedulerChangePriority(uint64_t pid, int priority)
         scheduler_kernel->priority[previousPrio]->ready_process_count--;
         scheduler_kernel->priority[toChange->priority]->ready_process_count++;
     }
-
-    _sti();
 
     return pid;
 }
