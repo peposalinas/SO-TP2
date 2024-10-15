@@ -3,9 +3,11 @@
 
 #include <stdint.h>
 #include "MemoryManagerADT.h"
+#include "scheduler.h"
 
 #define STACK_SIZE 4 * 1024
 #define PRIORITY_AMOUNT 4
+#define ALIGN 7
 
 typedef enum
 {
@@ -25,7 +27,7 @@ typedef struct process_t
     char *name;
     int priority;
     uint64_t parent_pid;
-    uint64_t return_value; // Como hago para que retorne un string o void*
+    uint64_t return_value; // Como hacer para que retorne un string o void*
     int isBeingWaited;
 } process_t;
 

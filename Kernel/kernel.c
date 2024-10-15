@@ -102,22 +102,30 @@ int main()
 	char *argvIdle[2] = {"idle", NULL};
 	schedulerAddProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
 
-	// Testeo 1
+	// Test_processes
+
 	// char *argvTest[2] = {"10", NULL};
 	// schedulerAddProcess("test", HIGHEST_PRIO, test_processes, 1, argvTest);
 
-	// Testeo 2
+	// Fin Test_processes
+
+	// Test_prio
+
 	// char *argvTestPrio[2] = {"test_prio", NULL};
 	// uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
+
+	// Fin Test_prio
+
 	// int val = wait_pid(test_pid);
 	// ncPrintDec(val);
-
 	// char *argvShell[2] = {"shell", NULL};
 	// uint64_t shell_pid = schedulerAddProcess("shell", HIGHEST_PRIO, (EntryPoint)sampleCodeModuleAddress, 1, argvShell);
-	// ncPrint("Anda a modo video crack");
+
 	load_idt();
 	_sti();
+
 	//  testMM("100000");
+
 	return 0;
 }
 

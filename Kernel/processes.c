@@ -1,8 +1,4 @@
 #include "processes.h"
-#include "scheduler.h"
-#include "MemoryManagerADT.h"
-
-#define ALIGN 7
 
 typedef struct stack_frame
 {
@@ -41,7 +37,7 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
     stackFrame->rflags = 0x202;
     stackFrame->cs = 0x8;
     stackFrame->rip = entry_point;
-    stackFrame->rdi = argc; // Así o al revés?
+    stackFrame->rdi = argc;
     stackFrame->rsi = argv;
 
     memoryForProcess->stack_pointer = stackFrame;
@@ -49,8 +45,6 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
     memoryForProcess->priority = process_priority;
     memoryForProcess->parent_pid = parent_pid;
     memoryForProcess->isBeingWaited = 0;
-
-    // Hacer funcion idle aca?
 
     return memoryForProcess->pid;
 }

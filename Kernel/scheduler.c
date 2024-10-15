@@ -16,7 +16,6 @@ typedef struct schedulerCDT
 schedulerADT scheduler_kernel;
 
 static int firstTime = 1;
-static int timeBlocking = 1;
 
 static int checkPID(uint32_t pid);
 bool compareProcesses(process p1, process p2);

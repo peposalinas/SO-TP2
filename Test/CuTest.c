@@ -8,7 +8,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "./include/CuTest.h"
+#include "CuTest.h"
 
 /*-------------------------------------------------------------------------*
  * CuStr
