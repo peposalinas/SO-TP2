@@ -79,7 +79,7 @@ SECTION .text
 %endmacro
 
 %macro getRegs 0
-mov [regs], rax ; General Purpose Registers
+	mov [regs], rax ; General Purpose Registers
 	mov [regs+8], rbx
 	mov [regs+8*2], rcx
 	mov [regs+8*3], rdx
@@ -101,6 +101,7 @@ mov [regs], rax ; General Purpose Registers
 	mov [regs+8*17], rax
 	mov rax, [rsp+8*2] 		; RFLAGS
 	mov [regs+8*18], rax
+	mov rax, [regs]
 %endmacro
 
 
