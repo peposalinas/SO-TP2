@@ -9,6 +9,7 @@ GLOBAL getCurrentTime
 GLOBAL setTimerTick
 GLOBAL idle_asm
 GLOBAL _nop
+GLOBAL down
 
 section .text
 
@@ -235,13 +236,33 @@ idle_asm:
     ret
 
 ;===============================================================================
-; _nop- No hace nada
+; _nop - No hace nada
 ;===============================================================================
 
 _nop:
     nop
     ret
 
+;===============================================================================
+; down - espera a que la direccion de rdi este en 1, y luego 
+;        la pone en 0 y devuelve
+;===============================================================================
+; Argumentos:
+;	rdi: direccion de memoria para xchg
+;===============================================================================
+down:
+    push rbp
+    mov rbp, rsp
+    
+    mov al, 0
+.loop
+    xchg [rdi], al
+    test al, al
+    jz .loop
+
+    mov rsp, rbp
+    pop rbp
+    ret
 
 
 section .bss

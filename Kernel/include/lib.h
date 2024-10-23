@@ -14,4 +14,6 @@ uint8_t inb(uint8_t X);
 void idle_asm();
 void _nop();
 
+void down(uint8_t *lock);
+
 #endif
