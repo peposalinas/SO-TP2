@@ -1,7 +1,6 @@
 /* sampleCodeModule.c */
 #include <shell.h>
 #include <libc.h>
-#include <eliminator.h>
 #include <syscaller.h>
 #include <stdint.h>
 #include <welcome.h>
@@ -12,7 +11,7 @@ int main()
 	while (1)
 	{
 		welcome();
-		uint8_t *msg2[] = {"Please select a program to run:\0", "1. Eliminator\0", "2. Shell\0"};
+		uint8_t *msg2[] = {"Please select a program to run:\0", "1. Shell\0", "2. Dont know yet (maybe tests)\0"};
 		for (uint8_t i = 0; i < 3; i++)
 		{
 			uint8_t j = 0;
@@ -28,10 +27,6 @@ int main()
 		switch (c)
 		{
 		case '1':
-			gameMain();
-			break;
-
-		case '2':
 			launchShell();
 			break;
 		}

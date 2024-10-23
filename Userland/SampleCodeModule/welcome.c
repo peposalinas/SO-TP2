@@ -27,27 +27,4 @@ void welcome()
     }
 
     printRectangleCaller(UNUSED, 225, 60, 600, 105, WHITE);
-    uint8_t i = 0;
-
-    uint8_t *msg = "Welcome to PinguinOS\0";
-    while (*msg)
-    {
-        drawBigChar(*msg++, 86 + i++, 1, WHITE, ORANGE);
-    }
-    uint8_t *msg2 = "Pedro    Federico\0";
-    i = 0;
-    while (*msg2)
-    {
-        drawBigChar(*msg2++, 10 + i++, 23, WHITE, ORANGE);
-    }
-    uint8_t *msg3 = "Filipo    Agustin\0";
-    i = 0;
-    while (*msg3)
-    {
-        drawBigChar(*msg3++, 38 + i++, 23, WHITE, ORANGE);
-    }
-    printRectangleCaller(UNUSED, 110, 5, 35, 35, WHITE);
-    printRectangleCaller(UNUSED, SCREEN_WIDTH - 145, 5, 35, 35, WHITE);
-    printRectangleCaller(UNUSED, 120, 18, 23, 20, BLACK);
-    printRectangleCaller(UNUSED, SCREEN_WIDTH - 143, 18, 23, 20, BLACK);
 }

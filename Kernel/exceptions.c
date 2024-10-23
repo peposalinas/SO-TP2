@@ -24,12 +24,12 @@ void exceptionDispatcher(uint8_t exception, const uint64_t regs[19])
 
 static void zero_division(const uint64_t regs[19])
 {
-	printRegisters("Division by zero exception", regs);
+	printRegisters((uint8_t *)"Division by zero exception", regs);
 	return;
 }
 
 static void invalid_opcode(const uint64_t regs[19])
 {
-	printRegisters("Invalid opcode exception", regs);
+	printRegisters((uint8_t *)"Invalid opcode exception", regs);
 	return;
 }

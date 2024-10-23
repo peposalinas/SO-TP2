@@ -4,7 +4,6 @@
 #include <libc.h>
 #include <userLib.h>
 #include <sounds.h>
-#include <eliminator.h>
 #include <libc.h>
 
 #define BUFF_MAX 4096
@@ -32,18 +31,17 @@ typedef struct command
 static void clearCmd();
 static void div0();
 static void exit();
-static void eliminator();
 static void fontSmall();
 static void fontBig();
 static void getTime();
 static void help();
 static void invalidOpCode();
 
-static command commands[LETTERS][WORDS] = {{{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"eliminator", eliminator}, {"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {0, 0}}};
+static command commands[LETTERS][WORDS] = {{{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {0, 0}}};
 
 static char *commandNotFoundMsg = "Command not found. Type help for a list of commands";
 static uint8_t cNotFoundSize = 51;
-static char *helpMsg = "List of commands: clear, div0, eliminator, exit, fontBig, fontSmall, getTime, help, invalidOpCode";
+static char *helpMsg = "List of commands: clear, div0, exit, fontBig, fontSmall, getTime, help, invalidOpCode";
 static uint8_t hMsgSize = 97;
 static char *waitMsg = "Press any key to continue";
 // ###################################################################
@@ -148,7 +146,7 @@ void sPrintNewLine()
     reset = 0;
 }
 
-void printMsgAndWait(const char *msg, uint8_t size)
+void printMsgAndWait(char *msg, uint8_t size)
 {
     if (currentY < height - 2)
         currentY++;
@@ -496,14 +494,6 @@ void fontSmall()
     fontSize = 1;
     height *= 2;
     width *= 2;
-    sMoveScreenUp(0);
-    reset = 1;
-}
-
-void eliminator()
-{
-    gameMain();
-    cleanBuffer();
     sMoveScreenUp(0);
     reset = 1;
 }

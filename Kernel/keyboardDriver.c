@@ -131,7 +131,7 @@ void keyboard_handler()
 	{
 		if (ctrlOn && keyVal == R_MAKE_CODE)
 		{
-			printRegisters("REGISTERS", regs);
+			printRegisters((uint8_t *)"REGISTERS", regs);
 			ctrlOn = 0;
 		}
 		else

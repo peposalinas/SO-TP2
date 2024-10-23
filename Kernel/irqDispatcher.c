@@ -7,7 +7,7 @@ static void int_20();
 static void int_21();
 
 void (*interrupts_arr[])(void) = {int_20, int_21};
-void *(*sys_call_arr[])(void *rsi, void *rdx, void *rcx, void *r8, void *r9) = {read /*0*/, write /*1*/, printRectangle /*2*/, getScreenWidth /*3*/, getScreenHeight /*4*/, printChar /*5*/, wait /*6*/, keyboardStatus /*7*/, keyboardKey /*8*/, beepSyscall /*9*/, fontSizeUp /*10*/, fontSizeDown /*11*/, getTime /*12*/};
+void *(*sys_call_arr[])(void *rsi, void *rdx, void *rcx, void *r8, void *r9) = {(void *)read /*0*/, (void *)write /*1*/, (void *)printRectangle /*2*/, (void *)getScreenWidth /*3*/, (void *)getScreenHeight /*4*/, (void *)printChar /*5*/, (void *)wait /*6*/, (void *)keyboardStatus /*7*/, (void *)keyboardKey /*8*/, (void *)beepSyscall /*9*/, (void *)fontSizeUp /*10*/, (void *)fontSizeDown /*11*/, (void *)getTime /*12*/};
 
 void irqDispatcher(uint64_t irq)
 {
