@@ -3,6 +3,10 @@
 
 #include <stdint.h>
 #include "listADT.h"
+#include "MemoryManagerADT.h"
+#include "interrupts.h"
+#include "lib.h"
+#include "scheduler.h"
 
 #define MAX_SEMAPHORES 100
 
@@ -11,10 +15,11 @@ typedef struct sem_t
     int id;
     int value;
     uint8_t mutex;
-    LinkedList *blockedProcesses;
+    LinkedList *blockedPids;
+    int openedCount;
 } sem_t;
 
-LinkedList allSemaphores;
+LinkedList *allSemaphores;
 
 int semOpen(int id, int value);
 void semClose(int id);

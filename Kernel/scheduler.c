@@ -210,6 +210,10 @@ int schedulerBlockProcess(uint32_t pid)
 
     scheduler_kernel->processes[pid]->state = BLOCKED;
     scheduler_kernel->priority[scheduler_kernel->processes[pid]->priority]->ready_process_count--;
+    if (pid == getRunningPid())
+    {
+        _irq00Handler();
+    }
 
     return pid;
 }
@@ -313,4 +317,9 @@ void listProcesses()
             ncNewline();
         }
     }
+}
+
+void schedulerYield()
+{
+    _irq00Handler();
 }

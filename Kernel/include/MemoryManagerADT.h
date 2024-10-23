@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "syscall.h"
 #include "test_util.h"
 
 #define KB *1024 * 1024

@@ -10,6 +10,7 @@ GLOBAL setTimerTick
 GLOBAL idle_asm
 GLOBAL _nop
 GLOBAL down
+GLOBAL up
 
 section .text
 
@@ -264,6 +265,21 @@ down:
     pop rbp
     ret
 
+;===============================================================================
+; up - devuelve a 1 la direccion de memoria pasada por rdi 
+;===============================================================================
+; Argumentos:
+;	rdi: direccion de memoria para xchg
+;===============================================================================
+up:
+    push rbp
+    mov rbp, rsp
+    
+    xchg [rdi], 1
+
+    mov rsp, rbp
+    pop rbp
+    ret
 
 section .bss
 IRQ0_frequency:          resd 1          ; Actual frequency of PIT
