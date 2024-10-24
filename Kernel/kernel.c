@@ -27,6 +27,9 @@ int idle(int argc, char *argv[]);
 int64_t test_processes(uint64_t argc, char *argv[]);
 void test_prio(uint64_t argc, char *argvTestPrio[]);
 
+void test_waitpid();
+void test_child();
+
 typedef int (*EntryPoint)();
 
 void clearBSS(void *bssAddress, uint64_t bssSize)
@@ -101,6 +104,7 @@ int main()
 
 	char *argvIdle[2] = {"idle", NULL};
 	schedulerAddProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
+	schedulerAddProcess("test_waitpid", HIGHEST_PRIO, test_waitpid, 1, argvIdle);
 
 	// Test_processes
 
@@ -134,4 +138,37 @@ int idle(int argc, char *argv[])
 	while (1)
 	{
 	};
+}
+
+void test_waitpid()
+{
+	char *argvTest[1] = {NULL};
+	ncPrintDec(-1);
+	ncNewline();
+	ncPrint("Empece (parent): ");
+	ncPrintDec(getRunningPid());
+	ncNewline();
+	ncPrint("Waiting for my child");
+	int pidChild = schedulerAddProcess("test_child", HIGHEST_PRIO, test_child, 1, argvTest);
+	// ncPrintDec(pidChild);
+	wait_pid(pidChild);
+	ncPrint("My child has finished");
+	exitProcess(0);
+}
+
+void test_child()
+{
+	ncPrint("Empece (child)");
+	schedulerYield();
+	ncNewline();
+	for (int i = 0; i < 5; i++)
+	{
+		ncNewline();
+		ncPrintDec(i);
+		ncNewline();
+		bussy_wait(10000000);
+	}
+	ncPrint("Termine (child)");
+	ncNewline();
+	exitProcess(0);
 }
