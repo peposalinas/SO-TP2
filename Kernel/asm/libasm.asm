@@ -256,7 +256,7 @@ down:
     mov rbp, rsp
     
     mov al, 0
-.loop
+ .loop:
     xchg [rdi], al
     test al, al
     jz .loop
@@ -274,8 +274,9 @@ down:
 up:
     push rbp
     mov rbp, rsp
-    
-    xchg [rdi], 1
+
+    mov al, 1
+    xchg [rdi], al
 
     mov rsp, rbp
     pop rbp
