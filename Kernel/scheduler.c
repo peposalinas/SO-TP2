@@ -152,7 +152,7 @@ int schedulerKillProcess(uint32_t pid)
 
     if (pid == scheduler_kernel->running_process_pid)
     {
-        _irq00Handler();
+        schedulerYield();
     }
 
     _sti();
@@ -166,7 +166,16 @@ void exitProcess(uint64_t returnVal)
     toExit->return_value = returnVal;
     scheduler_kernel->priority[toExit->priority]->ready_process_count--;
 
-    if (toExit->isBeingWaited == 0)
+    if (toExit->isBeingWaited)
+    {
+        int retValue = schedulerUnblockProcess(scheduler_kernel->processes[toExit->parent_pid]->pid);
+        ncNewline();
+        ncPrint("Return of unblck: ");
+        ncPrintDec(retValue);
+        ncNewline();
+        schedulerBlockProcess(toExit->pid);
+    }
+    else
     {
         schedulerKillProcess(scheduler_kernel->running_process_pid);
     }
@@ -180,13 +189,14 @@ uint64_t wait_pid(uint64_t pid)
         return -1;
     }
 
-    scheduler_kernel->processes[scheduler_kernel->running_process_pid]->isBeingWaited = 1;
+    scheduler_kernel->processes[pid]->isBeingWaited = 1;
+    schedulerBlockProcess(scheduler_kernel->running_process_pid);
 
-    while (scheduler_kernel->processes[pid] != NULL && scheduler_kernel->processes[pid]->state != TERMINATED)
-    {
-        // ncPrint("Reached here"); // No llega a imprimir esto
-        //_irq00Handler();
-    }
+    // while (scheduler_kernel->processes[pid] != NULL && scheduler_kernel->processes[pid]->state != TERMINATED)
+    // {
+    //     // ncPrint("Reached here"); // No llega a imprimir esto
+    //     //_irq00Handler();
+    // }
 
     uint64_t return_value = scheduler_kernel->processes[pid]->return_value;
     scheduler_kernel->processes[pid]->isBeingWaited = 0;
@@ -203,16 +213,16 @@ uint64_t getRunningPid()
 int schedulerBlockProcess(uint32_t pid)
 {
 
-    if (checkPID(pid) == -1)
+    if (checkPID(pid) == -1 || scheduler_kernel->processes[pid]->state == BLOCKED)
     {
         return -1;
     }
 
     scheduler_kernel->processes[pid]->state = BLOCKED;
     scheduler_kernel->priority[scheduler_kernel->processes[pid]->priority]->ready_process_count--;
-    if (pid == getRunningPid())
+    if (pid == scheduler_kernel->running_process_pid)
     {
-        _irq00Handler();
+        schedulerYield();
     }
 
     return pid;
@@ -221,7 +231,7 @@ int schedulerBlockProcess(uint32_t pid)
 int schedulerUnblockProcess(uint32_t pid)
 {
 
-    if (checkPID(pid) == -1)
+    if (checkPID(pid) == -1 || scheduler_kernel->processes[pid]->state != BLOCKED)
     {
         return -1;
     }
@@ -321,5 +331,5 @@ void listProcesses()
 
 void schedulerYield()
 {
-    _irq00Handler();
+    int20();
 }

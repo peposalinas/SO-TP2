@@ -75,4 +75,6 @@ void listProcesses();
 
 void listProcessesByPrio();
 
+void schedulerYield();
+
 #endif

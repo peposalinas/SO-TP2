@@ -17,7 +17,7 @@ GLOBAL _irq80Handler
 GLOBAL _exception0Handler
 GLOBAL _exception06Handler
 
-GLOBAL asm_timer_tick
+GLOBAL int20
 
 GLOBAL regs
 
@@ -207,7 +207,7 @@ _irq80Handler:
 _exception0Handler:
 	exceptionHandler 0
 ;Invalid Opcode Exception	
-_exception06Handler
+_exception06Handler:
 	exceptionHandler 6
 
 haltcpu:
@@ -215,9 +215,8 @@ haltcpu:
 	hlt
 	ret
 
-asm_timer_tick:
-	mov rdi,0
-	int 80h
+int20:
+	int 20h
 	ret
 	
 

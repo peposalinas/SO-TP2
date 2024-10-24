@@ -27,7 +27,7 @@ void _sti(void);
 
 void _hlt(void);
 
-void asm_timer_tick(void);
+void int20(void);
 
 void picMasterMask(uint8_t mask);
 
