@@ -162,21 +162,26 @@ int schedulerKillProcess(uint32_t pid)
 void exitProcess(uint64_t returnVal)
 {
     process toExit = scheduler_kernel->processes[scheduler_kernel->running_process_pid];
-    toExit->state = TERMINATED;
     toExit->return_value = returnVal;
-    scheduler_kernel->priority[toExit->priority]->ready_process_count--;
+    ncNewline();
+    ncPrint("exiteando...");
 
     if (toExit->isBeingWaited)
     {
-        int retValue = schedulerUnblockProcess(scheduler_kernel->processes[toExit->parent_pid]->pid);
+        ncNewline();
+        ncPrint("Alguien me esta esperando");
+        int retValue = schedulerUnblockProcess(toExit->parent_pid);
         ncNewline();
         ncPrint("Return of unblck: ");
         ncPrintDec(retValue);
         ncNewline();
-        schedulerBlockProcess(toExit->pid);
+        toExit->state = TERMINATED;
+        scheduler_kernel->priority[toExit->priority]->ready_process_count--;
     }
     else
     {
+        ncNewline();
+        ncPrint("Nadie me esta esperando");
         schedulerKillProcess(scheduler_kernel->running_process_pid);
     }
     return;
@@ -191,12 +196,6 @@ uint64_t wait_pid(uint64_t pid)
 
     scheduler_kernel->processes[pid]->isBeingWaited = 1;
     schedulerBlockProcess(scheduler_kernel->running_process_pid);
-
-    // while (scheduler_kernel->processes[pid] != NULL && scheduler_kernel->processes[pid]->state != TERMINATED)
-    // {
-    //     // ncPrint("Reached here"); // No llega a imprimir esto
-    //     //_irq00Handler();
-    // }
 
     uint64_t return_value = scheduler_kernel->processes[pid]->return_value;
     scheduler_kernel->processes[pid]->isBeingWaited = 0;
@@ -293,40 +292,53 @@ void listProcessesByPrio()
 
 void listProcesses()
 {
-    ncNewline();
-    ncPrint(" PID: ");
-    ncPrint(" Name: ");
-    ncPrint(" Priority: ");
-    ncPrint(" State: ");
-    ncPrint(" Stack:");
-    ncPrint(" Stack pointer: ");
+    // ncNewline();
+    // ncPrint(" PID: ");
+    // ncPrint(" Name: ");
+    // ncPrint(" Priority: ");
+    // ncPrint(" State: ");
+    // ncPrint(" Stack:");
+    // ncPrint(" Stack pointer: ");
+
+    // for (int i = 0; i < MAX_PROCESSES; i++)
+    // {
+    //     if (scheduler_kernel->processes[i] != NULL)
+    //     {
+    //         ncNewline();
+    //         ncPrintDec(scheduler_kernel->processes[i]->pid);
+    //         ncPrint("     ");
+    //         ncPrint(scheduler_kernel->processes[i]->name);
+    //         ncPrint("     ");
+    //         ncPrintDec(scheduler_kernel->processes[i]->priority);
+    //         ncPrint("          ");
+    //         ncPrintDec(scheduler_kernel->processes[i]->state);
+    //         ncPrint("     ");
+    //         ncPrintHex((uint64_t)scheduler_kernel->processes[i]->stack);
+    //         ncPrint("     ");
+    //         ncPrintHex((uint64_t)scheduler_kernel->processes[i]->stack_pointer);
+    //         ncPrint("     ");
+
+    //         if (scheduler_kernel->running_process_pid == scheduler_kernel->processes[i]->pid)
+    //         {
+    //             ncPrint("  *  ");
+    //         }
+
+    //         ncNewline();
+    //     }
+    // }
+    process_t processArray[MAX_PROCESSES];
+    int index = 0;
 
     for (int i = 0; i < MAX_PROCESSES; i++)
     {
         if (scheduler_kernel->processes[i] != NULL)
         {
-            ncNewline();
-            ncPrintDec(scheduler_kernel->processes[i]->pid);
-            ncPrint("     ");
-            ncPrint(scheduler_kernel->processes[i]->name);
-            ncPrint("     ");
-            ncPrintDec(scheduler_kernel->processes[i]->priority);
-            ncPrint("          ");
-            ncPrintDec(scheduler_kernel->processes[i]->state);
-            ncPrint("     ");
-            ncPrintHex((uint64_t)scheduler_kernel->processes[i]->stack);
-            ncPrint("     ");
-            ncPrintHex((uint64_t)scheduler_kernel->processes[i]->stack_pointer);
-            ncPrint("     ");
-
-            if (scheduler_kernel->running_process_pid == scheduler_kernel->processes[i]->pid)
-            {
-                ncPrint("  *  ");
-            }
-
-            ncNewline();
+            processArray[index] = *(scheduler_kernel->processes[i]);
+            index++;
         }
     }
+
+    return processArray;
 }
 
 void schedulerYield()

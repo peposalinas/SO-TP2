@@ -2,6 +2,7 @@
 #define _SYSCALLS_H_
 
 #include <stdint.h>
+#include "scheduler.h"
 
 typedef enum FD
 {
@@ -22,5 +23,18 @@ void beepSyscall(uint32_t frequence, uint32_t waitTicks);                       
 uint8_t fontSizeUp();                                                                          // 10
 uint8_t fontSizeDown();                                                                        // 11
 void getTime(uint8_t pb[]);                                                                    // 12
+void allocM(size_t memoryToAllocate);
+void freeM(void *ptr);
+// char * memStatus();
+int createProc(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
+void exitProc(uint64_t returnVal);
+uint64_t getPID();
+// void listProcesses();
+int killProc(uint32_t pid);
+uint64_t changeProcPriority(uint64_t pid, int priority);
+int blockProc(uint32_t pid);
+int unblockProc(uint32_t pid);
+void yieldProc();
+uint64_t waitPID(uint64_t pid);
 
 #endif

@@ -104,7 +104,7 @@ int main()
 
 	char *argvIdle[2] = {"idle", NULL};
 	schedulerAddProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
-	schedulerAddProcess("test_waitpid", HIGHEST_PRIO, test_waitpid, 1, argvIdle);
+	// schedulerAddProcess("test_waitpid", HIGHEST_PRIO, test_waitpid, 1, argvIdle);
 
 	// Test_processes
 
@@ -122,8 +122,8 @@ int main()
 
 	// int val = wait_pid(test_pid);
 	// ncPrintDec(val);
-	// char *argvShell[2] = {"shell", NULL};
-	// uint64_t shell_pid = schedulerAddProcess("shell", HIGHEST_PRIO, (EntryPoint)sampleCodeModuleAddress, 1, argvShell);
+	char *argvSampleCode[2] = {"shell", NULL};
+	uint64_t sample_code_pid = schedulerAddProcess("sampleCodeModule", 3, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
 
 	load_idt();
 	_sti();
@@ -135,15 +135,21 @@ int main()
 
 int idle(int argc, char *argv[])
 {
+	int i = 0;
 	while (1)
 	{
+		if (i == 0)
+		{
+			ncPrint("Idle");
+			ncNewline();
+			i++;
+		}
 	};
 }
 
 void test_waitpid()
 {
 	char *argvTest[1] = {NULL};
-	ncPrintDec(-1);
 	ncNewline();
 	ncPrint("Empece (parent): ");
 	ncPrintDec(getRunningPid());
@@ -158,6 +164,7 @@ void test_waitpid()
 
 void test_child()
 {
+	ncNewline();
 	ncPrint("Empece (child)");
 	schedulerYield();
 	ncNewline();

@@ -11,6 +11,17 @@ GLOBAL beepSysCaller
 GLOBAL fontSizeUpCaller
 GLOBAL fontSizeDownCaller
 GLOBAL getTimeCaller
+GLOBAL allocMCaller
+GLOBAL freeMCaller
+GLOBAL createProcCaller
+GLOBAL exitProcCaller
+GLOBAL getPIDCaller
+GLOBAL killProcCaller
+GLOBAL changeProcessPriorityCaller
+GLOBAL blockProcessCaller
+GLOBAL unblockProcessCaller
+GLOBAL yieldProcessCaller
+GLOBAL waitPIDCaller
 
 
 section .text
@@ -57,4 +68,27 @@ fontSizeDownCaller:
     syscaller 11
 getTimeCaller:
     syscaller 12
+
+allocMCaller:
+    syscaller 13
+freeMCaller:
+    syscaller 14
+createProcCaller:
+    syscaller 15
+exitProcCaller:
+    syscaller 16
+getPIDCaller:
+    syscaller 17
+killProcCaller:
+    syscaller 18
+changeProcessPriorityCaller:
+    syscaller 19
+blockProcessCaller:
+    syscaller 20
+unblockProcessCaller:
+    syscaller 21
+yieldProcessCaller:
+    syscaller 22
+waitPIDCaller:
+    syscaller 23
 

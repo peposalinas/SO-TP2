@@ -168,3 +168,64 @@ static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base)
 
 	return digits;
 }
+
+void allocM(size_t memoryToAllocate)
+{
+	return allocMemoryKernel(memoryToAllocate);
+}
+
+void freeM(void *ptr)
+{
+	freeMemoryKernel(ptr);
+}
+
+//@TODO: implementar
+// char * memStatus();
+
+int createProc(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[])
+{
+	return schedulerAddProcess(process_name, process_priority, entry_point, argc, argv);
+}
+
+void exitProc(uint64_t returnVal)
+{
+	exitProcess(returnVal);
+}
+
+uint64_t getPID()
+{
+	return getRunningPid();
+}
+
+//@TODO: implementar
+// void listProcesses();
+
+int killProc(uint32_t pid)
+{
+	return schedulerKillProcess(pid);
+}
+
+uint64_t changeProcPriority(uint64_t pid, int priority)
+{
+	return schedulerChangePriority(pid, priority);
+}
+
+int blockProc(uint32_t pid)
+{
+	return schedulerBlockProcess(pid);
+}
+
+int unblockProc(uint32_t pid)
+{
+	return schedulerUnblockProcess(pid);
+}
+
+void yieldProc()
+{
+	schedulerYield();
+}
+
+uint64_t waitPID(uint64_t pid)
+{
+	return wait_pid(pid);
+}

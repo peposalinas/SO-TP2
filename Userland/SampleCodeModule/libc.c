@@ -218,3 +218,63 @@ int strcmp(char *s1, char *s2)
     } while (s1[i] && s2[i++] && !ret);
     return ret;
 }
+
+void allocM(size_t memoryToAllocate)
+{
+    allocMCaller(UNUSED, memoryToAllocate);
+}
+
+void freeM(void *ptr)
+{
+    freeMCaller(UNUSED, ptr);
+}
+
+//@TODO: Implement memStatus
+// char * memStatus();
+
+int createProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[])
+{
+    return createProcCaller(UNUSED, process_name, process_priority, entry_point, argc, argv);
+}
+
+void exitProc(uint64_t returnVal)
+{
+    exitProcCaller(UNUSED, returnVal);
+}
+
+uint64_t getPID()
+{
+    return getPIDCaller(UNUSED);
+}
+//@TODO: Implementar
+// void listProcesses();
+
+int killProcess(uint32_t pid)
+{
+    return killProcCaller(UNUSED, pid);
+}
+
+uint64_t changeProcessPriority(uint64_t pid, int priority)
+{
+    return changeProcessPriorityCaller(UNUSED, pid, priority);
+}
+
+int blockProcess(uint32_t pid)
+{
+    return blockProcessCaller(UNUSED, pid);
+}
+
+int unblockProcess(uint32_t pid)
+{
+    return unblockProcessCaller(UNUSED, pid);
+}
+
+void yieldProcess()
+{
+    yieldProcessCaller(UNUSED);
+}
+
+uint64_t waitPID(uint64_t pid)
+{
+    return waitPIDCaller(UNUSED, pid);
+}

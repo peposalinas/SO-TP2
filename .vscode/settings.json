@@ -17,6 +17,8 @@
     "interrupts.h": "c",
     "lib.h": "c",
     "time.h": "c",
-    "semaphores.h": "c"
+    "semaphores.h": "c",
+    "syscalls.h": "c",
+    "libc.h": "c"
   }
 }

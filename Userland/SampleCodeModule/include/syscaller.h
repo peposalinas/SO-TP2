@@ -2,6 +2,7 @@
 #define SYSCALLER_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 #define UNUSED 0
 
@@ -18,5 +19,18 @@ void beepSysCaller(uint8_t __unused, uint32_t frequence, int waitTicks);
 uint8_t fontSizeUpCaller(uint8_t __unused);
 uint8_t fontSizeDownCaller(uint8_t __unused);
 void getTimeCaller(uint8_t __unused, uint8_t bp[]);
+void allocMCaller(uint8_t __unused, size_t memoryToAllocate);
+void freeMCaller(uint8_t __unused, void *ptr);
+// char * memStatusCaller();
+int createProcCaller(uint8_t __unused, char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
+void exitProcCaller(uint8_t __unused, uint64_t returnVal);
+uint64_t getPIDCaller(uint8_t __unused);
+// void listProcessesCaller();
+int killProcCaller(uint8_t __unused, uint32_t pid);
+uint64_t changeProcessPriorityCaller(uint8_t __unused, uint64_t pid, int priority);
+int blockProcessCaller(uint8_t __unused, uint32_t pid);
+int unblockProcessCaller(uint8_t __unused, uint32_t pid);
+void yieldProcessCaller(uint8_t __unused);
+uint64_t waitPIDCaller(uint8_t __unused, uint64_t pid);
 
 #endif
