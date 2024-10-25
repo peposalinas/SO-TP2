@@ -19,6 +19,7 @@
     "time.h": "c",
     "semaphores.h": "c",
     "syscalls.h": "c",
-    "libc.h": "c"
+    "libc.h": "c",
+    "syscaller.h": "c"
   }
 }

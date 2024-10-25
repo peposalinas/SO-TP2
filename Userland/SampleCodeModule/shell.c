@@ -29,6 +29,8 @@ typedef struct command
     void (*function)();
 } command;
 
+uint64_t test_sync(uint64_t argc, char *argv[]);
+
 static void clearCmd();
 static void div0();
 static void exit();
@@ -364,7 +366,8 @@ void launchShell()
     startNewLine();
     sPrintSelected(' ');
     buffer[count] = ' ';
-    createProcess("test", 4, test_waitPid, 0, NULL);
+    char *argvTest[3] = {"10", "0", NULL};
+    // createProcess("test_sem", 4, test_sync, 2, argvTest);
     uint8_t key;
     while (!exitFlag)
     {

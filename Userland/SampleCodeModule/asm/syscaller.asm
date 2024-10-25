@@ -22,7 +22,10 @@ GLOBAL blockProcessCaller
 GLOBAL unblockProcessCaller
 GLOBAL yieldProcessCaller
 GLOBAL waitPIDCaller
-
+GLOBAL openSemCaller
+GLOBAL closeSemCaller
+GLOBAL waitSemCaller
+GLOBAL postSemCaller
 
 section .text
 
@@ -92,3 +95,11 @@ yieldProcessCaller:
 waitPIDCaller:
     syscaller 23
 
+openSemCaller:
+    syscaller 24
+closeSemCaller:
+    syscaller 25
+waitSemCaller:
+    syscaller 26
+postSemCaller:
+    syscaller 27

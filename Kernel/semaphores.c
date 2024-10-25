@@ -1,5 +1,12 @@
 #include "semaphores.h"
 
+LinkedList *allSemaphores;
+
+void semInit()
+{
+    allSemaphores = createLinkedList();
+}
+
 static bool compareSem(sem_t s1, int id)
 {
     return (s1.id == id);
@@ -7,32 +14,28 @@ static bool compareSem(sem_t s1, int id)
 
 int semOpen(int id, int value)
 {
-    _cli();
     sem_t *sem = findElem(allSemaphores, id, compareSem);
+
     if (sem == NULL)
     {
         sem = allocMemoryKernel(sizeof(sem_t));
         if (sem == NULL)
         {
-            _sti();
             return -1;
         }
         sem->id = id;
         sem->value = value;
         sem->mutex = 1;
-        sem->blockedPids = allocMemoryKernel(sizeof(LinkedList));
+        sem->blockedPids = createLinkedList();
         sem->openedCount = 1;
         if (sem->blockedPids == NULL)
         {
-            _sti();
             return -1;
         }
         insertLast(allSemaphores, sem);
-        _sti();
         return 1;
     }
     sem->openedCount++;
-    _sti();
     return 0;
 }
 
@@ -41,7 +44,6 @@ void semClose(int id)
     sem_t *sem = findElem(allSemaphores, id, compareSem);
     if (sem == NULL)
         return;
-    _cli();
     sem->openedCount--;
     if (sem->openedCount == 0)
     {
@@ -49,7 +51,6 @@ void semClose(int id)
         removeElem(allSemaphores, id, compareSem);
         freeMemoryKernel(sem);
     }
-    _sti();
 }
 
 void semWait(int id)

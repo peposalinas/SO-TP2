@@ -229,3 +229,23 @@ uint64_t waitPID(uint64_t pid)
 {
 	return wait_pid(pid);
 }
+
+int openSem(int id, int value)
+{
+	return semOpen(id, value);
+}
+
+void closeSem(int id)
+{
+	return semClose(id);
+}
+
+void waitSem(int id)
+{
+	return semWait(id);
+}
+
+void postSem(int id)
+{
+	return semPost(id);
+}

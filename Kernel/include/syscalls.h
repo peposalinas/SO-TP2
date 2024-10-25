@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "scheduler.h"
+#include "semaphores.h"
 
 typedef enum FD
 {
@@ -36,5 +37,9 @@ int blockProc(uint32_t pid);
 int unblockProc(uint32_t pid);
 void yieldProc();
 uint64_t waitPID(uint64_t pid);
+int openSem(int id, int value);
+void closeSem(int id);
+void waitSem(int id);
+void postSem(int id);
 
 #endif

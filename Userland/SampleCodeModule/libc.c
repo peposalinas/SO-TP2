@@ -219,7 +219,7 @@ int strcmp(char *s1, char *s2)
     return ret;
 }
 
-void allocM(size_t memoryToAllocate)
+void allocM(int memoryToAllocate)
 {
     allocMCaller(UNUSED, memoryToAllocate);
 }
@@ -237,34 +237,34 @@ int createProcess(char *process_name, int process_priority, void (*entry_point)(
     return createProcCaller(UNUSED, process_name, process_priority, entry_point, argc, argv);
 }
 
-void exitProc(uint64_t returnVal)
+void exitProc(int returnVal)
 {
     exitProcCaller(UNUSED, returnVal);
 }
 
-uint64_t getPID()
+int getPID()
 {
     return getPIDCaller(UNUSED);
 }
 //@TODO: Implementar
 // void listProcesses();
 
-int killProcess(uint32_t pid)
+int killProcess(int pid)
 {
     return killProcCaller(UNUSED, pid);
 }
 
-uint64_t changeProcessPriority(uint64_t pid, int priority)
+int changeProcessPriority(int pid, int priority)
 {
     return changeProcessPriorityCaller(UNUSED, pid, priority);
 }
 
-int blockProcess(uint32_t pid)
+int blockProcess(int pid)
 {
     return blockProcessCaller(UNUSED, pid);
 }
 
-int unblockProcess(uint32_t pid)
+int unblockProcess(int pid)
 {
     return unblockProcessCaller(UNUSED, pid);
 }
@@ -274,7 +274,27 @@ void yieldProcess()
     yieldProcessCaller(UNUSED);
 }
 
-uint64_t waitPID(uint64_t pid)
+int waitPID(int pid)
 {
     return waitPIDCaller(UNUSED, pid);
+}
+
+int openSem(int id, int value)
+{
+    return openSemCaller(UNUSED, id, value);
+}
+
+void closeSem(int id)
+{
+    closeSemCaller(UNUSED, id);
+}
+
+void waitSem(int id)
+{
+    waitSemCaller(UNUSED, id);
+}
+
+void postSem(int id)
+{
+    postSemCaller(UNUSED, id);
 }

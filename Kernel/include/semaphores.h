@@ -19,8 +19,7 @@ typedef struct sem_t
     int openedCount;
 } sem_t;
 
-LinkedList *allSemaphores;
-
+void semInit();
 int semOpen(int id, int value);
 void semClose(int id);
 void semWait(int id);

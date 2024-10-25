@@ -32,5 +32,9 @@ int blockProcessCaller(uint8_t __unused, uint32_t pid);
 int unblockProcessCaller(uint8_t __unused, uint32_t pid);
 void yieldProcessCaller(uint8_t __unused);
 uint64_t waitPIDCaller(uint8_t __unused, uint64_t pid);
+int openSemCaller(uint8_t __unused, int id, int value);
+void closeSemCaller(uint8_t __unused, int id);
+void waitSemCaller(uint8_t __unused, int id);
+void postSemCaller(uint8_t __unused, int id);
 
 #endif

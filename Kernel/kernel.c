@@ -10,6 +10,7 @@
 #include "./include/test_util.h"
 #include <interrupts.h>
 #include <scheduler.h>
+#include "semaphores.h"
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -101,6 +102,7 @@ int main()
 
 	createMemoryManager(dir1, dir2);
 	schedulerInit();
+	semInit();
 
 	char *argvIdle[2] = {"idle", NULL};
 	schedulerAddProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
@@ -123,7 +125,7 @@ int main()
 	// int val = wait_pid(test_pid);
 	// ncPrintDec(val);
 	char *argvSampleCode[2] = {"shell", NULL};
-	uint64_t sample_code_pid = schedulerAddProcess("sampleCodeModule", 3, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
+	uint64_t sample_code_pid = schedulerAddProcess("sampleCodeModule", 2, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
 
 	load_idt();
 	_sti();

@@ -7,6 +7,9 @@
 #include <welcome.h>
 #include <font.h>
 
+void idleUser();
+uint64_t test_sync(uint64_t argc, char *argv[]);
+
 int main()
 {
 	// char * argvShell[] = {NULL};
@@ -37,5 +40,15 @@ int main()
 	// 		break;
 	// 	}
 	// }
-	launchShell();
+	// launchShell();
+
+	char *argvTest[3] = {"10", "1", NULL};
+	createProcess("test_sync", 4, test_sync, 2, argvTest);
+	exitProc(0);
+}
+
+void idleUser()
+{
+	while (1)
+		;
 }
