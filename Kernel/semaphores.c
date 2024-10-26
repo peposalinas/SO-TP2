@@ -63,7 +63,9 @@ void semWait(int id)
     {
         int myPid = getRunningPid();
         insertLast(sem->blockedPids, myPid);
+        up(&(sem->mutex));
         schedulerBlockProcess(myPid);
+        down(&(sem->mutex));
     }
     sem->value--;
     up(&(sem->mutex));
@@ -76,7 +78,7 @@ void semPost(int id)
         return;
     down(&(sem->mutex));
     sem->value++;
-    if (sem->value == 1)
+    if (sem->blockedPids->size > 0)
     {
         int nextPid = removeFirst(sem->blockedPids);
         schedulerUnblockProcess(nextPid);

@@ -94,7 +94,7 @@ void *initializeKernelBinary()
 
 int main()
 {
-	setTimerTick(10000);
+	setTimerTick(100000);
 	_cli();
 
 	void *dir1 = (void *)0x600000;
