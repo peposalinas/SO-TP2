@@ -65,10 +65,12 @@ void semWait(int id)
         insertLast(sem->blockedPids, myPid);
         up(&(sem->mutex));
         schedulerBlockProcess(myPid);
-        down(&(sem->mutex));
     }
-    sem->value--;
-    up(&(sem->mutex));
+    else
+    {
+        sem->value--;
+        up(&(sem->mutex));
+    }
 }
 
 void semPost(int id)
@@ -77,11 +79,12 @@ void semPost(int id)
     if (sem == NULL)
         return;
     down(&(sem->mutex));
-    sem->value++;
     if (sem->blockedPids->size > 0)
     {
         int nextPid = removeFirst(sem->blockedPids);
         schedulerUnblockProcess(nextPid);
     }
+    else
+        sem->value++;
     up(&(sem->mutex));
 }

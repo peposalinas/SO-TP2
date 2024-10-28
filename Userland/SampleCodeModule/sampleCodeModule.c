@@ -45,7 +45,7 @@ int main()
 	// }
 	// launchShell();
 
-	char *argvTest[3] = {"10", "1", NULL};
+	char *argvTest[3] = {"32", "1", NULL};
 	int pid = createProcess("test_sync", 4, test_sync, 2, argvTest);
 	waitPID(pid);
 	// char *argvWait[1] = {NULL};
@@ -64,12 +64,19 @@ void test_waitPid()
 	char *argvTest[1] = {NULL};
 	printf("\nEmpece (parent): %d", getPID());
 	printf("\nWaiting for my child");
-	int pidChild = createProcess("test_child", 4, test_child, 1, argvTest);
-	int pidChild2 = createProcess("test_child2", 4, test_child2, 1, argvTest);
-	int returnV = waitPID(pidChild);
-	printf("\nMy child has finished with value: %d", returnV);
-	int returnV2 = waitPID(pidChild2);
-	printf("\nMy child2 has finished with value: %d", returnV2);
+	int pidChild[4];
+	for (size_t i = 0; i < 2; i++)
+	{
+		pidChild[i] = createProcess("test_child", 4, test_child, 1, argvTest);
+		pidChild[i + 2] = createProcess("test_child2", 4, test_child2, 1, argvTest);
+	}
+	for (size_t i = 0; i < 2; i++)
+	{
+		int returnV = waitPID(pidChild[i]);
+		printf("\nMy child has finished with value: %d", returnV);
+		int returnV2 = waitPID(pidChild[i + 2]);
+		printf("\nMy child2 has finished with value: %d", returnV2);
+	}
 	exitProc(0);
 }
 

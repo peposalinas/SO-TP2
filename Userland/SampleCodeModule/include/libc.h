@@ -28,5 +28,6 @@ int openSem(int id, int value);
 void closeSem(int id);
 void waitSem(int id);
 void postSem(int id);
+void clearScreen();
 
 #endif

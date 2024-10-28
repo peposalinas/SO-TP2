@@ -162,10 +162,11 @@ void exitProcess(uint64_t returnVal)
 
     if (toExit->isBeingWaited)
     {
-        int retValue = schedulerUnblockProcess(toExit->parent_pid);
+        schedulerUnblockProcess(toExit->parent_pid);
     }
     toExit->state = TERMINATED;
     scheduler_kernel->priority[toExit->priority]->ready_process_count--;
+    schedulerYield();
     return;
 }
 

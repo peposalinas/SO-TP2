@@ -94,7 +94,6 @@ void *initializeKernelBinary()
 
 int main()
 {
-	setTimerTick(100000);
 	_cli();
 	load_idt();
 

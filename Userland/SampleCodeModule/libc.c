@@ -298,3 +298,13 @@ void postSem(int id)
 {
     postSemCaller(UNUSED, id);
 }
+
+void clearScreen()
+{
+    int width = getScreenWidthCaller(UNUSED) / 8;
+    int height = getScreenHeightCaller(UNUSED) / 16;
+    for (int i = 0; i < width * height; i++)
+    {
+        putChar(' ');
+    }
+}
