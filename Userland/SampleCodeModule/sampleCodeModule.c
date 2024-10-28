@@ -9,6 +9,9 @@
 
 void idleUser();
 uint64_t test_sync(uint64_t argc, char *argv[]);
+void test_child();
+void test_waitPid();
+void test_child2();
 
 int main()
 {
@@ -43,7 +46,10 @@ int main()
 	// launchShell();
 
 	char *argvTest[3] = {"10", "1", NULL};
-	createProcess("test_sync", 4, test_sync, 2, argvTest);
+	int pid = createProcess("test_sync", 4, test_sync, 2, argvTest);
+	waitPID(pid);
+	// char *argvWait[1] = {NULL};
+	// createProcess("test_waitPid", 4, test_waitPid, 1, argvWait);
 	exitProc(0);
 }
 
@@ -51,4 +57,54 @@ void idleUser()
 {
 	while (1)
 		;
+}
+
+void test_waitPid()
+{
+	char *argvTest[1] = {NULL};
+	printf("\nEmpece (parent): %d", getPID());
+	printf("\nWaiting for my child");
+	int pidChild = createProcess("test_child", 4, test_child, 1, argvTest);
+	int pidChild2 = createProcess("test_child2", 4, test_child2, 1, argvTest);
+	int returnV = waitPID(pidChild);
+	printf("\nMy child has finished with value: %d", returnV);
+	int returnV2 = waitPID(pidChild2);
+	printf("\nMy child2 has finished with value: %d", returnV2);
+	exitProc(0);
+}
+
+void test_child()
+{
+	printf("\nEmpece (child)");
+	yieldProcess();
+	int j = 0;
+	for (int i = 0; i < 5; i++)
+	{
+		printf("\n%d", i);
+		while (j < 100000)
+		{
+			j++;
+		}
+		j = 0;
+	}
+	printf("\nTermine (child)");
+	exitProc(100);
+}
+
+void test_child2()
+{
+	printf("\nEmpece (child2)");
+	yieldProcess();
+	int j = 0;
+	for (int i = 6; i < 11; i++)
+	{
+		printf("\n%d", i);
+		while (j < 100000)
+		{
+			j++;
+		}
+		j = 0;
+	}
+	printf("\nTermine (child2)");
+	exitProc(80);
 }

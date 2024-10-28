@@ -159,27 +159,13 @@ void exitProcess(uint64_t returnVal)
 {
     process toExit = scheduler_kernel->processes[scheduler_kernel->running_process_pid];
     toExit->return_value = returnVal;
-    ncNewline();
-    ncPrint("exiteando...");
 
     if (toExit->isBeingWaited)
     {
-        ncNewline();
-        ncPrint("Alguien me esta esperando");
         int retValue = schedulerUnblockProcess(toExit->parent_pid);
-        ncNewline();
-        ncPrint("Return of unblck: ");
-        ncPrintDec(retValue);
-        ncNewline();
-        toExit->state = TERMINATED;
-        scheduler_kernel->priority[toExit->priority]->ready_process_count--;
     }
-    else
-    {
-        ncNewline();
-        ncPrint("Nadie me esta esperando");
-        schedulerKillProcess(scheduler_kernel->running_process_pid);
-    }
+    toExit->state = TERMINATED;
+    scheduler_kernel->priority[toExit->priority]->ready_process_count--;
     return;
 }
 

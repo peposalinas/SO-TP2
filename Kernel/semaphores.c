@@ -7,9 +7,9 @@ void semInit()
     allSemaphores = createLinkedList();
 }
 
-static bool compareSem(sem_t s1, int id)
+static bool compareSem(sem_t *s1, int id)
 {
-    return (s1.id == id);
+    return (s1->id == id);
 }
 
 int semOpen(int id, int value)

@@ -41,9 +41,6 @@ static void getTime();
 static void help();
 static void invalidOpCode();
 
-void test_waitPid();
-void test_child();
-
 static command commands[LETTERS][WORDS] = {{{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"eliminator", eliminator}, {"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {0, 0}}};
 
 static char *commandNotFoundMsg = "Command not found. Type help for a list of commands";
@@ -539,33 +536,4 @@ void invalidOpCode()
 {
     fontSize = 1;
     opcode();
-}
-
-void test_waitPid()
-{
-    char *argvTest[1] = {NULL};
-    printf("\nEmpece (parent): %d", getPID());
-    printf("\nWaiting for my child");
-    int pidChild = createProcess("test_child", 4, test_child, 1, argvTest);
-    waitPID(pidChild);
-    printf("\nMy child has finished");
-    exitProc(0);
-}
-
-void test_child()
-{
-    printf("\nEmpece (child)");
-    yieldProcess();
-    int j = 0;
-    for (int i = 0; i < 5; i++)
-    {
-        printf("\n%d", i);
-        while (j < 100000)
-        {
-            j++;
-        }
-        j = 0;
-    }
-    printf("\nTermine (child)");
-    exitProc(0);
 }

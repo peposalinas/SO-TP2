@@ -96,6 +96,7 @@ int main()
 {
 	setTimerTick(100000);
 	_cli();
+	load_idt();
 
 	void *dir1 = (void *)0x600000;
 	void *dir2 = (void *)0x700000;
@@ -127,7 +128,6 @@ int main()
 	char *argvSampleCode[2] = {"shell", NULL};
 	uint64_t sample_code_pid = schedulerAddProcess("sampleCodeModule", 2, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
 
-	load_idt();
 	_sti();
 
 	//  testMM("100000");
