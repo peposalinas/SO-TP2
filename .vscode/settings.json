@@ -20,6 +20,7 @@
     "semaphores.h": "c",
     "syscalls.h": "c",
     "libc.h": "c",
-    "syscaller.h": "c"
+    "syscaller.h": "c",
+    "sstream": "c"
   }
 }

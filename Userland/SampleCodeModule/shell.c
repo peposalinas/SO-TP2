@@ -1,13 +1,7 @@
 #include <shell.h>
-#include <stdint.h>
-#include <syscaller.h>
-#include <libc.h>
-#include <userLib.h>
-#include <sounds.h>
-#include <eliminator.h>
-#include <libc.h>
 
 #define BUFF_MAX 4096
+#define MAX_ARGS 10
 
 #define WHITE 0x00FFFFFF
 #define BLACK 0
@@ -18,30 +12,31 @@
 #define UP_ARROW 253
 #define DOWN_ARROW 254
 
-#define LETTERS 'i' - 'a' + 1
+#define LETTERS 'z' - 'a' + 1
 #define WORDS 2
 
 // ###################################################################
 // definiciones para los commandos
-typedef struct command
+typedef struct command_t
 {
     char *name;
-    void (*function)();
-} command;
+    void (*function)(uint64_t argc, char *argv[]);
+} command_t;
 
 uint64_t test_sync(uint64_t argc, char *argv[]);
 
-static void clearCmd();
-static void div0();
-static void exit();
-static void eliminator();
-static void fontSmall();
-static void fontBig();
-static void getTime();
-static void help();
-static void invalidOpCode();
+static void clearCmd(int argc, char *argv[]);
+static void div0(int argc, char *argv[]);
+static void exit(int argc, char *argv[]);
+static void eliminator(int argc, char *argv[]);
+static void fontSmall(int argc, char *argv[]);
+static void fontBig(int argc, char *argv[]);
+static void getTime(int argc, char *argv[]);
+static void help(int argc, char *argv[]);
+static void invalidOpCode(int argc, char *argv[]);
+static void createTestSync(int argc, char *argv[]);
 
-static command commands[LETTERS][WORDS] = {{{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"eliminator", eliminator}, {"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {0, 0}}};
+static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"eliminator", eliminator}, {"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testSync", createTestSync}, {0, 0}}};
 
 static char *commandNotFoundMsg = "Command not found. Type help for a list of commands";
 static uint8_t cNotFoundSize = 51;
@@ -73,7 +68,10 @@ void sPrintChar(uint8_t c)
 
 void sPrintSelected(uint8_t c)
 {
-    printCharCaller(UNUSED, c, currentX, currentY, BLACK, WHITE);
+    if (c == 0)
+        printCharCaller(UNUSED, c, currentX, currentY, WHITE, WHITE);
+    else
+        printCharCaller(UNUSED, c, currentX, currentY, BLACK, WHITE);
 }
 
 void startNewLine()
@@ -187,7 +185,7 @@ void printMsgAndWait(const char *msg, uint8_t size)
 
 char getCommandIdx(char c)
 {
-    return c - 'c';
+    return c - 'a';
 }
 
 void sCheckCommand()
@@ -195,7 +193,19 @@ void sCheckCommand()
     if (offsets[lineCount] == offsets[lineCount - 1])
         return;
     uint8_t aux = buffer[offsets[lineCount]];
-    char c = getCommandIdx(buffer[offsets[lineCount - 1]]);
+
+    char *command_tokens[MAX_ARGS + 1];
+    char *token;
+    char *command = &buffer[offsets[lineCount - 1]];
+    uint8_t j = 0;
+    do
+    {
+        token = strtok(command, " ");
+        command_tokens[j++] = token;
+        command = NULL;
+    } while (token);
+
+    char c = getCommandIdx(command_tokens[0][0]);
     if (c < 0 || c >= LETTERS)
     {
         printMsgAndWait(commandNotFoundMsg, cNotFoundSize);
@@ -203,7 +213,7 @@ void sCheckCommand()
     }
 
     buffer[offsets[lineCount]] = 0;
-    command *auxC = commands[c];
+    command_t *auxC = commands[c];
     for (int i = 0; i < WORDS; i++)
     {
         if (auxC[i].name != NULL)
@@ -215,7 +225,7 @@ void sCheckCommand()
             }
             else if (cmp == 0)
             {
-                auxC[i].function();
+                auxC[i].function(j - 2, command_tokens + 1);
                 buffer[offsets[lineCount]] = aux;
                 return;
             }
@@ -227,6 +237,26 @@ void sCheckCommand()
     }
     printMsgAndWait(commandNotFoundMsg, cNotFoundSize);
     buffer[offsets[lineCount]] = aux;
+}
+
+char **getArgs(char *buffer)
+{
+    static char *argv[10]; // Assuming a maximum of 10 arguments
+    int argc = 0;
+    char *aux = buffer;
+
+    while (*aux != 0 && argc < 10)
+    {
+        while (*aux == ' ') // Skip leading spaces
+            aux++;
+        argv[argc++] = aux;
+        while (*aux != ' ' && *aux != 0) // Find the end of the argument
+            aux++;
+        if (*aux != 0)
+            *aux++ = 0; // Null-terminate the argument and move to the next character
+    }
+    argv[argc] = NULL; // Null-terminate the argument list
+    return argv;
 }
 
 void sDeleteChar()
@@ -438,7 +468,7 @@ void launchShell()
             buffer[count - leftSteps] = key;
             count++;
             offsets[lineCount] = count;
-            buffer[count] = ' ';
+            buffer[count] = 0;
             sPrintChar(key);
             currentX++;
             if (currentX == width)
@@ -459,7 +489,7 @@ void launchShell()
 
 // comandos de la terminal
 
-void fontBig()
+void fontBig(int argc, char *argv[])
 {
     if (fontSize == 2)
     {
@@ -474,7 +504,7 @@ void fontBig()
     reset = 1;
 }
 
-void exit()
+void exit(int argc, char *argv[])
 {
     exitFlag = 1;
     firstLineOnScreen = lineCount - 1;
@@ -482,13 +512,13 @@ void exit()
     currentY = 0;
 }
 
-void div0()
+void div0(int argc, char *argv[])
 {
     fontSize = 1;
     divZero();
 }
 
-void fontSmall()
+void fontSmall(int argc, char *argv[])
 {
     if (fontSize == 1)
     {
@@ -503,7 +533,7 @@ void fontSmall()
     reset = 1;
 }
 
-void eliminator()
+void eliminator(int argc, char *argv[])
 {
     gameMain();
     cleanBuffer();
@@ -511,7 +541,7 @@ void eliminator()
     reset = 1;
 }
 
-void clearCmd()
+void clearCmd(int argc, char *argv[])
 {
     clear();
     reset = 1;
@@ -520,20 +550,26 @@ void clearCmd()
     currentY = 0;
 }
 
-void getTime()
+void getTime(int argc, char *argv[])
 {
     uint8_t clock[20];
     getTimeCaller(UNUSED, clock);
     printMsgAndWait(clock, 8);
 }
 
-void help()
+void help(int argc, char *argv[])
 {
     printMsgAndWait(helpMsg, hMsgSize);
 }
 
-void invalidOpCode()
+void invalidOpCode(int argc, char *argv[])
 {
     fontSize = 1;
     opcode();
+}
+
+void createTestSync(int argc, char *argv[])
+{
+    int pid = createProcess("test_sync", 4, test_sync, argc, argv);
+    waitPID(pid);
 }

@@ -29,5 +29,7 @@ void closeSem(int id);
 void waitSem(int id);
 void postSem(int id);
 void clearScreen();
+char *strtok(char *str, const char *delim);
+char *strchr(const char *str, int c);
 
 #endif

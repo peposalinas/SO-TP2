@@ -308,3 +308,52 @@ void clearScreen()
         putChar(' ');
     }
 }
+
+static char *last;
+
+char *strtok(char *str, const char *delim)
+{
+    if (str == NULL)
+        str = last;
+    if (str == NULL)
+        return NULL;
+
+    while (*str && strchr(delim, *str))
+        str++;
+
+    if (*str == '\0')
+    {
+        last = NULL;
+        return NULL;
+    }
+
+    char *token_start = str;
+
+    while (*str && !strchr(delim, *str))
+        str++;
+
+    if (*str)
+    {
+        *str = '\0';
+        last = str + 1;
+    }
+    else
+    {
+        last = NULL;
+    }
+
+    return token_start;
+}
+
+char *strchr(const char *str, int c)
+{
+    while (*str)
+    {
+        if (*str == (char)c)
+        {
+            return (char *)str;
+        }
+        str++;
+    }
+    return NULL;
+}

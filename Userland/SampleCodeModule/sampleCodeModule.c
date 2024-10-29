@@ -45,8 +45,7 @@ int main()
 	// }
 	// launchShell();
 
-	char *argvTest[3] = {"32", "1", NULL};
-	int pid = createProcess("test_sync", 4, test_sync, 2, argvTest);
+	int pid = createProcess("shell", 4, launchShell, 0, NULL);
 	waitPID(pid);
 	// char *argvWait[1] = {NULL};
 	// createProcess("test_waitPid", 4, test_waitPid, 1, argvWait);
