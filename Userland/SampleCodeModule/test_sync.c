@@ -43,21 +43,17 @@ uint64_t my_process_inc(uint64_t argc, char *argv[])
         if (use_sem)
         {
             waitSem(SEM_ID);
-            printf("W   ");
         }
         slowInc(&global, inc);
         if (use_sem)
         {
             postSem(SEM_ID);
-            printf("P   ");
         }
-        printf("%d\t", global);
     }
 
     if (use_sem)
     {
         closeSem(SEM_ID);
-        printf("C   ");
     }
 
     exitProc(0);
