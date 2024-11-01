@@ -23,8 +23,6 @@ typedef struct command_t
     void (*function)(uint64_t argc, char *argv[]);
 } command_t;
 
-uint64_t test_sync(uint64_t argc, char *argv[]);
-
 static void clearCmd(int argc, char *argv[]);
 static void div0(int argc, char *argv[]);
 static void exit(int argc, char *argv[]);
@@ -35,8 +33,9 @@ static void getTime(int argc, char *argv[]);
 static void help(int argc, char *argv[]);
 static void invalidOpCode(int argc, char *argv[]);
 static void createTestSync(int argc, char *argv[]);
+static void createTestMemInfo(int argc, char *argv[]);
 
-static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"eliminator", eliminator}, {"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testSync", createTestSync}, {0, 0}}};
+static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"eliminator", eliminator}, {"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMemInfo", createTestMemInfo}, {"testSync", createTestSync}}};
 
 static char *commandNotFoundMsg = "Command not found. Type help for a list of commands";
 static uint8_t cNotFoundSize = 51;
@@ -571,5 +570,11 @@ void invalidOpCode(int argc, char *argv[])
 void createTestSync(int argc, char *argv[])
 {
     int pid = createProcess("test_sync", 4, test_sync, argc, argv);
+    waitPID(pid);
+}
+
+void createTestMemInfo(int argc, char *argv[])
+{
+    int pid = createProcess("test_mem", 4, test_mem, argc, argv);
     waitPID(pid);
 }

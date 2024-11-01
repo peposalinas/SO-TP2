@@ -21,6 +21,8 @@
     "syscalls.h": "c",
     "libc.h": "c",
     "syscaller.h": "c",
-    "sstream": "c"
+    "sstream": "c",
+    "shell.h": "c",
+    "eliminator.h": "c"
   }
 }

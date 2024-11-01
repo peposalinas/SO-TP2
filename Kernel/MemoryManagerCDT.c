@@ -232,12 +232,21 @@ void freeMemory(MemoryManagerADT mm, void *ptr)
     }
 }
 
-char *memStatus(MemoryManagerADT mm)
+// char *memStatus(MemoryManagerADT mm)
+// {
+//     Uso espacio después de todos los bloques
+//     char *mem_status = (char *)(mm->mem_start + TOTAL_MEM);
+//     sprintf(mem_status, "Free memory: %ld bytes\nOccupied memory: %ld bytes", mm->free_mem, mm->occupied_mem);
+//     return mem_status;
+// }
+
+MemStatus *memStatusKernel()
 {
-    // Uso espacio después de todos los bloques
-    // char *mem_status = (char *)(mm->mem_start + TOTAL_MEM);
-    // sprintf(mem_status, "Free memory: %ld bytes\nOccupied memory: %ld bytes", mm->free_mem, mm->occupied_mem);
-    // return mem_status;
+    MemStatus *mem_status = allocMemoryKernel(sizeof(MemStatus));
+    mem_status->total_mem = kernel_mm->total_size;
+    mem_status->free_mem = kernel_mm->free_mem;
+    mem_status->occupied_mem = kernel_mm->occupied_mem;
+    return mem_status;
 }
 
 static void declareFreeMem(MemoryManagerADT mm, size_t size)

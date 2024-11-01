@@ -169,7 +169,7 @@ static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base)
 	return digits;
 }
 
-void allocM(size_t memoryToAllocate)
+void *allocM(size_t memoryToAllocate)
 {
 	return allocMemoryKernel(memoryToAllocate);
 }
@@ -180,7 +180,10 @@ void freeM(void *ptr)
 }
 
 //@TODO: implementar
-// char * memStatus();
+MemStatus *memStatus()
+{
+	return memStatusKernel();
+}
 
 int createProc(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[])
 {

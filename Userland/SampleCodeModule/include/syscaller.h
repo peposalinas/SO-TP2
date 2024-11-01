@@ -6,6 +6,13 @@
 
 #define UNUSED 0
 
+typedef struct MemStatus
+{
+    size_t total_mem;
+    size_t free_mem;
+    size_t occupied_mem;
+} MemStatus;
+
 uint32_t readCaller(uint8_t __unused, uint8_t *buffer, uint32_t size);
 long int writeCaller(uint8_t __unused, uint8_t fd, const uint8_t *string, uint32_t size);
 void printRectangleCaller(uint8_t __unused, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t color);
@@ -19,7 +26,7 @@ void beepSysCaller(uint8_t __unused, uint32_t frequence, int waitTicks);
 uint8_t fontSizeUpCaller(uint8_t __unused);
 uint8_t fontSizeDownCaller(uint8_t __unused);
 void getTimeCaller(uint8_t __unused, uint8_t bp[]);
-void allocMCaller(uint8_t __unused, size_t memoryToAllocate);
+void *allocMCaller(uint8_t __unused, size_t memoryToAllocate);
 void freeMCaller(uint8_t __unused, void *ptr);
 // char * memStatusCaller();
 int createProcCaller(uint8_t __unused, char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
@@ -36,5 +43,6 @@ int openSemCaller(uint8_t __unused, int id, int value);
 void closeSemCaller(uint8_t __unused, int id);
 void waitSemCaller(uint8_t __unused, int id);
 void postSemCaller(uint8_t __unused, int id);
+MemStatus *memStatusCaller(uint8_t __unused);
 
 #endif

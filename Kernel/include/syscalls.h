@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "scheduler.h"
 #include "semaphores.h"
+#include "MemoryManagerADT.h"
 
 typedef enum FD
 {
@@ -24,9 +25,8 @@ void beepSyscall(uint32_t frequence, uint32_t waitTicks);                       
 uint8_t fontSizeUp();                                                                          // 10
 uint8_t fontSizeDown();                                                                        // 11
 void getTime(uint8_t pb[]);                                                                    // 12
-void allocM(size_t memoryToAllocate);
+void *allocM(size_t memoryToAllocate);
 void freeM(void *ptr);
-// char * memStatus();
 int createProc(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
 void exitProc(uint64_t returnVal);
 uint64_t getPID();
@@ -41,5 +41,6 @@ int openSem(int id, int value);
 void closeSem(int id);
 void waitSem(int id);
 void postSem(int id);
+MemStatus *memStatus();
 
 #endif

@@ -5,11 +5,18 @@
 #include <stdlib.h>
 #include "test_util.h"
 
-#define KB *1024 * 1024
-#define AMOUNT_OF_KB 128
-#define TOTAL_MEM AMOUNT_OF_KB KB // @TODO: Cambiar magic number
+#define MB *1024 * 1024
+#define AMOUNT_OF_MB 128
+#define TOTAL_MEM AMOUNT_OF_MB MB
 
 typedef struct MemoryManagerCDT *MemoryManagerADT;
+
+typedef struct MemStatus
+{
+    size_t total_mem;
+    size_t free_mem;
+    size_t occupied_mem;
+} MemStatus;
 
 /**
  * Crea los recursos necesarios para un memory manager. Aunque lo retorna, también lo almacena como variable interna
@@ -28,7 +35,7 @@ void freeMemory(MemoryManagerADT mm, void *ptr);
 void *allocMemoryKernel(size_t memoryToAllocate);
 
 /**
- * Libera memoria usando el MM dl kernel
+ * Libera memoria usando el MM del kernel
  * @param ptr puntero a la memoria a liberar
  */
 void freeMemoryKernel(void *ptr);
@@ -37,6 +44,12 @@ void freeMemoryKernel(void *ptr);
  *  Refleja la memoria ocupada y libre del Memory Manager (incluyendo los struct block)
  *  @return string representando lo antedicho
  */
-char *memStatus(MemoryManagerADT mm); //@TODO: Chequear qué retornamos
+// char *memStatus(MemoryManagerADT mm); //@TODO: Chequear qué retornamos
+
+/**
+ *  Refleja la memoria ocupada y libre del Memory Manager del Kernel (incluyendo los struct block)
+ *  @return string representando lo antedicho
+ */
+MemStatus *memStatusKernel(); //@TODO: Chequear qué retornamos
 
 #endif

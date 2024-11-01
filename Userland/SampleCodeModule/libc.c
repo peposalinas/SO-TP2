@@ -1,7 +1,4 @@
 #include <libc.h>
-#include <stdint.h>
-#include <stdarg.h>
-#include <syscaller.h>
 
 void readString(char *buffer, int maxLength);
 void printString(char *str);
@@ -219,9 +216,9 @@ int strcmp(char *s1, char *s2)
     return ret;
 }
 
-void allocM(int memoryToAllocate)
+void *allocM(int memoryToAllocate)
 {
-    allocMCaller(UNUSED, memoryToAllocate);
+    return allocMCaller(UNUSED, memoryToAllocate);
 }
 
 void freeM(void *ptr)
@@ -230,7 +227,10 @@ void freeM(void *ptr)
 }
 
 //@TODO: Implement memStatus
-// char * memStatus();
+MemStatus *memStatus()
+{
+    return memStatusCaller(UNUSED);
+}
 
 int createProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[])
 {

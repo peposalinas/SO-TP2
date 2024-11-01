@@ -9,6 +9,7 @@
 #include <eliminator.h>
 #include <libc.h>
 #include <stdarg.h>
+#include "test_util.h"
 
 void launchShell();
 

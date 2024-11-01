@@ -26,6 +26,7 @@ GLOBAL openSemCaller
 GLOBAL closeSemCaller
 GLOBAL waitSemCaller
 GLOBAL postSemCaller
+GLOBAL memStatusCaller
 
 section .text
 
@@ -103,3 +104,6 @@ waitSemCaller:
     syscaller 26
 postSemCaller:
     syscaller 27
+
+memStatusCaller:
+    syscaller 28

@@ -1,5 +1,10 @@
 #ifndef _LIBC_H_
 #define _LIBC_H_
+
+#include <stdint.h>
+#include <stdarg.h>
+#include <syscaller.h>
+
 #define EOF -1
 #define NULL 0
 
@@ -11,9 +16,9 @@ void scanf(const char *fmt, ...);
 int atoi(const char *str);
 void itos(int num, char *buffer);
 int strcmp(char *s1, char *s2);
-void allocM(int memoryToAllocate);
+void *allocM(int memoryToAllocate);
 void freeM(void *ptr);
-// char * memStatus();
+MemStatus *memStatus();
 int createProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
 void exitProc(int returnVal);
 int getPID();

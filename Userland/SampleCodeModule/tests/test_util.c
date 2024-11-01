@@ -1,4 +1,4 @@
-#include "./include/test_util.h"
+#include "test_util.h"
 #include "libc.h"
 #define MAX_BLOCKS 128
 #define TICKS 100
@@ -8,6 +8,7 @@ static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base);
 // Random
 static uint32_t m_z = 362436069;
 static uint32_t m_w = 521288629;
+static int id = 0;
 
 typedef struct MM_rq
 {
@@ -70,6 +71,8 @@ int64_t satoi(char *str)
 
 void endless_loop()
 {
+    printf("%d\n", id);
+    id++;
     while (1)
         ;
 }

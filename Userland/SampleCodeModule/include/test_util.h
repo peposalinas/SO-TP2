@@ -1,5 +1,7 @@
 #include <stdint.h>
 
+uint64_t test_mem(int argc, char *argv[]);
+uint64_t test_sync(uint64_t argc, char *argv[]);
 uint32_t GetUint();
 uint32_t Gs(uint32_t max);
 uint8_t memcheck(void *start, uint8_t value, uint32_t size);
