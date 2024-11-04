@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <welcome.h>
 #include <font.h>
+#include "test_util.h"
 
 void idleUser();
 uint64_t test_sync(uint64_t argc, char *argv[]);

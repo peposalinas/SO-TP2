@@ -77,14 +77,19 @@ void endless_loop()
         ;
 }
 
-void endless_loop_print(uint64_t wait)
+void endless_loop_print(uint64_t argc, char *argv[])
 {
     int64_t pid = getPID();
 
+    if (argc != 1)
+        exitProc(-1);
+    size_t wait = satoi(argv[0]);
+
     while (1)
     {
-        // bussy_wait(wait);
-        // ncPrintDec(pid);
+        for (int i = 0; i < wait; i++)
+            ;
+        printf("%d", pid);
     }
 }
 
