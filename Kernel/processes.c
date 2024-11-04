@@ -29,7 +29,8 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
 
     memoryForProcess->pid = process_pid;
     memoryForProcess->state = READY;
-    memoryForProcess->stack = (uint64_t)(allocMemoryKernel(STACK_SIZE) + STACK_SIZE) & ~ALIGN;
+    memoryForProcess->stack_end = allocMemoryKernel(STACK_SIZE);
+    memoryForProcess->stack = (uint64_t)(memoryForProcess->stack_end + STACK_SIZE) & ~ALIGN;
     stack_frame *stackFrame = memoryForProcess->stack - sizeof(stack_frame);
 
     stackFrame->ss = 0x0;
@@ -51,6 +52,6 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
 
 int killProcess(process process)
 {
-    freeMemoryKernel(process->stack);
+    freeMemoryKernel(process->stack_end);
     freeMemoryKernel(process);
 }

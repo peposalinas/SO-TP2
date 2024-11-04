@@ -40,6 +40,7 @@ static void createTestMemInfo(int argc, char *argv[]);
 static void createTestProcesses(int argc, char *argv[]);
 static void createTestPrio(int argc, char *argv[]);
 static void createTestMem(int argc, char *argv[]);
+static void doNothing();
 
 static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"eliminator", eliminator}, {"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {"invalidOpCodeTest", createTestWaitShell}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"ps", listAllProcesses}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMem", createTestMem}, {"testMemInfo", createTestMemInfo}, {"testPrio", createTestPrio}, {"testProcesses", createTestProcesses}, {"testSync", createTestSync}}};
 
@@ -583,6 +584,8 @@ void createTestMemInfo(int argc, char *argv[])
 {
     int pid = createProcess("test_mem", 4, test_mem, argc, argv);
     waitPID(pid);
+    pid = createProcess("test_mem", 4, test_mem, argc, argv);
+    waitPID(pid);
 }
 
 void createTestProcesses(int argc, char *argv[])
@@ -593,7 +596,7 @@ void createTestProcesses(int argc, char *argv[])
 
 void createTestPrio(int argc, char *argv[])
 {
-    int pid = createProcess("test_prio", 4, test_prio, argc, argv);
+    int pid = createProcess("test_prio", 4, doNothing, argc, argv);
     waitPID(pid);
 }
 
@@ -623,4 +626,8 @@ void listAllProcesses()
     char *toPrint = listProcessesInfo();
     printf(toPrint);
     freeMCaller(UNUSED, toPrint);
+}
+
+void doNothing() {
+    exitProc(0);
 }
