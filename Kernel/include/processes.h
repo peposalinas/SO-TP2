@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include "MemoryManagerADT.h"
-#include "scheduler.h"
+// #include "scheduler.h"
 
 #define STACK_SIZE 4 * 1024
 #define PRIORITY_AMOUNT 4

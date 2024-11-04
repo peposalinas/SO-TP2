@@ -37,4 +37,6 @@ void clearScreen();
 char *strtok(char *str, const char *delim);
 char *strchr(const char *str, int c);
 
+char *listProcessesInfo();
+
 #endif

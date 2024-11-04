@@ -25,6 +25,7 @@ typedef struct command_t
 void test_wait_shell(int argc, char *argv[]);
 void createTestWaitShell(int argc, char *argv[]);
 
+static void listAllProcesses();
 static void clearCmd(int argc, char *argv[]);
 static void div0(int argc, char *argv[]);
 static void exit(int argc, char *argv[]);
@@ -40,7 +41,7 @@ static void createTestProcesses(int argc, char *argv[]);
 static void createTestPrio(int argc, char *argv[]);
 static void createTestMem(int argc, char *argv[]);
 
-static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"eliminator", eliminator}, {"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {"invalidOpCodeTest", createTestWaitShell}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMem", createTestMem}, {"testMemInfo", createTestMemInfo}, {"testPrio", createTestPrio}, {"testProcesses", createTestProcesses}, {"testSync", createTestSync}}};
+static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"eliminator", eliminator}, {"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {"invalidOpCodeTest", createTestWaitShell}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"ps", listAllProcesses}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMem", createTestMem}, {"testMemInfo", createTestMemInfo}, {"testPrio", createTestPrio}, {"testProcesses", createTestProcesses}, {"testSync", createTestSync}}};
 
 static char *commandNotFoundMsg = "Command not found. Type help for a list of commands";
 static uint8_t cNotFoundSize = 51;
@@ -616,4 +617,10 @@ void test_wait_shell(int argc, char *argv[])
     printf("Done but gonna write some more\n");
     printf("            Done!\n");
     exitProc(0);
+}
+void listAllProcesses()
+{
+    char *toPrint = listProcessesInfo();
+    printf(toPrint);
+    freeMCaller(UNUSED, toPrint);
 }

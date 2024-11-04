@@ -22,7 +22,6 @@
     "libc.h": "c",
     "syscaller.h": "c",
     "sstream": "c",
-    "shell.h": "c",
-    "eliminator.h": "c"
+    "stddef.h": "c"
   }
 }

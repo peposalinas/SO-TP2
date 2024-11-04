@@ -27,6 +27,7 @@ GLOBAL closeSemCaller
 GLOBAL waitSemCaller
 GLOBAL postSemCaller
 GLOBAL memStatusCaller
+GLOBAL listProcessesInfoCaller
 
 section .text
 
@@ -107,3 +108,5 @@ postSemCaller:
 
 memStatusCaller:
     syscaller 28
+listProcessesInfoCaller:
+    syscaller 29
