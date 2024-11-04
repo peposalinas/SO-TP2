@@ -299,6 +299,11 @@ void postSem(int id)
     postSemCaller(UNUSED, id);
 }
 
+char *listProcessesInfo()
+{
+    return listProcessesInfoCaller(UNUSED);
+}
+
 void clearScreen()
 {
     int width = getScreenWidthCaller(UNUSED) / 8;

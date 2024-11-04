@@ -19,6 +19,14 @@
 #define LOW_PRIO 1
 #define LOWEST_PRIO 0
 
+typedef struct toUserInformation
+{
+    uint64_t pid;
+    process_state_t state;
+    char *name;
+    int priority;
+} toUserInformation;
+
 typedef struct schedulerCDT *schedulerADT;
 
 /*Inicializa los recursos necesarios para la creación del scheduler*/
@@ -76,5 +84,7 @@ void listProcesses();
 void listProcessesByPrio();
 
 void schedulerYield();
+
+char *getAllProcessesInformation();
 
 #endif

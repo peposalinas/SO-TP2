@@ -5,6 +5,19 @@
 #include <stddef.h>
 
 #define UNUSED 0
+typedef struct toUserInformation
+{
+    uint64_t pid;
+    int state;
+    char *name;
+    int priority;
+} toUserInformation;
+
+typedef struct processList
+{
+    int count;
+    toUserInformation *processes;
+} processList;
 
 typedef struct MemStatus
 {
@@ -32,7 +45,6 @@ void freeMCaller(uint8_t __unused, void *ptr);
 int createProcCaller(uint8_t __unused, char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
 void exitProcCaller(uint8_t __unused, uint64_t returnVal);
 uint64_t getPIDCaller(uint8_t __unused);
-// void listProcessesCaller();
 int killProcCaller(uint8_t __unused, uint32_t pid);
 uint64_t changeProcessPriorityCaller(uint8_t __unused, uint64_t pid, int priority);
 int blockProcessCaller(uint8_t __unused, uint32_t pid);
@@ -44,5 +56,7 @@ void closeSemCaller(uint8_t __unused, int id);
 void waitSemCaller(uint8_t __unused, int id);
 void postSemCaller(uint8_t __unused, int id);
 MemStatus *memStatusCaller(uint8_t __unused);
+
+char *listProcessesInfoCaller(uint8_t __unused);
 
 #endif

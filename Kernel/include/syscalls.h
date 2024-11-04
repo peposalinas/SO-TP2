@@ -30,7 +30,7 @@ void freeM(void *ptr);
 int createProc(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
 void exitProc(uint64_t returnVal);
 uint64_t getPID();
-// void listProcesses();
+char *listAllProcessesInformation();
 int killProc(uint32_t pid);
 uint64_t changeProcPriority(uint64_t pid, int priority);
 int blockProc(uint32_t pid);

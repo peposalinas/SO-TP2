@@ -327,6 +327,115 @@ void listProcesses()
     return processArray;
 }
 
+void appendString(char *dest, const char *src)
+{
+    while (*dest)
+    {
+        dest++;
+    }
+    while (*src)
+    {
+        *dest++ = *src++;
+    }
+    *dest = '\0';
+}
+
+void appendInt(char *dest, int value)
+{
+    char buffer[20];
+    int index = 0;
+
+    if (value < 0)
+    {
+        buffer[index++] = '-';
+        value = -value;
+    }
+
+    int startIndex = index;
+    do
+    {
+        buffer[index++] = (value % 10) + '0';
+        value /= 10;
+    } while (value > 0);
+
+    for (int i = startIndex, j = index - 1; i < j; i++, j--)
+    {
+        char temp = buffer[i];
+        buffer[i] = buffer[j];
+        buffer[j] = temp;
+    }
+
+    buffer[index] = '\0';
+    appendString(dest, buffer);
+}
+
+void appendHex(char *dest, unsigned int value)
+{
+    char buffer[20];
+    int index = 0;
+
+    appendString(dest, "0x");
+
+    do
+    {
+        int digit = value % 16;
+        if (digit < 10)
+        {
+            buffer[index++] = '0' + digit;
+        }
+        else
+        {
+            buffer[index++] = 'A' + (digit - 10);
+        }
+        value /= 16;
+    } while (value > 0);
+
+    for (int i = 0, j = index - 1; i < j; i++, j--)
+    {
+        char temp = buffer[i];
+        buffer[i] = buffer[j];
+        buffer[j] = temp;
+    }
+
+    buffer[index] = '\0';
+    appendString(dest, buffer);
+}
+
+char *getAllProcessesInformation()
+{
+    int amount = 0;
+
+    for (int i = 0; i < PRIORITY_AMOUNT; i++)
+    {
+        amount += scheduler_kernel->priority[i]->processList->size;
+    }
+
+    char *toReturn = allocMemoryKernel(amount * BUFSIZ);
+    toReturn[0] = '\0';
+
+    appendString(toReturn, "PID      | Priority   | State     | S. Base          | S. Pointer       | Name\n");
+    for (int i = 0; i < MAX_PROCESSES; i++)
+    {
+        if (scheduler_kernel->processes[i] != NULL)
+        {
+            appendInt(toReturn, scheduler_kernel->processes[i]->pid);
+            appendString(toReturn, "        | ");
+            appendInt(toReturn, scheduler_kernel->processes[i]->priority);
+            appendString(toReturn, "          | ");
+            appendInt(toReturn, scheduler_kernel->processes[i]->state);
+            appendString(toReturn, "         | ");
+            appendHex(toReturn, scheduler_kernel->processes[i]->stack);
+            appendString(toReturn, "         | ");
+            appendHex(toReturn, scheduler_kernel->processes[i]->stack_pointer);
+            appendString(toReturn, "         | ");
+            appendString(toReturn, scheduler_kernel->processes[i]->name);
+            appendString(toReturn, "\n");
+        }
+    }
+
+    return toReturn;
+}
+
 void schedulerYield()
 {
     int20();

@@ -200,8 +200,10 @@ uint64_t getPID()
 	return getRunningPid();
 }
 
-//@TODO: implementar
-// void listProcesses();
+char *listAllProcessesInformation()
+{
+	return getAllProcessesInformation();
+}
 
 int killProc(uint32_t pid)
 {
