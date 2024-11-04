@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "test_util.h"
+#include "scheduler.h"
 
 #define MB *1024 * 1024
 #define AMOUNT_OF_MB 128
@@ -13,9 +14,9 @@ typedef struct MemoryManagerCDT *MemoryManagerADT;
 
 typedef struct MemStatus
 {
-    size_t total_mem;
-    size_t free_mem;
-    size_t occupied_mem;
+    int total_mem;
+    int free_mem;
+    int occupied_mem;
 } MemStatus;
 
 /**

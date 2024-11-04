@@ -54,7 +54,7 @@ void insertLast(LinkedList *list, void *data)
 void *removeElem(LinkedList *list, void *data, bool (*compare)(void *, void *))
 {
     if (list->head == NULL)
-        return;
+        return NULL;
 
     Node *temp = list->head;
     Node *prev = NULL;

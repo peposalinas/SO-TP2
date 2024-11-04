@@ -77,4 +77,18 @@ void listProcessesByPrio();
 
 void schedulerYield();
 
+/**
+ * Checks if ptr is in the list of allocated pointers of the current process, and removes it if it is
+ * @param ptr puntero a chequear
+ * @return 1 si se encontró y eliminó, 0 si no
+ */
+int checkAndRemovePointerToFree(void *ptr);
+
+/**
+ * Añade un puntero a la lista de punteros asignados del proceso actual. No chequea si ya fue asignado previamente
+ * Este puntero debe apuntar a la memoria que utilizará el usuario, no al comienzo del bloque
+ * @param ptr puntero a añadir
+ */
+int addAllocatedPointer(void *ptr);
+
 #endif

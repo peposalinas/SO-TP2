@@ -45,12 +45,14 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
     memoryForProcess->priority = process_priority;
     memoryForProcess->parent_pid = parent_pid;
     memoryForProcess->isBeingWaited = 0;
+    memoryForProcess->allocatedBlocks = createLinkedList();
 
     return memoryForProcess->pid;
 }
 
 int killProcess(process process)
 {
+    destroyLinkedList(process->allocatedBlocks, _nop);
     freeMemoryKernel(process->stack);
     freeMemoryKernel(process);
 }

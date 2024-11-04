@@ -19,10 +19,16 @@ static int firstTime = 1;
 
 static int checkPID(uint32_t pid);
 bool compareProcesses(process p1, process p2);
+bool comparePointers(void *p1, void *p2);
 
 bool compareProcesses(process p1, process p2)
 {
     return p1->pid == p2->pid;
+}
+
+bool comparePointers(void *p1, void *p2)
+{
+    return p1 == p2;
 }
 
 static int checkPID(uint32_t pid)
@@ -193,6 +199,18 @@ uint64_t wait_pid(uint64_t pid)
 uint64_t getRunningPid()
 {
     return scheduler_kernel->running_process_pid;
+}
+
+int checkAndRemovePointerToFree(void *ptr)
+{
+    return removeElem(scheduler_kernel->processes[scheduler_kernel->running_process_pid]->allocatedBlocks, ptr, comparePointers) != NULL;
+}
+
+//@TODO: añadir chequeo de si la memoria falla?
+int addAllocatedPointer(void *ptr)
+{
+    insertFirst(scheduler_kernel->processes[scheduler_kernel->running_process_pid]->allocatedBlocks, ptr);
+    return 1;
 }
 
 int schedulerBlockProcess(uint32_t pid)

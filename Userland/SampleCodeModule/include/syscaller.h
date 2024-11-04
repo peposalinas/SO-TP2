@@ -8,9 +8,9 @@
 
 typedef struct MemStatus
 {
-    size_t total_mem;
-    size_t free_mem;
-    size_t occupied_mem;
+    int total_mem;
+    int free_mem;
+    int occupied_mem;
 } MemStatus;
 
 uint32_t readCaller(uint8_t __unused, uint8_t *buffer, uint32_t size);

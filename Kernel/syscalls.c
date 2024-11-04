@@ -171,11 +171,15 @@ static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base)
 
 void *allocM(size_t memoryToAllocate)
 {
-	return allocMemoryKernel(memoryToAllocate);
+	void *ptr = allocMemoryKernel(memoryToAllocate);
+	addAllocatedPointer(ptr);
+	return ptr;
 }
 
 void freeM(void *ptr)
 {
+	if (!checkAndRemovePointerToFree(ptr))
+		return;
 	freeMemoryKernel(ptr);
 }
 

@@ -29,6 +29,7 @@ typedef struct process_t
     uint64_t parent_pid;
     uint64_t return_value; // Como hacer para que retorne un string o void*
     int isBeingWaited;
+    LinkedList *allocatedBlocks;
 } process_t;
 
 typedef process_t *process;
