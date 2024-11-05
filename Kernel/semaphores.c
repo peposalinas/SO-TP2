@@ -68,7 +68,7 @@ void semWait(int id)
 
     if (sem->value == 0)
     {
-        intptr_t myPid = getRunningPid(); // Use intptr_t to match pointer size
+        intptr_t myPid = getRunningPid();
         insertLast(sem->blockedPids, (void *)myPid);
         up(&(sem->mutex));
         schedulerBlockProcess((int)myPid);
@@ -91,8 +91,8 @@ void semPost(int id)
 
     if (sem->blockedPids->size > 0)
     {
-        intptr_t nextPid = (intptr_t)removeFirst(sem->blockedPids); // Cast to intptr_t
-        schedulerUnblockProcess((int)nextPid);                      // Convert back to int if needed
+        intptr_t nextPid = (intptr_t)removeFirst(sem->blockedPids);
+        schedulerUnblockProcess((int)nextPid);
     }
     else
     {
