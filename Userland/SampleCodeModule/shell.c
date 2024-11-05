@@ -13,8 +13,7 @@
 #define DOWN_ARROW 254
 
 #define LETTERS 'z' - 'a' + 1
-#define WORDS 2
-
+#define WORDS 5
 // ###################################################################
 // definiciones para los commandos
 typedef struct command_t
@@ -22,6 +21,9 @@ typedef struct command_t
     char *name;
     void (*function)(uint64_t argc, char *argv[]);
 } command_t;
+
+void test_wait_shell(int argc, char *argv[]);
+void createTestWaitShell(int argc, char *argv[]);
 
 static void listAllProcesses();
 static void clearCmd(int argc, char *argv[]);
@@ -34,8 +36,12 @@ static void help(int argc, char *argv[]);
 static void invalidOpCode(int argc, char *argv[]);
 static void createTestSync(int argc, char *argv[]);
 static void createTestMemInfo(int argc, char *argv[]);
+static void createTestProcesses(int argc, char *argv[]);
+static void createTestPrio(int argc, char *argv[]);
+static void createTestMem(int argc, char *argv[]);
+static void doNothing();
 
-static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", (void *)clearCmd}, {0, 0}}, {{"div0", (void *)div0}, {0, 0}}, {{0, 0}, {"exit", (void *)exit}}, {{"fontBig", (void *)fontBig}, {"fontSmall", (void *)fontSmall}}, {{"getTime", (void *)getTime}, {0, 0}}, {{"help", (void *)help}, {0, 0}}, {{"invalidOpCode", (void *)invalidOpCode}, {0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"ps", (void *)listAllProcesses}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMemInfo", (void *)createTestMemInfo}, {"testSync", (void *)createTestSync}}};
+static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"eliminator", eliminator}, {"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {"invalidOpCodeTest", createTestWaitShell}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"ps", listAllProcesses}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMem", createTestMem}, {"testMemInfo", createTestMemInfo}, {"testPrio", createTestPrio}, {"testProcesses", createTestProcesses}, {"testSync", createTestSync}}};
 
 static char *commandNotFoundMsg = "Command not found. Type 'help' to see the list of commands";
 static uint8_t cNotFoundSize = 51;
@@ -581,11 +587,51 @@ void createTestMemInfo(int argc, char *argv[])
 {
     int pid = createProcess("test_mem", 4, test_mem, argc, argv);
     waitPID(pid);
+    pid = createProcess("test_mem", 4, test_mem, argc, argv);
+    waitPID(pid);
 }
 
+void createTestProcesses(int argc, char *argv[])
+{
+    int pid = createProcess("test_processes", 4, test_processes, argc, argv);
+    waitPID(pid);
+}
+
+void createTestPrio(int argc, char *argv[])
+{
+    int pid = createProcess("test_prio", 4, doNothing, argc, argv);
+    waitPID(pid);
+}
+
+void createTestMem(int argc, char *argv[])
+{
+    int pid = createProcess("test_mm", 4, test_mm, argc, argv);
+    waitPID(pid);
+}
+
+void createTestWaitShell(int argc, char *argv[])
+{
+    int pid = createProcess("test_wait_shell", 4, test_wait_shell, argc, argv);
+    waitPID(pid);
+}
+
+void test_wait_shell(int argc, char *argv[])
+{
+    printf("            Waiting...\n");
+    for (int i = 0; i < 1000000000; i++)
+        ;
+    printf("Done but gonna write some more\n");
+    printf("            Done!\n");
+    exitProc(0);
+}
 void listAllProcesses()
 {
     char *toPrint = listProcessesInfo();
     printf(toPrint);
     freeMCaller(UNUSED, toPrint);
+}
+
+void doNothing()
+{
+    exitProc(0);
 }

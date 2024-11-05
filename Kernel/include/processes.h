@@ -21,6 +21,7 @@ typedef struct process_t
 {
     uint64_t pid;
     process_state_t state;
+    uint64_t *stack_end;
     uint64_t *stack;
     uint64_t *stack_pointer;
     char **argv;
