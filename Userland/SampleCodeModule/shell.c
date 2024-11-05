@@ -41,7 +41,7 @@ static void createTestPrio(int argc, char *argv[]);
 static void createTestMem(int argc, char *argv[]);
 static void doNothing();
 
-static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"ps", listAllProcesses}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMem", createTestMem}, {"testMemInfo", createTestMemInfo}, {"testPrio", createTestPrio}, {"testProcesses", createTestProcesses}, {"testSync", createTestSync}}};
+static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", (void *)clearCmd}, {0, 0}}, {{"div0", (void *)div0}, {0, 0}}, {{"exit", (void *)exit}}, {{"fontBig", (void *)fontBig}, {"fontSmall", (void *)fontSmall}}, {{"getTime", (void *)getTime}, {0, 0}}, {{"help", (void *)help}, {0, 0}}, {{"invalidOpCode", (void *)invalidOpCode}, {0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"ps", (void *)listAllProcesses}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMem", (void *)createTestMem}, {"testMemInfo", (void *)createTestMemInfo}, {"testPrio", (void *)createTestPrio}, {"testProcesses", (void *)createTestProcesses}, {"testSync", (void *)createTestSync}}};
 
 static char *commandNotFoundMsg = "Command not found. Type 'help' to see the list of commands";
 static uint8_t cNotFoundSize = 51;
