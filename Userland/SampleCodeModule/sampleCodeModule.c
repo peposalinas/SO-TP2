@@ -1,10 +1,8 @@
 /* sampleCodeModule.c */
 #include <shell.h>
 #include <libc.h>
-#include <eliminator.h>
 #include <syscaller.h>
 #include <stdint.h>
-#include <welcome.h>
 #include <font.h>
 
 void idleUser();

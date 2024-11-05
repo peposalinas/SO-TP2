@@ -7,14 +7,17 @@ void semInit()
     allSemaphores = createLinkedList();
 }
 
-static bool compareSem(sem_t *s1, int id)
+static bool compareSem(void *s1_ptr, void *id_ptr)
 {
+    sem_t *s1 = (sem_t *)s1_ptr;
+    int id = *((int *)id_ptr);
     return (s1->id == id);
 }
 
 int semOpen(int id, int value)
 {
-    sem_t *sem = findElem(allSemaphores, id, compareSem);
+    int id_temp = id;
+    sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
 
     if (sem == NULL)
     {
@@ -41,21 +44,23 @@ int semOpen(int id, int value)
 
 void semClose(int id)
 {
-    sem_t *sem = findElem(allSemaphores, id, compareSem);
+    int id_temp = id;
+    sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
     if (sem == NULL)
         return;
     sem->openedCount--;
     if (sem->openedCount == 0)
     {
         destroyLinkedList(sem->blockedPids, _nop);
-        removeElem(allSemaphores, id, compareSem);
+        removeElem(allSemaphores, &id_temp, compareSem);
         freeMemoryKernel(sem);
     }
 }
 
 void semWait(int id)
 {
-    sem_t *sem = findElem(allSemaphores, id, compareSem);
+    int id_temp = id;
+    sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
     if (sem == NULL)
         return;
     down(&(sem->mutex));
@@ -75,7 +80,8 @@ void semWait(int id)
 
 void semPost(int id)
 {
-    sem_t *sem = findElem(allSemaphores, id, compareSem);
+    int id_temp = id;
+    sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
     if (sem == NULL)
         return;
     down(&(sem->mutex));
@@ -85,6 +91,8 @@ void semPost(int id)
         schedulerUnblockProcess(nextPid);
     }
     else
+    {
         sem->value++;
+    }
     up(&(sem->mutex));
 }

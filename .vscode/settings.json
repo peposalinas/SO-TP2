@@ -22,6 +22,10 @@
     "libc.h": "c",
     "syscaller.h": "c",
     "sstream": "c",
-    "stddef.h": "c"
+    "stddef.h": "c",
+    "idtloader.h": "c",
+    "font.h": "c",
+    "videodriver.h": "c",
+    "keyboarddriver.h": "c"
   }
 }

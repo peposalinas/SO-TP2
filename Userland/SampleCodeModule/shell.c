@@ -27,7 +27,6 @@ static void listAllProcesses();
 static void clearCmd(int argc, char *argv[]);
 static void div0(int argc, char *argv[]);
 static void exit(int argc, char *argv[]);
-static void eliminator(int argc, char *argv[]);
 static void fontSmall(int argc, char *argv[]);
 static void fontBig(int argc, char *argv[]);
 static void getTime(int argc, char *argv[]);
@@ -36,11 +35,22 @@ static void invalidOpCode(int argc, char *argv[]);
 static void createTestSync(int argc, char *argv[]);
 static void createTestMemInfo(int argc, char *argv[]);
 
-static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", clearCmd}, {0, 0}}, {{"div0", div0}, {0, 0}}, {{"eliminator", eliminator}, {"exit", exit}}, {{"fontBig", fontBig}, {"fontSmall", fontSmall}}, {{"getTime", getTime}, {0, 0}}, {{"help", help}, {0, 0}}, {{"invalidOpCode", invalidOpCode}, {0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"ps", listAllProcesses}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMemInfo", createTestMemInfo}, {"testSync", createTestSync}}};
+static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", (void *)clearCmd}, {0, 0}}, {{"div0", (void *)div0}, {0, 0}}, {{0, 0}, {"exit", (void *)exit}}, {{"fontBig", (void *)fontBig}, {"fontSmall", (void *)fontSmall}}, {{"getTime", (void *)getTime}, {0, 0}}, {{"help", (void *)help}, {0, 0}}, {{"invalidOpCode", (void *)invalidOpCode}, {0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"ps", (void *)listAllProcesses}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMemInfo", (void *)createTestMemInfo}, {"testSync", (void *)createTestSync}}};
 
-static char *commandNotFoundMsg = "Command not found. Type help for a list of commands";
+static char *commandNotFoundMsg = "Command not found. Type 'help' to see the list of commands";
 static uint8_t cNotFoundSize = 51;
-static char *helpMsg = "List of commands: clear, div0, eliminator, exit, fontBig, fontSmall, getTime, help, invalidOpCode";
+static char *helpMsg = "PinguinOS - v.5.0\n\n"
+                       "clear: Clear the screen\n"
+                       "div0: Divide by zero\n"
+                       "exit: Exit the shell\n"
+                       "fontBig: Increase the font size\n"
+                       "fontSmall: Decrease the font size\n"
+                       "getTime: Get the current time\n"
+                       "help: Show this message\n"
+                       "invalidOpCode: Execute an invalid operation code\n"
+                       "ps: List all processes\n"
+                       "testMemInfo: Test memory info\n"
+                       "testSync: Test sync\n";
 static uint8_t hMsgSize = 97;
 static char *waitMsg = "Press any key to continue";
 // ###################################################################
@@ -533,14 +543,6 @@ void fontSmall(int argc, char *argv[])
     reset = 1;
 }
 
-void eliminator(int argc, char *argv[])
-{
-    gameMain();
-    cleanBuffer();
-    sMoveScreenUp(0);
-    reset = 1;
-}
-
 void clearCmd(int argc, char *argv[])
 {
     clear();
@@ -559,7 +561,8 @@ void getTime(int argc, char *argv[])
 
 void help(int argc, char *argv[])
 {
-    printMsgAndWait(helpMsg, hMsgSize);
+    printf(helpMsg);
+    // printMsgAndWait(helpMsg, hMsgSize);
 }
 
 void invalidOpCode(int argc, char *argv[])

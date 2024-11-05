@@ -1,15 +1,40 @@
 #include <regsDump.h>
-
 #include <keyboardDriver.h>
 #include <videoDriver.h>
 #include <interrupts.h>
 
-void printRegisters(const uint8_t *msg, const uint64_t regs[])
+static char *registers[19] = {
+    "RAX:",
+    "RBX:",
+    "RCX:",
+    "RDX:",
+    "RSI:",
+    "RDI:",
+    "RSP:",
+    "RBP:",
+    "R8 :",
+    "R9 :",
+    "R10:",
+    "R11:",
+    "R12:",
+    "R13:",
+    "R14:",
+    "R15:",
+    "RIP:",
+    "CS :",
+    "RFLAGS:",
+};
+
+// Prototipo de la función
+void uint64ToHex(uint64_t num, char buf[17]);
+
+void printRegisters(const char *msg, const uint64_t regs[19])
 {
     savePopUpWindow();
     clearPopUp();
-    printInPopUp(msg, 0, 0);
-    uint8_t buf[19];
+    printInPopUp((char *)msg, 0, 0); // Cast para evitar el warning de const
+
+    char buf[19]; // Cambiar uint8_t por char para compatibilidad con printInPopUp
     buf[0] = '0';
     buf[1] = 'x';
     for (uint8_t i = 0; i < 18; i++)
@@ -22,12 +47,14 @@ void printRegisters(const uint8_t *msg, const uint64_t regs[])
     uint64ToHex(regs[18], buf + 2);
     printInPopUp(buf, 8, 10);
     printInPopUp("Press ESC to continue", 0, 11);
+
     while (getKeyboardKey() != ESC_MAKE_CODE)
         ;
 
     resetPopUp();
 }
-void uint64ToHex(uint64_t num, uint8_t buf[17])
+
+void uint64ToHex(uint64_t num, char buf[17])
 {
     int i = 15;
     while (i >= 0)
@@ -37,5 +64,5 @@ void uint64ToHex(uint64_t num, uint8_t buf[17])
         num /= 16;
         i--;
     }
-    buf[16] = 0;
+    buf[16] = '\0';
 }

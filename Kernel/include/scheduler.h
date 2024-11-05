@@ -41,14 +41,14 @@ void schedulerInit();
  * @param argv arreglo de args
  * @return pid del proceso agregado
  */
-int schedulerAddProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
+int schedulerAddProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char **argv);
 
 /**
  * Decide qué proceso correr
  * @param current_stack_pointer SP del proceso actual
  * @return SP del proceso a correr
  */
-uint32_t *schedulerRun(uint32_t *current_stack_pointer);
+uint64_t *schedulerRun(uint64_t *current_stack_pointer);
 
 /**
  * Quita del scheduler el proceso de pid indicado (no libera sus recursos)

@@ -27,7 +27,7 @@ uint8_t fontSizeDown();                                                         
 void getTime(uint8_t pb[]);                                                                    // 12
 void *allocM(size_t memoryToAllocate);
 void freeM(void *ptr);
-int createProc(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
+int createProc(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[]);
 void exitProc(uint64_t returnVal);
 uint64_t getPID();
 char *listAllProcessesInformation();

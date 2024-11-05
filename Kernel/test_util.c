@@ -95,15 +95,16 @@ void endless_loop()
         ;
 }
 
-void endless_loop_print(uint64_t wait)
+int endless_loop_print(uint64_t wait)
 {
-    int64_t pid = getRunningPid();
+    uint64_t pid = getRunningPid();
 
     while (1)
     {
         // bussy_wait(wait);
         // ncPrintDec(pid);
     }
+    return 0;
 }
 
 uint64_t testMM(char *c)

@@ -24,12 +24,12 @@ static const uint64_t PageSize = 0x1000;
 static void *const sampleCodeModuleAddress = (void *)0x400000;
 static void *const sampleDataModuleAddress = (void *)0x500000;
 
-int idle(int argc, char *argv[]);
+static int idle(int argc, char *argv[]);
 int64_t test_processes(uint64_t argc, char *argv[]);
 void test_prio(uint64_t argc, char *argvTestPrio[]);
 
-void test_waitpid();
-void test_child();
+int test_waitpid();
+int test_child();
 
 typedef int (*EntryPoint)();
 
@@ -126,8 +126,8 @@ int main()
 	// ncPrintDec(val);
 	char *argvSampleCode[2] = {"shell", NULL};
 	uint64_t sample_code_pid = schedulerAddProcess("sampleCodeModule", 2, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
-
 	_sti();
+	wait_pid(sample_code_pid); // Hace falta??? DA UN WARNING
 
 	//  testMM("100000");
 
@@ -136,19 +136,13 @@ int main()
 
 int idle(int argc, char *argv[])
 {
-	int i = 0;
 	while (1)
 	{
-		if (i == 0)
-		{
-			ncPrint("Idle");
-			ncNewline();
-			i++;
-		}
 	};
+	return 0;
 }
 
-void test_waitpid()
+int test_waitpid()
 {
 	char *argvTest[1] = {NULL};
 	ncNewline();
@@ -157,13 +151,13 @@ void test_waitpid()
 	ncNewline();
 	ncPrint("Waiting for my child");
 	int pidChild = schedulerAddProcess("test_child", HIGHEST_PRIO, test_child, 1, argvTest);
-	// ncPrintDec(pidChild);
 	wait_pid(pidChild);
 	ncPrint("My child has finished");
 	exitProcess(0);
+	return 0;
 }
 
-void test_child()
+int test_child(int argc, char *argv[])
 {
 	ncNewline();
 	ncPrint("Empece (child)");
@@ -179,4 +173,5 @@ void test_child()
 	ncPrint("Termine (child)");
 	ncNewline();
 	exitProcess(0);
+	return 0;
 }

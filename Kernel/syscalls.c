@@ -139,7 +139,7 @@ void getTime(uint8_t pb[])
 
 static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base)
 {
-	char *p = buffer;
+	char *p = (char *)buffer;
 	char *p1, *p2;
 	uint32_t digits = 0;
 
@@ -155,7 +155,7 @@ static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base)
 	*p = 0;
 
 	// Reverse string in buffer.
-	p1 = buffer;
+	p1 = (char *)buffer;
 	p2 = p - 1;
 	while (p1 < p2)
 	{
@@ -185,7 +185,7 @@ MemStatus *memStatus()
 	return memStatusKernel();
 }
 
-int createProc(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[])
+int createProc(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[])
 {
 	return schedulerAddProcess(process_name, process_priority, entry_point, argc, argv);
 }

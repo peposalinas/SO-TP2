@@ -41,7 +41,7 @@ typedef process_t *process;
  * @param argv argumentos de entry_point
  * @return pid del proceso si es exitoso, 0 caso contrario
  */
-int createProcess(process memoryForProcess, char *process_name, uint64_t process_pid, int process_priority, void (*entry_point)(void), int argc, char *argv[], uint64_t parent_pid);
+int createProcess(process memoryForProcess, char *process_name, uint64_t process_pid, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[], uint64_t parent_pid);
 
 /**
  * Mata un proceso

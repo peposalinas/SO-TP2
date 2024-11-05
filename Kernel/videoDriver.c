@@ -21,11 +21,9 @@ extern const unsigned char __font_bitmap__[];
 
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr)0x0000000000005C00;
 
-// agregar (o no) font_size
 uint8_t font_size = 1;
 
-// imprime en la ventana emergente el mensaje desde la posicion relativa (x,y)
-void printInPopUp(uint8_t *msg, uint16_t x, uint16_t y)
+void printInPopUp(char *msg, uint16_t x, uint16_t y)
 {
 	uint8_t aux = font_size;
 	font_size = 1;
@@ -102,7 +100,7 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y)
 
 unsigned char *fontArr = __font_bitmap__;
 
-void drawchar(uint8_t c, uint32_t x, uint32_t y, uint32_t fgcolor, uint32_t bgcolor)
+void drawchar(char c, uint32_t x, uint32_t y, uint32_t fgcolor, uint32_t bgcolor)
 {
 	x *= 8 * font_size;
 	y *= 16 * font_size;
@@ -123,7 +121,7 @@ void drawchar(uint8_t c, uint32_t x, uint32_t y, uint32_t fgcolor, uint32_t bgco
 	}
 }
 
-void drawString(const uint8_t *string, uint32_t x, uint32_t y, uint32_t fgcolor, uint32_t bgcolor)
+void drawString(const char *string, uint32_t x, uint32_t y, uint32_t fgcolor, uint32_t bgcolor)
 {
 	uint32_t w = x, h = y;
 	while (*string != 0)

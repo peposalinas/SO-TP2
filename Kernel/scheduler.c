@@ -18,11 +18,11 @@ schedulerADT scheduler_kernel;
 static int firstTime = 1;
 
 static int checkPID(uint32_t pid);
-bool compareProcesses(process p1, process p2);
+bool compareProcesses(void *p1, void *p2);
 
-bool compareProcesses(process p1, process p2)
+bool compareProcesses(void *p1, void *p2)
 {
-    return p1->pid == p2->pid;
+    return ((process)p1)->pid == ((process)p2)->pid;
 }
 
 static int checkPID(uint32_t pid)
@@ -48,7 +48,7 @@ void schedulerInit()
         scheduler->priority[i]->ready_process_count = 0;
     }
     scheduler_kernel = scheduler;
-    uint32_t running_process_pid = 0;
+    scheduler_kernel->running_process_pid = 0;
     return;
 }
 
@@ -64,7 +64,7 @@ int chooseNextPID()
     return -1;
 }
 
-int schedulerAddProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[])
+int schedulerAddProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char **argv)
 {
     process newProcess = (process)allocMemoryKernel(sizeof(process_t));
     int next_pid = chooseNextPID();
@@ -75,7 +75,7 @@ int schedulerAddProcess(char *process_name, int process_priority, void (*entry_p
     return newProcess->pid;
 }
 
-uint32_t *schedulerRun(uint32_t *current_stack_pointer)
+uint64_t *schedulerRun(uint64_t *current_stack_pointer)
 {
     int foundToRun = 0;
     process toRun;
@@ -276,55 +276,21 @@ void listProcessesByPrio()
     }
 }
 
-void listProcesses()
+void listProcesses() // QUE ONDA ESTE BROSKI???? HAGO EL DE DEVOLVER LA INFO O QUE BRORHSUAHDUSA
 {
-    // ncNewline();
-    // ncPrint(" PID: ");
-    // ncPrint(" Name: ");
-    // ncPrint(" Priority: ");
-    // ncPrint(" State: ");
-    // ncPrint(" Stack:");
-    // ncPrint(" Stack pointer: ");
+    // process_t processArray[MAX_PROCESSES];
+    // int index = 0;
 
     // for (int i = 0; i < MAX_PROCESSES; i++)
     // {
     //     if (scheduler_kernel->processes[i] != NULL)
     //     {
-    //         ncNewline();
-    //         ncPrintDec(scheduler_kernel->processes[i]->pid);
-    //         ncPrint("     ");
-    //         ncPrint(scheduler_kernel->processes[i]->name);
-    //         ncPrint("     ");
-    //         ncPrintDec(scheduler_kernel->processes[i]->priority);
-    //         ncPrint("          ");
-    //         ncPrintDec(scheduler_kernel->processes[i]->state);
-    //         ncPrint("     ");
-    //         ncPrintHex((uint64_t)scheduler_kernel->processes[i]->stack);
-    //         ncPrint("     ");
-    //         ncPrintHex((uint64_t)scheduler_kernel->processes[i]->stack_pointer);
-    //         ncPrint("     ");
-
-    //         if (scheduler_kernel->running_process_pid == scheduler_kernel->processes[i]->pid)
-    //         {
-    //             ncPrint("  *  ");
-    //         }
-
-    //         ncNewline();
+    //         processArray[index] = *(scheduler_kernel->processes[i]);
+    //         index++;
     //     }
     // }
-    process_t processArray[MAX_PROCESSES];
-    int index = 0;
 
-    for (int i = 0; i < MAX_PROCESSES; i++)
-    {
-        if (scheduler_kernel->processes[i] != NULL)
-        {
-            processArray[index] = *(scheduler_kernel->processes[i]);
-            index++;
-        }
-    }
-
-    return processArray;
+    return;
 }
 
 void appendString(char *dest, const char *src)
@@ -369,7 +335,7 @@ void appendInt(char *dest, int value)
     appendString(dest, buffer);
 }
 
-void appendHex(char *dest, unsigned int value)
+void appendHex(char *dest, uint64_t value)
 {
     char buffer[20];
     int index = 0;
@@ -424,9 +390,9 @@ char *getAllProcessesInformation()
             appendString(toReturn, "          | ");
             appendInt(toReturn, scheduler_kernel->processes[i]->state);
             appendString(toReturn, "         | ");
-            appendHex(toReturn, scheduler_kernel->processes[i]->stack);
+            appendHex(toReturn, (uint64_t)(scheduler_kernel->processes[i]->stack));
             appendString(toReturn, "         | ");
-            appendHex(toReturn, scheduler_kernel->processes[i]->stack_pointer);
+            appendHex(toReturn, (uint64_t)(scheduler_kernel->processes[i]->stack_pointer));
             appendString(toReturn, "         | ");
             appendString(toReturn, scheduler_kernel->processes[i]->name);
             appendString(toReturn, "\n");

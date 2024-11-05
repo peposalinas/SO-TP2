@@ -6,7 +6,6 @@
 #include <libc.h>
 #include <userLib.h>
 #include <sounds.h>
-#include <eliminator.h>
 #include <libc.h>
 #include <stdarg.h>
 #include "test_util.h"

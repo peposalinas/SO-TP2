@@ -24,33 +24,58 @@ typedef struct stack_frame
     uint64_t ss;
 } stack_frame;
 
-int createProcess(process memoryForProcess, char *process_name, uint64_t process_pid, int process_priority, void (*entry_point)(void), int argc, char *argv[], uint64_t parent_pid) // veamos si el entry_point puede recibir argumentos
+int createProcess(process memoryForProcess, char *process_name, uint64_t process_pid, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[], uint64_t parent_pid) // veamos si el entry_point puede recibir argumentos
 {
-
     memoryForProcess->pid = process_pid;
     memoryForProcess->state = READY;
-    memoryForProcess->stack = (uint64_t)(allocMemoryKernel(STACK_SIZE) + STACK_SIZE) & ~ALIGN;
-    stack_frame *stackFrame = memoryForProcess->stack - sizeof(stack_frame);
+
+    uint64_t *allocatedMemory = (uint64_t *)allocMemoryKernel(STACK_SIZE);
+    memoryForProcess->stack = (uint64_t *)((uint64_t)allocatedMemory + STACK_SIZE);
+    memoryForProcess->stack = (uint64_t *)((uint64_t)memoryForProcess->stack & ~((uint64_t)ALIGN));
+
+    stack_frame *stackFrame = (stack_frame *)(memoryForProcess->stack - sizeof(stack_frame));
 
     stackFrame->ss = 0x0;
-    stackFrame->rsp = memoryForProcess->stack;
+    stackFrame->rsp = (uint64_t)memoryForProcess->stack;
     stackFrame->rflags = 0x202;
     stackFrame->cs = 0x8;
-    stackFrame->rip = entry_point;
-    stackFrame->rdi = argc;
-    stackFrame->rsi = argv;
+    stackFrame->rip = (uint64_t)entry_point;
+    stackFrame->rdi = (uint64_t)argc;
+    stackFrame->rsi = (uint64_t)argv;
 
-    memoryForProcess->stack_pointer = stackFrame;
+    memoryForProcess->stack_pointer = (uint64_t *)stackFrame;
     memoryForProcess->name = process_name;
     memoryForProcess->priority = process_priority;
     memoryForProcess->parent_pid = parent_pid;
     memoryForProcess->isBeingWaited = 0;
 
     return memoryForProcess->pid;
+
+    // memoryForProcess->pid = process_pid;
+    // memoryForProcess->state = READY;
+    // memoryForProcess->stack = (uint64_t)(allocMemoryKernel(STACK_SIZE) + STACK_SIZE) & ~ALIGN;
+    // stack_frame *stackFrame = memoryForProcess->stack - sizeof(stack_frame);
+
+    // stackFrame->ss = 0x0;
+    // stackFrame->rsp = memoryForProcess->stack;
+    // stackFrame->rflags = 0x202;
+    // stackFrame->cs = 0x8;
+    // stackFrame->rip = entry_point;
+    // stackFrame->rdi = argc;
+    // stackFrame->rsi = argv;
+
+    // memoryForProcess->stack_pointer = stackFrame;
+    // memoryForProcess->name = process_name;
+    // memoryForProcess->priority = process_priority;
+    // memoryForProcess->parent_pid = parent_pid;
+    // memoryForProcess->isBeingWaited = 0;
+
+    // return memoryForProcess->pid;
 }
 
 int killProcess(process process)
 {
     freeMemoryKernel(process->stack);
     freeMemoryKernel(process);
+    return 0;
 }

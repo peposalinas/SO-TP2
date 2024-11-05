@@ -25,4 +25,4 @@ void semClose(int id);
 void semWait(int id);
 void semPost(int id);
 
-#endif SEMAPHORES_H
+#endif

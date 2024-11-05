@@ -25,7 +25,7 @@ void test_prio(uint64_t argc, char *argv1[])
 {
 
     int64_t pids[TOTAL_PROCESSES];
-    char *argv[] = {100000000};
+    char *argv[] = {NULL};
     uint64_t i;
 
     ncNewline();
