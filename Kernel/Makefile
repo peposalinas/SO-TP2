@@ -3,7 +3,20 @@ include Makefile.inc
 KERNEL=kernel.bin
 KERNEL_ELF=$(KERNEL:.bin=.elf)
 
-SOURCES=$(wildcard *.c)
+# Conditional source files based on memory manager type
+ifeq ($(MM_TYPE),BUDDY)
+    MM_SOURCES=buddyMemoryManager.c
+    EXTRA_FLAGS=-DUSE_BUDDY_MM
+else ifeq ($(MM_TYPE),CUSTOM)
+    MM_SOURCES=MemoryManagerCDT.c
+    EXTRA_FLAGS=-DUSE_CUSTOM_MM
+else
+    MM_SOURCES=MemoryManagerCDT.c
+    EXTRA_FLAGS=-DUSE_CUSTOM_MM
+endif
+
+BASE_SOURCES=$(filter-out buddyMemoryManager.c MemoryManagerCDT.c, $(wildcard *.c))
+SOURCES=$(BASE_SOURCES) $(MM_SOURCES)
 SOURCES_ASM=$(wildcard asm/*.asm)
 OBJECTS=$(SOURCES:.c=.o)
 OBJECTS_ASM=$(SOURCES_ASM:.asm=.o)
@@ -11,6 +24,9 @@ LOADERSRC=loader.asm
 
 LOADEROBJECT=$(LOADERSRC:.asm=.o)
 STATICLIBS=
+
+# Update GCCFLAGS to include the memory manager type
+GCCFLAGS+=$(EXTRA_FLAGS)
 
 all: $(KERNEL)
 

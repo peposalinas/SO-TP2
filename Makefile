@@ -4,6 +4,12 @@ all:  bootloader kernel userland image
 bootloader:
 	cd Bootloader; make all
 
+buddy: export MM_TYPE=BUDDY
+buddy: clean kernel userland image
+
+myMM: export MM_TYPE=CUSTOM
+myMM: clean kernel userland image
+
 debug: all
 	cd Kernel; make debug
 	cd Userland; make debug
@@ -23,4 +29,4 @@ clean:
 	cd Kernel; make clean
 	cd Userland; make clean
 
-.PHONY: bootloader image collections kernel userland all clean
+.PHONY: bootloader image collections kernel userland all clean buddy myMM
