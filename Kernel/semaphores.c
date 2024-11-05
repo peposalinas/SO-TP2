@@ -63,13 +63,15 @@ void semWait(int id)
     sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
     if (sem == NULL)
         return;
+
     down(&(sem->mutex));
+
     if (sem->value == 0)
     {
-        int myPid = getRunningPid();
-        insertLast(sem->blockedPids, myPid);
+        intptr_t myPid = getRunningPid(); // Use intptr_t to match pointer size
+        insertLast(sem->blockedPids, (void *)myPid);
         up(&(sem->mutex));
-        schedulerBlockProcess(myPid);
+        schedulerBlockProcess((int)myPid);
     }
     else
     {
@@ -84,15 +86,18 @@ void semPost(int id)
     sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
     if (sem == NULL)
         return;
+
     down(&(sem->mutex));
+
     if (sem->blockedPids->size > 0)
     {
-        int nextPid = removeFirst(sem->blockedPids);
-        schedulerUnblockProcess(nextPid);
+        intptr_t nextPid = (intptr_t)removeFirst(sem->blockedPids); // Cast to intptr_t
+        schedulerUnblockProcess((int)nextPid);                      // Convert back to int if needed
     }
     else
     {
         sem->value++;
     }
+
     up(&(sem->mutex));
 }

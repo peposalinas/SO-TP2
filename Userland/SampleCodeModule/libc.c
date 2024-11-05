@@ -232,7 +232,7 @@ MemStatus *memStatus()
     return memStatusCaller(UNUSED);
 }
 
-int createProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[])
+int createProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[])
 {
     return createProcCaller(UNUSED, process_name, process_priority, entry_point, argc, argv);
 }

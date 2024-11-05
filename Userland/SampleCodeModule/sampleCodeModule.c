@@ -7,10 +7,9 @@
 #include "test_util.h"
 
 void idleUser();
-uint64_t test_sync(uint64_t argc, char *argv[]);
-void test_child();
+int test_child(int argc, char *argv[]);
 void test_waitPid();
-void test_child2();
+int test_child2(int argc, char *argv[]);
 
 int main()
 {
@@ -49,6 +48,7 @@ int main()
 	// char *argvWait[1] = {NULL};
 	// createProcess("test_waitPid", 4, test_waitPid, 1, argvWait);
 	exitProc(0);
+	return 0;
 }
 
 void idleUser()
@@ -78,7 +78,7 @@ void test_waitPid()
 	exitProc(0);
 }
 
-void test_child()
+int test_child(int argc, char *argv[])
 {
 	printf("\nEmpece (child)");
 	yieldProcess();
@@ -94,9 +94,10 @@ void test_child()
 	}
 	printf("\nTermine (child)");
 	exitProc(100);
+	return 0;
 }
 
-void test_child2()
+int test_child2(int argc, char *argv[])
 {
 	printf("\nEmpece (child2)");
 	yieldProcess();
@@ -112,4 +113,5 @@ void test_child2()
 	}
 	printf("\nTermine (child2)");
 	exitProc(80);
+	return 0;
 }

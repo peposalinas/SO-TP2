@@ -3,12 +3,9 @@
 #define MAX_BLOCKS 128
 #define TICKS 100
 
-static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base);
-
 // Random
 static uint32_t m_z = 362436069;
 static uint32_t m_w = 521288629;
-static int id = 0;
 
 typedef struct MM_rq
 {
@@ -69,15 +66,13 @@ int64_t satoi(char *str)
     return res * sign;
 }
 
-void endless_loop()
+int endless_loop(int argc, char *argv[])
 {
-    printf("%d\n", id);
-    id++;
     while (1)
         ;
 }
 
-void endless_loop_print(uint64_t argc, char *argv[])
+int endless_loop_print(int argc, char *argv[])
 {
     int64_t pid = getPID();
 
@@ -91,9 +86,10 @@ void endless_loop_print(uint64_t argc, char *argv[])
             ;
         printf("%d", pid);
     }
+    return 0;
 }
 
-static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base)
+uint32_t uintToBase(char value, char *buffer, uint32_t base)
 {
     char *p = buffer;
     char *p1, *p2;

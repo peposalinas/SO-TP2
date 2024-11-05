@@ -10,6 +10,6 @@
 #include <stdarg.h>
 #include "test_util.h"
 
-void launchShell();
+int launchShell(int argc, char *argv[]);
 
 #endif

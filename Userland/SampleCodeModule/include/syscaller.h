@@ -26,8 +26,8 @@ typedef struct MemStatus
     size_t occupied_mem;
 } MemStatus;
 
-uint32_t readCaller(uint8_t __unused, uint8_t *buffer, uint32_t size);
-long int writeCaller(uint8_t __unused, uint8_t fd, const uint8_t *string, uint32_t size);
+uint32_t readCaller(uint8_t __unused, char *buffer, uint32_t size);
+long int writeCaller(uint8_t __unused, uint8_t fd, const char *string, uint32_t size);
 void printRectangleCaller(uint8_t __unused, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t color);
 uint64_t getScreenWidthCaller(uint8_t __unused);
 uint64_t getScreenHeightCaller(uint8_t __unused);
@@ -38,11 +38,11 @@ uint8_t keyboardKeyCaller(uint8_t __unused);
 void beepSysCaller(uint8_t __unused, uint32_t frequence, int waitTicks);
 uint8_t fontSizeUpCaller(uint8_t __unused);
 uint8_t fontSizeDownCaller(uint8_t __unused);
-void getTimeCaller(uint8_t __unused, uint8_t bp[]);
+void getTimeCaller(uint8_t __unused, char bp[]);
 void *allocMCaller(uint8_t __unused, size_t memoryToAllocate);
 void freeMCaller(uint8_t __unused, void *ptr);
 // char * memStatusCaller();
-int createProcCaller(uint8_t __unused, char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
+int createProcCaller(uint8_t __unused, char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[]);
 void exitProcCaller(uint8_t __unused, uint64_t returnVal);
 uint64_t getPIDCaller(uint8_t __unused);
 int killProcCaller(uint8_t __unused, uint32_t pid);

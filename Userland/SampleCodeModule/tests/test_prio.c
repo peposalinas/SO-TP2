@@ -15,7 +15,7 @@
 
 int64_t prio[TOTAL_PROCESSES] = {LOWEST, LOW, MEDIUM, HIGH, HIGHEST};
 
-void test_prio(uint64_t argc, char *argv1[])
+int test_prio(int argc, char *argv1[])
 {
 
     int64_t pids[TOTAL_PROCESSES];
@@ -64,4 +64,5 @@ void test_prio(uint64_t argc, char *argv1[])
         ;
 
     exitProc(0);
+    return 0;
 }

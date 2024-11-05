@@ -2,10 +2,10 @@
 #include "test_util.h"
 #include "libc.h"
 
-uint64_t test_mem(int argc, char *argv[])
+int test_mem(int argc, char *argv[])
 {
     MemStatus *mem = memStatus();
-    size_t freeMemo = mem->free_mem / (1024 * 1024); // To convert from Bytes to MB
+    size_t freeMemo = mem->free_mem / (1024 * 1024);
     size_t totalMemo = mem->total_mem / (1024 * 1024);
     size_t occupiedMemo = mem->occupied_mem / (1024 * 1024);
     printf("Total mem: %d MB\nOccupied mem: %d MB\nFree mem: %d MB\n", totalMemo, occupiedMemo, freeMemo);
@@ -27,4 +27,5 @@ uint64_t test_mem(int argc, char *argv[])
     occupiedMemo = mem->occupied_mem / (1024 * 1024);
     printf("Total mem: %d MB\nOccupied mem: %d MB\nFree mem: %d MB\n", totalMemo, occupiedMemo, freeMemo);
     exitProc(0);
+    return 0;
 }

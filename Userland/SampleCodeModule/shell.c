@@ -22,7 +22,7 @@ typedef struct command_t
     void (*function)(uint64_t argc, char *argv[]);
 } command_t;
 
-void test_wait_shell(int argc, char *argv[]);
+int test_wait_shell(int argc, char *argv[]);
 void createTestWaitShell(int argc, char *argv[]);
 
 static void listAllProcesses();
@@ -39,7 +39,6 @@ static void createTestMemInfo(int argc, char *argv[]);
 static void createTestProcesses(int argc, char *argv[]);
 static void createTestPrio(int argc, char *argv[]);
 static void createTestMem(int argc, char *argv[]);
-static void doNothing();
 
 static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", (void *)clearCmd}, {0, 0}}, {{"div0", (void *)div0}, {0, 0}}, {{"exit", (void *)exit}}, {{"fontBig", (void *)fontBig}, {"fontSmall", (void *)fontSmall}}, {{"getTime", (void *)getTime}, {0, 0}}, {{"help", (void *)help}, {0, 0}}, {{"invalidOpCode", (void *)invalidOpCode}, {0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"ps", (void *)listAllProcesses}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMem", (void *)createTestMem}, {"testMemInfo", (void *)createTestMemInfo}, {"testPrio", (void *)createTestPrio}, {"testProcesses", (void *)createTestProcesses}, {"testSync", (void *)createTestSync}}};
 
@@ -57,7 +56,6 @@ static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "ps: List all processes\n"
                        "testMemInfo: Test memory info\n"
                        "testSync: Test sync\n";
-static uint8_t hMsgSize = 97;
 static char *waitMsg = "Press any key to continue";
 // ###################################################################
 
@@ -65,7 +63,7 @@ static uint16_t currentY;
 static uint16_t currentX;
 static uint16_t width;
 static uint16_t height;
-static uint8_t buffer[4096];
+static char buffer[4096];
 static uint16_t count;
 static uint16_t offsets[4096] = {0};
 static uint16_t lineCount;
@@ -213,6 +211,7 @@ void sCheckCommand()
     char *command_tokens[MAX_ARGS + 1];
     char *token;
     char *command = &buffer[offsets[lineCount - 1]];
+
     uint8_t j = 0;
     do
     {
@@ -229,7 +228,7 @@ void sCheckCommand()
     }
 
     buffer[offsets[lineCount]] = 0;
-    command_t *auxC = commands[c];
+    command_t *auxC = commands[(unsigned char)c];
     for (int i = 0; i < WORDS; i++)
     {
         if (auxC[i].name != NULL)
@@ -390,7 +389,7 @@ void printBufferFrom(uint16_t start, uint16_t end)
     }
 }
 
-void launchShell()
+int launchShell(int argc, char *argv[])
 {
     count = 0;
     lineCount = 1;
@@ -409,8 +408,6 @@ void launchShell()
     startNewLine();
     sPrintSelected(' ');
     buffer[count] = ' ';
-    char *argvTest[3] = {"10", "0", NULL};
-    // createProcess("test_sem", 4, test_sync, 2, argvTest);
     uint8_t key;
     while (!exitFlag)
     {
@@ -447,7 +444,7 @@ void launchShell()
             if (offsets[lineCount] - offsets[lineCount - 1] == 1)
             {
                 char c = getCommandIdx(buffer[count - 1]);
-                char *aux = commands[c][0].name + 1;
+                char *aux = commands[(unsigned char)c][0].name + 1;
                 while (*aux)
                 {
                     sPrintChar(*aux);
@@ -501,6 +498,8 @@ void launchShell()
     }
     while (fontSizeDownCaller(UNUSED))
         fontSize--;
+
+    return 0;
 }
 
 // comandos de la terminal
@@ -558,10 +557,10 @@ void clearCmd(int argc, char *argv[])
     currentY = 0;
 }
 
-void getTime(int argc, char *argv[])
+void getTime(int argc, char *argv[]) // Chequear
 {
-    uint8_t clock[20];
-    getTimeCaller(UNUSED, clock);
+    char clock[20];
+    getTimeCaller(UNUSED, (char *)clock);
     printMsgAndWait(clock, 8);
 }
 
@@ -613,7 +612,7 @@ void createTestWaitShell(int argc, char *argv[])
     waitPID(pid);
 }
 
-void test_wait_shell(int argc, char *argv[])
+int test_wait_shell(int argc, char *argv[])
 {
     printf("            Waiting...\n");
     for (int i = 0; i < 1000000000; i++)
@@ -621,6 +620,7 @@ void test_wait_shell(int argc, char *argv[])
     printf("Done but gonna write some more\n");
     printf("            Done!\n");
     exitProc(0);
+    return 0;
 }
 void listAllProcesses()
 {

@@ -15,7 +15,7 @@ void slowInc(int64_t *p, int64_t inc)
     *p = aux;
 }
 
-uint64_t my_process_inc(uint64_t argc, char *argv[])
+int my_process_inc(int argc, char *argv[])
 {
     uint64_t n;
     int8_t inc;
@@ -57,9 +57,10 @@ uint64_t my_process_inc(uint64_t argc, char *argv[])
     }
 
     exitProc(0);
+    return 0;
 }
 
-uint64_t test_sync(uint64_t argc, char *argv[])
+int test_sync(int argc, char *argv[])
 {
     uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
 
@@ -86,4 +87,5 @@ uint64_t test_sync(uint64_t argc, char *argv[])
     printf("\nFinal value: %d\n", global);
 
     exitProc(0);
+    return 0;
 }
