@@ -46,7 +46,7 @@ static void nice(int argc, char *argv[]);
 static void block(int argc, char *argv[]);
 
 static command_t commands[LETTERS][WORDS] = {{{0, 0}},
-                                             {{"block", block}},
+                                             {{"block", (void *)block}},
                                              {{"clear", (void *)clearCmd}, {0, 0}},
                                              {{"div0", (void *)div0}, {0, 0}},
                                              {{"exit", (void *)exit}},
@@ -58,7 +58,7 @@ static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{"kill", (void *)kill}},
                                              {{"loop", (void *)loop}},
                                              {{0, 0}},
-                                             {{"nice", nice}},
+                                             {{"nice", (void *)nice}},
                                              {{0, 0}},
                                              {{"ps", (void *)listAllProcesses}},
                                              {{0, 0}},
@@ -663,7 +663,7 @@ void loop(int argc, char *argv[])
         return;
     }
     int pid = createProcess("loopPrinter", 4, loopPrinter, argc, argv);
-    // waitPID(pid);
+    waitPID(pid);
 }
 
 int loopPrinter(int argc, char *argv[])
@@ -671,8 +671,7 @@ int loopPrinter(int argc, char *argv[])
     while (1)
     {
         printf("Hello, my PID is %d\n", getPID());
-        // waitCaller(UNUSED, atoi(argv[0]));
-        waitCaller(UNUSED, 3);
+        waitCaller(UNUSED, atoi(argv[0]));
     }
     return 0;
 }
