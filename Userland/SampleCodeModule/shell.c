@@ -44,6 +44,7 @@ static int loopPrinter(int argc, char *argv[]);
 static void kill(int argc, char *argv[]);
 static void nice(int argc, char *argv[]);
 static void block(int argc, char *argv[]);
+static void memStatusPrinter(uint64_t argc, char *argv[]);
 
 static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{"block", (void *)block}},
@@ -57,7 +58,7 @@ static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{0, 0}},
                                              {{"kill", (void *)kill}},
                                              {{"loop", (void *)loop}},
-                                             {{0, 0}},
+                                             {{"mem", (void *)memStatusPrinter}},
                                              {{"nice", (void *)nice}},
                                              {{0, 0}},
                                              {{"ps", (void *)listAllProcesses}},
@@ -69,6 +70,7 @@ static command_t commands[LETTERS][WORDS] = {{{0, 0}},
 static char *commandNotFoundMsg = "Command not found. Type 'help' to see the list of commands";
 static uint8_t cNotFoundSize = 51;
 static char *helpMsg = "PinguinOS - v.5.0\n\n"
+                       "block: Block a process\n"
                        "clear: Clear the screen\n"
                        "div0: Divide by zero\n"
                        "exit: Exit the shell\n"
@@ -77,11 +79,16 @@ static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "getTime: Get the current time\n"
                        "help: Show this message\n"
                        "invalidOpCode: Execute an invalid operation code\n"
-                       "loop: loop forever and print a salute and its PID\n"
                        "kill: Kill a process\n"
+                       "loop: loop forever and print a salute and its PID\n"
+                       "mem: Show memory status\n"
+                       "nice: Change the priority of a process\n"
                        "ps: List all processes\n"
-                       "testMemInfo: Test memory info\n"
-                       "testSync: Test sync\n";
+                       "testMem: Tests memory allocation\n"
+                       "testMemInfo: Tests memory information\n"
+                       "testPrio: Tests priorities\n"
+                       "testProcesses: Tests processes\n"
+                       "testSync: Tests synchronization\n";
 static char *waitMsg = "Press any key to continue";
 // ###################################################################
 
@@ -684,7 +691,7 @@ void loop(int argc, char *argv[])
         return;
     }
     int pid = createProcess("loopPrinter", 4, loopPrinter, argc, argv);
-    waitPID(pid);
+    // waitPID(pid);
 }
 
 int loopPrinter(int argc, char *argv[])
@@ -692,7 +699,8 @@ int loopPrinter(int argc, char *argv[])
     while (1)
     {
         printf("Hello, my PID is %d\n", getPID());
-        waitCaller(UNUSED, atoi(argv[0]));
+        // waitCaller(UNUSED, atoi(argv[0]));
+        waitCaller(UNUSED, 10);
     }
     return 0;
 }
@@ -713,5 +721,40 @@ void nice(int argc, char *argv[])
 void block(int argc, char *argv[])
 {
     int pid = atoi(argv[0]);
-    blockProcess(pid);
+    processInformation *info = listProcessesInfo();
+    for (int i = 0; info[i].pid != UINT64_MAX; i++)
+    {
+        if (info[i].pid == pid)
+        {
+            if (info[i].state == BLOCKED)
+            {
+                unblockProcess(pid);
+                return;
+            }
+            else if (info[i].state == READY)
+            {
+                blockProcess(pid);
+                return;
+            }
+        }
+    }
+    freeM(info);
+}
+
+void memStatusPrinter(uint64_t argc, char *argv[])
+{
+    MemStatus *memStatus = memStatusCaller(UNUSED);
+    printf("Total memory: %d B\n", memStatus->total_mem);
+    printf("              %d KB\n", memStatus->total_mem / (1024));
+    printf("              %d MB\n", memStatus->total_mem / (1024 * 1024));
+    printf("\n");
+    printf("Free memory: %d B\n", memStatus->free_mem);
+    printf("             %d KB\n", memStatus->free_mem / (1024));
+    printf("             %d MB\n", memStatus->free_mem / (1024 * 1024));
+    printf("\n");
+    printf("Occupied memory: %d B\n", memStatus->occupied_mem);
+    printf("                 %d KB\n", memStatus->occupied_mem / (1024));
+    printf("                 %d MB\n", memStatus->occupied_mem / (1024 * 1024));
+
+    freeM(memStatus);
 }

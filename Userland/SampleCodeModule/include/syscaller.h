@@ -6,17 +6,17 @@
 
 #define UNUSED 0
 
-// typedef enum
-// {
-//     RUNNING,
-//     READY,
-//     BLOCKED,
-//     TERMINATED
-// } process_state_t;
+typedef enum
+{
+    RUNNING,
+    READY,
+    BLOCKED,
+    TERMINATED
+} process_state_t;
 typedef struct processInformation
 {
     uint64_t pid;
-    int state;
+    process_state_t state;
     char *name;
     int priority;
     uint64_t *stack;
