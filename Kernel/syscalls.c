@@ -38,7 +38,7 @@ long int write(int pipeId, const uint8_t *string, uint32_t size)
 		return -1;
 	}
 	int written = 0;
-	while (*string)
+	while (written < size)
 	{
 		semWait(pipe->semWrite);
 		pipe->buffer[pipe->currentWritePos++] = *string;

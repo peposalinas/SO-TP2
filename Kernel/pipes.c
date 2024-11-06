@@ -12,8 +12,10 @@ int createPipe(int id)
     pipeArray[id] = (pipe_t *)allocMemoryKernel(sizeof(pipe_t));
     pipeArray[id]->currentReadPos = 0;
     pipeArray[id]->currentWritePos = 0;
-    pipeArray[id]->semWrite = semOpen(semId++, PIPE_SIZE);
-    pipeArray[id]->semRead = semOpen(semId++, 0);
+    pipeArray[id]->semWrite = semId;
+    semOpen(semId++, PIPE_SIZE);
+    pipeArray[id]->semRead = semId;
+    semOpen(semId++, 0);
     return 0;
 }
 

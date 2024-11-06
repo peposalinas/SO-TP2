@@ -4,6 +4,7 @@
 #include "lib.h"
 #include "regsDump.h"
 #include "pipes.h"
+#include "syscalls.h"
 
 #define RIGHTKEY 0x4D
 #define LEFTKEY 0x4B
