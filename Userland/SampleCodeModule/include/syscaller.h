@@ -60,5 +60,6 @@ char *listProcessesInfoCaller(uint8_t __unused);
 int createStandardProcCaller(uint8_t __unused, char *process_name, int (*entry_point)(int, char **), int argc, char *argv[]);
 int getRunningOutputPipeCaller(uint8_t __unused);
 int getRunningInputPipeCaller(uint8_t __unused);
+int newPipeCaller(uint8_t __unused, int id);
 
 #endif

@@ -4,8 +4,9 @@ static char *charBuffer;
 static uint64_t last = 0;
 static uint64_t next = 0;
 
-void initKeyboard()
+void keyboardInit()
 {
+	createPipe(0);
 	charBuffer = getPipe(0)->buffer;
 }
 

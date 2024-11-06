@@ -31,6 +31,7 @@ GLOBAL listProcessesInfoCaller
 GLOBAL createStandardProcCaller
 GLOBAL getRunningOutputPipeCaller
 GLOBAL getRunningInputPipeCaller
+GLOBAL newPipeCaller
 
 section .text
 
@@ -119,3 +120,5 @@ getRunningOutputPipeCaller:
     syscaller 31
 getRunningInputPipeCaller:
     syscaller 32
+newPipeCaller:
+    syscaller 33

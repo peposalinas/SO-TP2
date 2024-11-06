@@ -391,6 +391,7 @@ void printBufferFrom(uint16_t start, uint16_t end)
 
 int launchShell(int argc, char *argv[])
 {
+    newPipe(1);
     count = 0;
     lineCount = 1;
     firstLineOnScreen = 0;

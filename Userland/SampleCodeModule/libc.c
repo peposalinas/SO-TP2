@@ -310,6 +310,11 @@ int createStandardProc(char *process_name, int (*entry_point)(int, char **), int
     return createStandardProcCaller(UNUSED, process_name, entry_point, argc, argv);
 }
 
+int newPipe(int id)
+{
+    return newPipeCaller(UNUSED, id);
+}
+
 void clearScreen()
 {
     int width = getScreenWidthCaller(UNUSED) / 8;

@@ -45,5 +45,6 @@ char *listAllProcessesInformation();
 int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[]);
 int getRunningOutputPipe();
 int getRunningInputPipe();
+int newPipe(int id);
 
 #endif

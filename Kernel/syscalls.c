@@ -305,3 +305,8 @@ int getRunningOutputPipe()
 {
 	return getCurrentOutputPipe();
 }
+
+int newPipe(int id)
+{
+	return createPipe(id);
+}

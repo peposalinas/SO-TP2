@@ -3,6 +3,7 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
+#include <keyboardDriver.h>
 #include <audioDriver.h>
 #include <videoDriver.h>
 #include <idtLoader.h>
@@ -103,6 +104,7 @@ int main()
 	createMemoryManager(dir1, dir2);
 	schedulerInit();
 	semInit();
+	keyboardInit();
 
 	char *argvIdle[2] = {"idle", NULL};
 	schedulerAddStandardProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);

@@ -38,5 +38,6 @@ char *strchr(const char *str, int c);
 
 char *listProcessesInfo();
 int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[]);
+int newPipe(int id);
 
 #endif
