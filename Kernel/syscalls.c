@@ -200,7 +200,7 @@ uint64_t getPID()
 	return getRunningPid();
 }
 
-char *listAllProcessesInformation()
+processInformation *listAllProcessesInformation()
 {
 	return getAllProcessesInformation();
 }

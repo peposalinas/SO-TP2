@@ -35,7 +35,8 @@ void postSem(int id);
 void clearScreen();
 char *strtok(char *str, const char *delim);
 char *strchr(const char *str, int c);
+void uint64ToHexString(uint64_t value, char *buffer, int bufferSize);
 
-char *listProcessesInfo();
+processInformation *listProcessesInfo();
 
 #endif

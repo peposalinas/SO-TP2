@@ -201,6 +201,27 @@ void itos(int num, char *buffer)
     return;
 }
 
+void uint64ToHexString(uint64_t value, char *buffer, int bufferSize)
+{
+    const char *hexDigits = "0123456789ABCDEF";
+    buffer[0] = '0';
+    buffer[1] = 'x';
+    buffer[bufferSize - 1] = '\0';
+
+    int index = bufferSize - 2;
+
+    for (int i = 0; i < 6; i++)
+    {
+        buffer[index--] = hexDigits[value % 16];
+        value /= 16;
+    }
+
+    while (index >= 2)
+    {
+        buffer[index--] = '0';
+    }
+}
+
 int strcmp(char *s1, char *s2)
 {
     if (s1 == NULL && s2 == NULL)
@@ -230,6 +251,11 @@ void freeM(void *ptr)
 MemStatus *memStatus()
 {
     return memStatusCaller(UNUSED);
+}
+
+processInformation *listProcessesInfo()
+{
+    return listProcessesInfoCaller(UNUSED);
 }
 
 int createProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[])
@@ -297,11 +323,6 @@ void waitSem(int id)
 void postSem(int id)
 {
     postSemCaller(UNUSED, id);
-}
-
-char *listProcessesInfo()
-{
-    return listProcessesInfoCaller(UNUSED);
 }
 
 void clearScreen()

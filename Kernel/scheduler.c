@@ -276,130 +276,35 @@ void listProcessesByPrio()
     }
 }
 
-void listProcesses() // QUE ONDA ESTE BROSKI???? HAGO EL DE DEVOLVER LA INFO O QUE BRORHSUAHDUSA
+processInformation *getAllProcessesInformation()
 {
-    // process_t processArray[MAX_PROCESSES];
-    // int index = 0;
-
-    // for (int i = 0; i < MAX_PROCESSES; i++)
-    // {
-    //     if (scheduler_kernel->processes[i] != NULL)
-    //     {
-    //         processArray[index] = *(scheduler_kernel->processes[i]);
-    //         index++;
-    //     }
-    // }
-
-    return;
-}
-
-void appendString(char *dest, const char *src)
-{
-    while (*dest)
-    {
-        dest++;
-    }
-    while (*src)
-    {
-        *dest++ = *src++;
-    }
-    *dest = '\0';
-}
-
-void appendInt(char *dest, int value)
-{
-    char buffer[20];
-    int index = 0;
-
-    if (value < 0)
-    {
-        buffer[index++] = '-';
-        value = -value;
-    }
-
-    int startIndex = index;
-    do
-    {
-        buffer[index++] = (value % 10) + '0';
-        value /= 10;
-    } while (value > 0);
-
-    for (int i = startIndex, j = index - 1; i < j; i++, j--)
-    {
-        char temp = buffer[i];
-        buffer[i] = buffer[j];
-        buffer[j] = temp;
-    }
-
-    buffer[index] = '\0';
-    appendString(dest, buffer);
-}
-
-void appendHex(char *dest, uint64_t value)
-{
-    char buffer[20];
-    int index = 0;
-
-    appendString(dest, "0x");
-
-    do
-    {
-        int digit = value % 16;
-        if (digit < 10)
-        {
-            buffer[index++] = '0' + digit;
-        }
-        else
-        {
-            buffer[index++] = 'A' + (digit - 10);
-        }
-        value /= 16;
-    } while (value > 0);
-
-    for (int i = 0, j = index - 1; i < j; i++, j--)
-    {
-        char temp = buffer[i];
-        buffer[i] = buffer[j];
-        buffer[j] = temp;
-    }
-
-    buffer[index] = '\0';
-    appendString(dest, buffer);
-}
-
-char *getAllProcessesInformation()
-{
-    int amount = 0;
-
+    int totalProcesses = 0;
     for (int i = 0; i < PRIORITY_AMOUNT; i++)
     {
-        amount += scheduler_kernel->priority[i]->processList->size;
+        totalProcesses += scheduler_kernel->priority[i]->processList->size;
     }
 
-    char *toReturn = allocMemoryKernel(amount * BUFSIZ);
-    toReturn[0] = '\0';
+    processInformation *processes = allocMemoryKernel(sizeof(processInformation) * (totalProcesses + 1));
+    int index = 0;
 
-    appendString(toReturn, "PID      | Priority   | State     | S. Base          | S. Pointer       | Name\n");
     for (int i = 0; i < MAX_PROCESSES; i++)
     {
-        if (scheduler_kernel->processes[i] != NULL)
+        process p = scheduler_kernel->processes[i];
+        if (p != NULL)
         {
-            appendInt(toReturn, scheduler_kernel->processes[i]->pid);
-            appendString(toReturn, "        | ");
-            appendInt(toReturn, scheduler_kernel->processes[i]->priority);
-            appendString(toReturn, "          | ");
-            appendInt(toReturn, scheduler_kernel->processes[i]->state);
-            appendString(toReturn, "         | ");
-            appendHex(toReturn, (uint64_t)(scheduler_kernel->processes[i]->stack));
-            appendString(toReturn, "         | ");
-            appendHex(toReturn, (uint64_t)(scheduler_kernel->processes[i]->stack_pointer));
-            appendString(toReturn, "         | ");
-            appendString(toReturn, scheduler_kernel->processes[i]->name);
-            appendString(toReturn, "\n");
+            processes[index].pid = p->pid;
+            processes[index].state = p->state;
+            processes[index].name = p->name;
+            processes[index].priority = p->priority;
+            processes[index].stack = p->stack;
+            processes[index].stack_pointer = p->stack_pointer;
+            processes[index].parent_pid = p->parent_pid;
+            index++;
         }
     }
 
-    return toReturn;
+    processes[index].pid = UINT64_MAX;
+    return processes;
 }
 
 void schedulerYield()

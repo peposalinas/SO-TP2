@@ -648,11 +648,32 @@ int test_wait_shell(int argc, char *argv[])
     exitProc(0);
     return 0;
 }
+
 void listAllProcesses()
 {
-    char *toPrint = listProcessesInfo();
-    printf(toPrint);
-    freeMCaller(UNUSED, toPrint);
+    processInformation *toPrint = listProcessesInfo();
+    printf("| PID |Priority | State | S.Base           | S.Pointer        | Parent PID | Name\n");
+
+    char stackHex[9];
+    char stackPointerHex[9];
+
+    while (toPrint->pid != UINT64_MAX)
+    {
+        uint64ToHexString((uint64_t)toPrint->stack, stackHex, sizeof(stackHex));
+        uint64ToHexString((uint64_t)toPrint->stack_pointer, stackPointerHex, sizeof(stackPointerHex));
+
+        printf("|  %d  |    %d    |   %d   |     %s     |     %s     |     %d      | %s\n",
+               (int)toPrint->pid,
+               toPrint->priority,
+               toPrint->state,
+               stackHex,
+               stackPointerHex,
+               (int)toPrint->parent_pid,
+               toPrint->name);
+        toPrint++;
+    }
+
+    freeM(toPrint);
 }
 
 void loop(int argc, char *argv[])

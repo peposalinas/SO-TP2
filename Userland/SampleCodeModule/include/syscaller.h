@@ -5,20 +5,25 @@
 #include <stddef.h>
 
 #define UNUSED 0
-typedef struct toUserInformation
+
+// typedef enum
+// {
+//     RUNNING,
+//     READY,
+//     BLOCKED,
+//     TERMINATED
+// } process_state_t;
+typedef struct processInformation
 {
     uint64_t pid;
     int state;
     char *name;
     int priority;
-} toUserInformation;
+    uint64_t *stack;
+    uint64_t *stack_pointer;
+    uint64_t parent_pid;
 
-typedef struct processList
-{
-    int count;
-    toUserInformation *processes;
-} processList;
-
+} processInformation;
 typedef struct MemStatus
 {
     size_t total_mem;
@@ -55,8 +60,8 @@ int openSemCaller(uint8_t __unused, int id, int value);
 void closeSemCaller(uint8_t __unused, int id);
 void waitSemCaller(uint8_t __unused, int id);
 void postSemCaller(uint8_t __unused, int id);
-MemStatus *memStatusCaller(uint8_t __unused);
 
-char *listProcessesInfoCaller(uint8_t __unused);
+MemStatus *memStatusCaller(uint8_t __unused);
+processInformation *listProcessesInfoCaller(uint8_t __unused);
 
 #endif
