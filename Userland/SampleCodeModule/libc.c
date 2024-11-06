@@ -226,7 +226,6 @@ void freeM(void *ptr)
     freeMCaller(UNUSED, ptr);
 }
 
-//@TODO: Implement memStatus
 MemStatus *memStatus()
 {
     return memStatusCaller(UNUSED);

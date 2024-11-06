@@ -14,6 +14,11 @@ debug: all
 	cd Kernel; make debug
 	cd Userland; make debug
 
+debug_buddy: export MM_TYPE=BUDDY
+debug_buddy: clean kernel userland image
+	cd Kernel; make debug
+	cd Userland; make debug
+
 kernel:
 	cd Kernel; make all
 
@@ -29,4 +34,4 @@ clean:
 	cd Kernel; make clean
 	cd Userland; make clean
 
-.PHONY: bootloader image collections kernel userland all clean buddy myMM
+.PHONY: bootloader image collections kernel userland all clean buddy myMM debug debug_buddy

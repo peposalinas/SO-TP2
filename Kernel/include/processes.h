@@ -40,7 +40,7 @@ typedef process_t *process;
  * @param entry_point puntero a la función a correr
  * @param argc cantidad del argumentos de entry_point
  * @param argv argumentos de entry_point
- * @return pid del proceso si es exitoso, 0 caso contrario
+ * @return pid del proceso si es exitoso, -1 caso contrario
  */
 int createProcess(process memoryForProcess, char *process_name, uint64_t process_pid, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[], uint64_t parent_pid);
 

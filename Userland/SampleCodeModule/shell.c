@@ -409,8 +409,8 @@ void launchShell()
     startNewLine();
     sPrintSelected(' ');
     buffer[count] = ' ';
-    char *argvTest[3] = {"10", "0", NULL};
-    // createProcess("test_sem", 4, test_sync, 2, argvTest);
+    char *argvTest[2] = {"10", NULL};
+    createProcess("test_mem_info", 4, test_mem, 1, argvTest);
     uint8_t key;
     while (!exitFlag)
     {

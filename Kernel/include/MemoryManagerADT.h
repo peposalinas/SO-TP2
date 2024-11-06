@@ -6,7 +6,7 @@
 #include "test_util.h"
 
 #define MB *1024 * 1024
-#define AMOUNT_OF_MB 128
+#define AMOUNT_OF_MB 256
 #define TOTAL_MEM AMOUNT_OF_MB MB
 
 typedef struct MemoryManagerCDT *MemoryManagerADT;

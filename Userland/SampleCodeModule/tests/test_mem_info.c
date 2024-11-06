@@ -8,6 +8,7 @@ uint64_t test_mem(int argc, char *argv[])
     size_t freeMemo = mem->free_mem / (1024 * 1024); // To convert from Bytes to MB
     size_t totalMemo = mem->total_mem / (1024 * 1024);
     size_t occupiedMemo = mem->occupied_mem / (1024 * 1024);
+    // Printfs tiran excepcion 8 en modo texto
     printf("Total mem: %d MB\nOccupied mem: %d MB\nFree mem: %d MB\n", totalMemo, occupiedMemo, freeMemo);
     freeM(mem);
 

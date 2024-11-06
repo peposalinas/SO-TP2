@@ -23,44 +23,52 @@ void test_prio(uint64_t argc, char *argv1[])
     uint64_t i;
 
     printf("CREATING PROCESSES...\n");
-    for (int i = 0; i < WAIT; i++)
+    for (int j = 0; j < WAIT; j++)
         ;
-    for (i = 0; i < TOTAL_PROCESSES; i++)
-        pids[i] = createProcess("endless_loop_print", prio[4], endless_loop_print, 1, argv);
+    for (int k = 0; k < TOTAL_PROCESSES; k++)
+    {
+        pids[k] = createProcess("endless_loop_print", prio[4], endless_loop_print, 1, argv);
+        printf("Process %d created with pid %d\n", k, pids[k]);
+        if (pids[k] == -1)
+        {
+            printf("Error creating process\n");
+            exitProc(1);
+        }
+    }
 
     printf("\nCHANGING PRIORITIES...\n");
-    for (int i = 0; i < WAIT; i++)
+    for (int j = 0; j < WAIT; j++)
         ;
     for (i = 0; i < TOTAL_PROCESSES; i++)
         changeProcessPriority(pids[i], prio[i]);
 
     printf("\nBLOCKING...\n");
-    for (int i = 0; i < WAIT; i++)
+    for (int j = 0; j < WAIT; j++)
         ;
     for (i = 0; i < TOTAL_PROCESSES; i++)
         blockProcess(pids[i]);
 
     //@TODO: Analizar si cambiar esto porque por nuestra implementacion despues de cambiar la prioridad no se ejecuta ninguno (la shell es de prioridad 4)
     printf("\nCHANGING PRIORITIES WHILE BLOCKED...\n");
-    for (int i = 0; i < WAIT; i++)
+    for (int j = 0; j < WAIT; j++)
         ;
     for (i = 0; i < TOTAL_PROCESSES; i++)
         changeProcessPriority(pids[i], MEDIUM);
 
     printf("\nUNBLOCKING...\n");
-    for (int i = 0; i < WAIT; i++)
+    for (int j = 0; j < WAIT; j++)
         ;
     for (i = 0; i < TOTAL_PROCESSES; i++)
         unblockProcess(pids[i]);
 
     printf("\nKILLING...\n");
-    for (int i = 0; i < WAIT; i++)
+    for (int j = 0; j < WAIT; j++)
         ;
     for (i = 0; i < TOTAL_PROCESSES; i++)
     {
         killProcess(pids[i]);
     }
-    for (int i = 0; i < WAIT; i++)
+    for (int j = 0; j < WAIT; j++)
         ;
 
     exitProc(0);

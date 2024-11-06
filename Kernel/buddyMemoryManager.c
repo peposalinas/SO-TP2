@@ -67,18 +67,23 @@ void *allocMemory(MemoryManagerADT mm, size_t memoryToAllocate)
     struct Block *prev = NULL;
 
     // Encuentro un bloque que pueda contener el tamaño solicitado
-    while (current != NULL)
+    while (current != NULL && current->size < total_size)
     {
-        if (current->size >= total_size)
-            break;
         prev = current;
         current = current->next;
     }
 
+    // Acá está el error con test_processes, por alguna razon se le pide 8912 bytes y dice que no tiene espacio
     if (current == NULL)
         return NULL;
+    // Error end
 
-    // Divido bloques hasta encontrar el tamaño adecuado
+    // No llega a entrar acá en el alloc de 10MB
+    ncPrint("M ");
+    ncPrintDec(total_size);
+    ncPrint(" | ");
+
+    // Divido bloques hasta encontrar el tamaño adecuado (exactamente total_size)
     while (current->size > total_size)
     {
         size_t new_size = current->size / 2;
@@ -103,7 +108,8 @@ void *allocMemory(MemoryManagerADT mm, size_t memoryToAllocate)
 
 void freeMemory(MemoryManagerADT mm, void *ptr)
 {
-    if (ptr == NULL)
+    ncPrint("F | ");
+    if (ptr == NULL || (ptr < mm->mem_start || ptr >= (mm->mem_start + mm->total_size)))
         return;
 
     // Agarro el struct block
@@ -132,47 +138,45 @@ void freeMemory(MemoryManagerADT mm, void *ptr)
         mm->free_blocks = block;
 
     // Fusiono buddies si es posible
-
-    int buddyExists = 1;
-    while (buddyExists)
+    int buddyCouldExist = 1;
+    while (buddyCouldExist)
     {
         struct Block *buddy = NULL;
         struct Block *buddy_prev = NULL;
         current = mm->free_blocks;
         prev = NULL;
+        int foundBuddy = 0;
 
         // Encuentro el buddy del bloque (si existe)
-        while (current != NULL)
+        while (current != NULL && !foundBuddy)
         {
             if (current != block && isBuddy(block, current, size, mm->mem_start))
             {
                 buddy = current;
                 buddy_prev = prev;
-                break;
+                foundBuddy = 1;
             }
-            prev = current;
-            current = current->next;
+            else
+            {
+                prev = current;
+                current = current->next;
+            }
         }
 
-        // Si no se encuentra un buddy o son de tamaños distintos, termino
+        // Si no se encuentra un buddy o son de tamaños distintos (el buddy está dividido), termino
         if (!buddy || buddy->size != size)
-            buddyExists = 0;
+            buddyCouldExist = 0;
         else
         {
-            // Remove buddy from list
-            if (buddy_prev)
-                buddy_prev->next = buddy->next;
-            else
-                mm->free_blocks = buddy->next;
-
-            // Merge blocks (keep the lower address)
-            if (block > buddy)
+            // Me quedo en block con la dirección más baja
+            if ((char *)block > (char *)buddy)
             {
-                struct Block *temp = block;
+                struct Block *aux = block;
                 block = buddy;
-                buddy = temp;
+                buddy = aux;
             }
-
+            // Saco al buddy de la lista de bloques libres
+            block->next = buddy->next;
             block->size *= 2;
             size *= 2;
         }
@@ -191,9 +195,18 @@ void freeMemoryKernel(void *ptr)
 
 MemStatus *memStatusKernel()
 {
-    MemStatus *status = memStatusKernel();
-    status->total_mem = kernel_mm->total_size;
-    status->free_mem = kernel_mm->free_mem;
-    status->occupied_mem = kernel_mm->occupied_mem;
-    return status;
+    ncPrint("S ");
+    MemStatus *mem_status = allocMemoryKernel(sizeof(MemStatus));
+    mem_status->total_mem = kernel_mm->total_size;
+    mem_status->free_mem = kernel_mm->free_mem;
+    mem_status->occupied_mem = kernel_mm->occupied_mem;
+    ncPrintHex(mem_status);
+    ncPrint(" ");
+    ncPrintDec(mem_status->free_mem);
+    ncPrint(" ");
+    ncPrintDec(mem_status->occupied_mem);
+    ncPrint(" ");
+    ncPrintDec(mem_status->total_mem);
+    ncPrint(" | ");
+    return mem_status;
 }
