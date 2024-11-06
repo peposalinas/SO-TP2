@@ -3,11 +3,12 @@
 
 #include <stdint.h>
 #include "MemoryManagerADT.h"
-// #include "scheduler.h"
+#include "pipes.h"
 
 #define STACK_SIZE 4 * 1024
 #define PRIORITY_AMOUNT 4
 #define ALIGN 7
+#define MAX_PIPES_PER_PROCESS 10
 
 typedef enum
 {
@@ -30,6 +31,8 @@ typedef struct process_t
     uint64_t parent_pid;
     uint64_t return_value; // Como hacer para que retorne un string o void*
     int isBeingWaited;
+    int inputPipe;
+    int outputPipe;
 } process_t;
 
 typedef process_t *process;

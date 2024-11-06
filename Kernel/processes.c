@@ -26,7 +26,7 @@ typedef struct stack_frame
 
 int createProcess(process memoryForProcess, char *process_name, uint64_t process_pid,
                   int process_priority, int (*entry_point)(int, char **),
-                  int argc, char *argv[], uint64_t parent_pid)
+                  int argc, char *argv[], uint64_t parent_pid, int inputPipe, int outputPipe)
 {
     memoryForProcess->pid = process_pid;
     memoryForProcess->state = READY;
@@ -47,8 +47,17 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
     memoryForProcess->priority = process_priority;
     memoryForProcess->parent_pid = parent_pid;
     memoryForProcess->isBeingWaited = 0;
+    memoryForProcess->inputPipe = inputPipe;
+    memoryForProcess->outputPipe = outputPipe;
 
     return memoryForProcess->pid;
+}
+
+int createStandardProcess(process memoryForProcess, char *process_name, uint64_t process_pid,
+                          int process_priority, int (*entry_point)(int, char **),
+                          int argc, char *argv[], uint64_t parent_pid)
+{
+    return createProcess(memoryForProcess, process_name, process_pid, process_priority, entry_point, argc, argv, parent_pid, KEYBOARD_PIPE, TERMINAL_PIPE);
 }
 
 int killProcess(process process)

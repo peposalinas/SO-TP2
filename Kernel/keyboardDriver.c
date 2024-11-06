@@ -1,10 +1,14 @@
-#include <keyboardDriver.h>
-#include <lib.h>
-#include <regsDump.h>
+#include "keyboardDriver.h"
 
+pipe_t *keyboardPipe;
 static uint8_t charBuffer[BUFF_SIZE];
 static uint64_t last = 0;
 static uint64_t next = 0;
+
+void initKeyboard()
+{
+	keyboardPipe = getPipe(0);
+}
 
 extern const uint64_t regs[19];
 

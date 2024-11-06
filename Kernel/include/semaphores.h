@@ -8,8 +8,6 @@
 #include "lib.h"
 #include "scheduler.h"
 
-#define MAX_SEMAPHORES 100
-
 typedef struct sem_t
 {
     int id;

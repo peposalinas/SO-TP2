@@ -12,8 +12,8 @@ typedef enum FD
     STDERR = 2
 } FD;
 
-uint32_t read(uint8_t *buffer, uint32_t size);                                                 // 0
-long int write(FD fd, const uint8_t *string, uint32_t size);                                   // 1
+uint32_t read(int pipeId, uint8_t *buffer, uint32_t size);                                     // 0
+long int write(int pipeId, const uint8_t *string, uint32_t size);                              // 1
 void printRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t colors); // 2
 uint64_t getScreenWidth();                                                                     // 3
 uint64_t getScreenHeight();                                                                    // 4

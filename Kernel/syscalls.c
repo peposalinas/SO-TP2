@@ -3,40 +3,81 @@
 #include <audioDriver.h>
 #include <keyboardDriver.h>
 #include <videoDriver.h>
+#include <pipes.h>
 
 static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base);
 
-uint32_t read(uint8_t *buffer, uint32_t size)
+uint32_t read(int pipeId, uint8_t *buffer, uint32_t size)
 {
-	uint32_t i = 0;
-	uint8_t c;
-	while (i < size && (c = nextFromBuffer()))
+	pipe_t *pipe = getPipe(pipeId);
+	if (pipe == NULL)
 	{
-		buffer[i++] = c;
+		return -1;
 	}
-	return i;
+	int bytesRead = 0;
+	while (bytesRead < size)
+	{
+		semWait(pipe->semRead);
+		*buffer = pipe->buffer[pipe->currentReadPos++];
+		semPost(pipe->semWrite);
+		if (pipe->currentReadPos == PIPE_SIZE)
+		{
+			pipe->currentReadPos = 0;
+		}
+		bytesRead++;
+		buffer++;
+	}
+	return bytesRead;
+
+	// uint32_t i = 0;
+	// uint8_t c;
+	// while (i < size && (c = nextFromBuffer()))
+	// {
+	// 	buffer[i++] = c;
+	// }
+	// return i;
 }
 
 static uint64_t lastCharX = 0;
 static uint64_t lastCharY = 0;
-long int write(FD fd, const uint8_t *string, uint32_t size)
+long int write(int pipeId, const uint8_t *string, uint32_t size)
 {
-	uint32_t height = getHeight() / 16;
-	uint32_t width = getWidth();
-	uint32_t colour = fd == STDOUT ? WHITE : RED;
-	int i = 0;
-	while (i < size)
+	pipe_t *pipe = getPipe(pipeId);
+	if (pipe == NULL)
 	{
-		if (string[i] == '\n' || (lastCharX + 1) * 8 == width)
-		{
-			lastCharY++;
-			lastCharX = 0;
-		}
-		if (string[i] != '\n')
-			drawchar(string[i], lastCharX++, lastCharY % height, colour, BLACK);
-		i++;
+		return -1;
 	}
-	return i;
+	int written = 0;
+	while (*string)
+	{
+		semWait(pipe->semWrite);
+		pipe->buffer[pipe->currentWritePos++] = *string;
+		semPost(pipe->semRead);
+		if (pipe->currentWritePos == PIPE_SIZE)
+		{
+			pipe->currentWritePos = 0;
+		}
+		string++;
+		written++;
+	}
+	return written;
+
+	// uint32_t height = getHeight() / 16;
+	// uint32_t width = getWidth();
+	// uint32_t colour = fd == STDOUT ? WHITE : RED;
+	// int i = 0;
+	// while (i < size)
+	// {
+	// 	if (string[i] == '\n' || (lastCharX + 1) * 8 == width)
+	// 	{
+	// 		lastCharY++;
+	// 		lastCharX = 0;
+	// 	}
+	// 	if (string[i] != '\n')
+	// 		drawchar(string[i], lastCharX++, lastCharY % height, colour, BLACK);
+	// 	i++;
+	// }
+	// return i;
 }
 
 void printRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t color)
@@ -237,6 +278,10 @@ uint64_t waitPID(uint64_t pid)
 
 int openSem(int id, int value)
 {
+	if (id >= FIRST_SEM_FOR_PIPES && id <= LAST_SEM_FOR_PIPES)
+	{
+		return -1;
+	}
 	return semOpen(id, value);
 }
 
