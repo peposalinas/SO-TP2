@@ -43,7 +43,7 @@ int main()
 	// }
 	// launchShell();
 
-	int pid = createProcess("shell", 4, launchShell, 0, NULL);
+	int pid = createStandardProc("shell", launchShell, 0, NULL);
 	waitPID(pid);
 	// char *argvWait[1] = {NULL};
 	// createProcess("test_waitPid", 4, test_waitPid, 1, argvWait);
@@ -65,8 +65,8 @@ void test_waitPid()
 	int pidChild[4];
 	for (size_t i = 0; i < 2; i++)
 	{
-		pidChild[i] = createProcess("test_child", 4, test_child, 1, argvTest);
-		pidChild[i + 2] = createProcess("test_child2", 4, test_child2, 1, argvTest);
+		pidChild[i] = createStandardProc("test_child", test_child, 1, argvTest);
+		pidChild[i + 2] = createStandardProc("test_child2", test_child2, 1, argvTest);
 	}
 	for (size_t i = 0; i < 2; i++)
 	{

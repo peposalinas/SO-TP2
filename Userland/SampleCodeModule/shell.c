@@ -578,37 +578,37 @@ void invalidOpCode(int argc, char *argv[])
 
 void createTestSync(int argc, char *argv[])
 {
-    int pid = createProcess("test_sync", 4, test_sync, argc, argv);
+    int pid = createStandardProc("test_sync", test_sync, argc, argv);
     waitPID(pid);
 }
 
 void createTestMemInfo(int argc, char *argv[])
 {
-    int pid = createProcess("test_mem", 4, test_mem, argc, argv);
+    int pid = createStandardProc("test_mem", test_mem, argc, argv);
     waitPID(pid);
 }
 
 void createTestProcesses(int argc, char *argv[])
 {
-    int pid = createProcess("test_processes", 4, test_processes, argc, argv);
+    int pid = createStandardProc("test_processes", test_processes, argc, argv);
     waitPID(pid);
 }
 
 void createTestPrio(int argc, char *argv[])
 {
-    int pid = createProcess("test_prio", 4, test_prio, argc, argv);
+    int pid = createStandardProc("test_prio", test_prio, argc, argv);
     waitPID(pid);
 }
 
 void createTestMem(int argc, char *argv[])
 {
-    int pid = createProcess("test_mm", 4, test_mm, argc, argv);
+    int pid = createStandardProc("test_mm", test_mm, argc, argv);
     waitPID(pid);
 }
 
 void createTestWaitShell(int argc, char *argv[])
 {
-    int pid = createProcess("test_wait_shell", 4, test_wait_shell, argc, argv);
+    int pid = createStandardProc("test_wait_shell", test_wait_shell, argc, argv);
     waitPID(pid);
 }
 

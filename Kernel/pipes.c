@@ -1,7 +1,7 @@
 #include "pipes.h"
 
 pipe_t *pipeArray[MAX_PIPES] = {NULL};
-int id = FIRST_SEM_FOR_PIPES;
+int semId = FIRST_SEM_FOR_PIPES;
 
 int createPipe(int id)
 {
@@ -12,8 +12,8 @@ int createPipe(int id)
     pipeArray[id] = (pipe_t *)allocMemoryKernel(sizeof(pipe_t));
     pipeArray[id]->currentReadPos = 0;
     pipeArray[id]->currentWritePos = 0;
-    pipeArray[id]->semWrite = semOpen(id++, PIPE_SIZE);
-    pipeArray[id]->semRead = semOpen(id++, 0);
+    pipeArray[id]->semWrite = semOpen(semId++, PIPE_SIZE);
+    pipeArray[id]->semRead = semOpen(semId++, 0);
     return 0;
 }
 

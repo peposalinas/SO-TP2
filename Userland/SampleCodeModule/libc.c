@@ -43,21 +43,22 @@ int printf(const char *fmt, ...)
 
 int putChar(char c)
 {
-    return writeCaller(UNUSED, 1, &c, 1);
+    return writeCaller(UNUSED, getRunningOutputPipeCaller(UNUSED), &c, 1);
 }
 
 int getChar()
 {
+
     char c = 0;
     while (!c)
-        readCaller(UNUSED, &c, 1);
+        readCaller(UNUSED, getRunningInputPipeCaller(UNUSED), &c, 1);
     return c;
 }
 
 void cleanBuffer()
 {
     char c;
-    while (readCaller(UNUSED, &c, 1))
+    while (readCaller(UNUSED, getRunningInputPipeCaller(UNUSED), &c, 1))
         ;
 }
 
@@ -232,9 +233,9 @@ MemStatus *memStatus()
     return memStatusCaller(UNUSED);
 }
 
-int createProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[])
+int createProcess(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[], int *pipesIO)
 {
-    return createProcCaller(UNUSED, process_name, process_priority, entry_point, argc, argv);
+    return createProcCaller(UNUSED, process_name, entry_point, argc, argv, pipesIO);
 }
 
 void exitProc(int returnVal)
@@ -302,6 +303,11 @@ void postSem(int id)
 char *listProcessesInfo()
 {
     return listProcessesInfoCaller(UNUSED);
+}
+
+int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[])
+{
+    return createStandardProcCaller(UNUSED, process_name, entry_point, argc, argv);
 }
 
 void clearScreen()

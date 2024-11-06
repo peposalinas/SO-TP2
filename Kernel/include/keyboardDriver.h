@@ -31,8 +31,6 @@
 #define RIGHT_SHIFT_B 0xB6
 #define LEFT_CTRL_B 0x9D
 
-#define BUFF_SIZE 512
-
 void initKeyboard();
 
 uint8_t keyHandler();

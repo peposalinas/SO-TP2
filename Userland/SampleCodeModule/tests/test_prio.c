@@ -26,7 +26,10 @@ int test_prio(int argc, char *argv1[])
     for (int i = 0; i < WAIT; i++)
         ;
     for (i = 0; i < TOTAL_PROCESSES; i++)
-        pids[i] = createProcess("endless_loop_print", prio[4], endless_loop_print, 1, argv);
+    {
+        pids[i] = createStandardProc("endless_loop_print", endless_loop_print, 1, argv);
+        changeProcessPriority(pids[i], prio[4]);
+    }
 
     printf("\nCHANGING PRIORITIES...\n");
     for (int i = 0; i < WAIT; i++)

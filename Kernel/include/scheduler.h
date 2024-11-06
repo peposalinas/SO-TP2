@@ -19,6 +19,8 @@
 #define LOW_PRIO 1
 #define LOWEST_PRIO 0
 
+#define DEFAULT_PRIORITY 2
+
 typedef struct toUserInformation
 {
     uint64_t pid;
@@ -41,7 +43,9 @@ void schedulerInit();
  * @param argv arreglo de args
  * @return pid del proceso agregado
  */
-int schedulerAddProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char **argv);
+int schedulerAddProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char **argv, int *pipesIO);
+
+int schedulerAddStandardProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char **argv);
 
 /**
  * Decide qué proceso correr
@@ -84,6 +88,10 @@ void listProcesses();
 void listProcessesByPrio();
 
 void schedulerYield();
+
+int getCurrentInputPipe();
+
+int getCurrentOutputPipe();
 
 char *getAllProcessesInformation();
 

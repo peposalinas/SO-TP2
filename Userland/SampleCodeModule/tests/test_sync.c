@@ -75,8 +75,8 @@ int test_sync(int argc, char *argv[])
 
     for (i = 0; i < TOTAL_PAIR_PROCESSES; i++)
     {
-        pids[i] = createProcess("my_process_dec", 4, my_process_inc, 3, argvDec);
-        pids[i + TOTAL_PAIR_PROCESSES] = createProcess("my_process_inc", 4, my_process_inc, 3, argvInc);
+        pids[i] = createStandardProc("my_process_dec", my_process_inc, 3, argvDec);
+        pids[i + TOTAL_PAIR_PROCESSES] = createStandardProc("my_process_inc", my_process_inc, 3, argvInc);
     }
 
     for (i = 0; i < TOTAL_PAIR_PROCESSES; i++)

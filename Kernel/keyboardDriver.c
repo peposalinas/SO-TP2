@@ -1,13 +1,12 @@
 #include "keyboardDriver.h"
 
-pipe_t *keyboardPipe;
-static uint8_t charBuffer[BUFF_SIZE];
+static char *charBuffer;
 static uint64_t last = 0;
 static uint64_t next = 0;
 
 void initKeyboard()
 {
-	keyboardPipe = getPipe(0);
+	charBuffer = getPipe(0)->buffer;
 }
 
 extern const uint64_t regs[19];
@@ -125,7 +124,7 @@ void keyboard_handler()
 		default:
 			return;
 		}
-		charBuffer[last % BUFF_SIZE] = aux;
+		charBuffer[last % PIPE_SIZE] = aux;
 		last++;
 	}
 	else if (keyVal > 58)
@@ -140,12 +139,12 @@ void keyboard_handler()
 		}
 		else
 		{
-			charBuffer[last % BUFF_SIZE] = asccode[keyVal][shiftOn + capsLock * 2];
+			charBuffer[last % PIPE_SIZE] = asccode[keyVal][shiftOn + capsLock * 2];
 			last++;
 		}
 	}
 }
 uint8_t nextFromBuffer()
 {
-	return last <= next ? 0 : charBuffer[(next++) % BUFF_SIZE];
+	return last <= next ? 0 : charBuffer[(next++) % PIPE_SIZE];
 }

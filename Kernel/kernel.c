@@ -105,7 +105,7 @@ int main()
 	semInit();
 
 	char *argvIdle[2] = {"idle", NULL};
-	schedulerAddProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
+	schedulerAddStandardProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
 	// schedulerAddProcess("test_waitpid", HIGHEST_PRIO, test_waitpid, 1, argvIdle);
 
 	// Test_processes
@@ -125,7 +125,7 @@ int main()
 	// int val = wait_pid(test_pid);
 	// ncPrintDec(val);
 	char *argvSampleCode[2] = {"shell", NULL};
-	uint64_t sample_code_pid = schedulerAddProcess("sampleCodeModule", 2, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
+	uint64_t sample_code_pid = schedulerAddStandardProcess("sampleCodeModule", MEDIUM_PRIO, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
 	_sti();
 	wait_pid(sample_code_pid); // Hace falta??? DA UN WARNING
 
@@ -150,7 +150,7 @@ int test_waitpid()
 	ncPrintDec(getRunningPid());
 	ncNewline();
 	ncPrint("Waiting for my child");
-	int pidChild = schedulerAddProcess("test_child", HIGHEST_PRIO, test_child, 1, argvTest);
+	int pidChild = schedulerAddStandardProcess("test_child", MEDIUM_PRIO, test_child, 1, argvTest);
 	wait_pid(pidChild);
 	ncPrint("My child has finished");
 	exitProcess(0);

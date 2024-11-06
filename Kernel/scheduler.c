@@ -64,15 +64,21 @@ int chooseNextPID()
     return -1;
 }
 
-int schedulerAddProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char **argv)
+int schedulerAddProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char **argv, int *pipesIO)
 {
     process newProcess = (process)allocMemoryKernel(sizeof(process_t));
     int next_pid = chooseNextPID();
-    createProcess(newProcess, process_name, next_pid, process_priority, entry_point, argc, argv, scheduler_kernel->running_process_pid); // Chequear  si esta bien lo del parent
+    createProcess(newProcess, process_name, next_pid, process_priority, entry_point, argc, argv, scheduler_kernel->running_process_pid, pipesIO); // Chequear  si esta bien lo del parent
     scheduler_kernel->processes[newProcess->pid] = newProcess;
     insertLast(scheduler_kernel->priority[newProcess->priority]->processList, newProcess);
     scheduler_kernel->priority[newProcess->priority]->ready_process_count++;
     return newProcess->pid;
+}
+
+int schedulerAddStandardProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char **argv)
+{
+    int pipesIO[2] = {KEYBOARD_PIPE, TERMINAL_PIPE};
+    return schedulerAddProcess(process_name, process_priority, entry_point, argc, argv, pipesIO);
 }
 
 uint64_t *schedulerRun(uint64_t *current_stack_pointer)
@@ -405,4 +411,14 @@ char *getAllProcessesInformation()
 void schedulerYield()
 {
     int20();
+}
+
+int getCurrentInputPipe()
+{
+    return scheduler_kernel->processes[scheduler_kernel->running_process_pid]->inputPipe;
+}
+
+int getCurrentOutputPipe()
+{
+    return scheduler_kernel->processes[scheduler_kernel->running_process_pid]->outputPipe;
 }

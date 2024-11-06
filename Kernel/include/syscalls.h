@@ -27,10 +27,9 @@ uint8_t fontSizeDown();                                                         
 void getTime(uint8_t pb[]);                                                                    // 12
 void *allocM(size_t memoryToAllocate);
 void freeM(void *ptr);
-int createProc(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[]);
+int createProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[], int *pipesIO);
 void exitProc(uint64_t returnVal);
 uint64_t getPID();
-char *listAllProcessesInformation();
 int killProc(uint32_t pid);
 uint64_t changeProcPriority(uint64_t pid, int priority);
 int blockProc(uint32_t pid);
@@ -42,5 +41,9 @@ void closeSem(int id);
 void waitSem(int id);
 void postSem(int id);
 MemStatus *memStatus();
+char *listAllProcessesInformation();
+int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[]);
+int getRunningOutputPipe();
+int getRunningInputPipe();
 
 #endif

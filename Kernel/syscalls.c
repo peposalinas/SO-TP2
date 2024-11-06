@@ -28,18 +28,8 @@ uint32_t read(int pipeId, uint8_t *buffer, uint32_t size)
 		buffer++;
 	}
 	return bytesRead;
-
-	// uint32_t i = 0;
-	// uint8_t c;
-	// while (i < size && (c = nextFromBuffer()))
-	// {
-	// 	buffer[i++] = c;
-	// }
-	// return i;
 }
 
-static uint64_t lastCharX = 0;
-static uint64_t lastCharY = 0;
 long int write(int pipeId, const uint8_t *string, uint32_t size)
 {
 	pipe_t *pipe = getPipe(pipeId);
@@ -226,9 +216,15 @@ MemStatus *memStatus()
 	return memStatusKernel();
 }
 
-int createProc(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[])
+int createProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[], int *pipesIO)
 {
-	return schedulerAddProcess(process_name, process_priority, entry_point, argc, argv);
+	return schedulerAddProcess(process_name, DEFAULT_PRIORITY, entry_point, argc, argv, pipesIO);
+}
+
+int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[])
+{
+	int pipesIO[2] = {KEYBOARD_PIPE, TERMINAL_PIPE};
+	return createProc(process_name, entry_point, argc, argv, pipesIO);
 }
 
 void exitProc(uint64_t returnVal)
@@ -298,4 +294,14 @@ void waitSem(int id)
 void postSem(int id)
 {
 	return semPost(id);
+}
+
+int getRunningInputPipe()
+{
+	return getCurrentInputPipe();
+}
+
+int getRunningOutputPipe()
+{
+	return getCurrentOutputPipe();
 }

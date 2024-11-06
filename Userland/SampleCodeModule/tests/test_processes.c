@@ -37,7 +37,7 @@ int test_processes(int argc, char *argv[])
         // Create max_processes processes
         for (rq = 0; rq < max_processes; rq++)
         {
-            p_rqs[rq].pid = createProcess("endless_loop", 4, endless_loop, 0, argvAux);
+            p_rqs[rq].pid = createStandardProc("endless_loop", endless_loop, 0, argvAux);
 
             if (p_rqs[rq].pid == -1)
             {

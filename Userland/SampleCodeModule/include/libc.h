@@ -18,7 +18,7 @@ int strcmp(char *s1, char *s2);
 void *allocM(int memoryToAllocate);
 void freeM(void *ptr);
 MemStatus *memStatus();
-int createProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[]);
+int createProcess(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[], int *pipesIO);
 void exitProc(int returnVal);
 int getPID();
 // void listProcesses();
@@ -37,5 +37,6 @@ char *strtok(char *str, const char *delim);
 char *strchr(const char *str, int c);
 
 char *listProcessesInfo();
+int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[]);
 
 #endif
