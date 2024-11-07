@@ -691,7 +691,7 @@ void loop(int argc, char *argv[])
         return;
     }
     int pid = createProcess("loopPrinter", 4, loopPrinter, argc, argv);
-    // waitPID(pid);
+    waitPID(pid);
 }
 
 int loopPrinter(int argc, char *argv[])
@@ -699,8 +699,8 @@ int loopPrinter(int argc, char *argv[])
     while (1)
     {
         printf("Hello, my PID is %d\n", getPID());
-        // waitCaller(UNUSED, atoi(argv[0]));
-        waitCaller(UNUSED, 10);
+        waitCaller(UNUSED, atoi(argv[0]));
+        // waitCaller(UNUSED, 10);
     }
     return 0;
 }
