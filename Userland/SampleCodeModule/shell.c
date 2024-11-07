@@ -691,7 +691,7 @@ void loop(int argc, char *argv[])
         printf("Usage: loop <seconds>\n");
         return;
     }
-    int pid = createProcess("loopPrinter", 4, loopPrinter, argc, argv);
+    int pid = createStandardProc("loopPrinter", loopPrinter, argc, argv);
     waitPID(pid);
 }
 
