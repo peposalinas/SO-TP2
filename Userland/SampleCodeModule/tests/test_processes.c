@@ -2,17 +2,10 @@
 #include "test_util.h"
 #include "libc.h"
 
-enum State
-{
-    RUNNING,
-    BLOCKED,
-    KILLED
-};
-
 typedef struct P_rq
 {
     int32_t pid;
-    enum State state;
+    process_state_t state;
 } p_rq;
 
 int test_processes(int argc, char *argv[])
@@ -69,7 +62,7 @@ int test_processes(int argc, char *argv[])
                             printf("test_processes: ERROR killing process\n");
                             exitProc(-1);
                         }
-                        p_rqs[rq].state = KILLED;
+                        p_rqs[rq].state = TERMINATED;
                         alive--;
                     }
                     break;

@@ -39,12 +39,38 @@ static void createTestMemInfo(int argc, char *argv[]);
 static void createTestProcesses(int argc, char *argv[]);
 static void createTestPrio(int argc, char *argv[]);
 static void createTestMem(int argc, char *argv[]);
+static void loop(int argc, char *argv[]);
+static int loopPrinter(int argc, char *argv[]);
+static void kill(int argc, char *argv[]);
+static void nice(int argc, char *argv[]);
+static void block(int argc, char *argv[]);
+static void memStatusPrinter(uint64_t argc, char *argv[]);
 
-static command_t commands[LETTERS][WORDS] = {{{0, 0}}, {{0, 0}}, {{"clear", (void *)clearCmd}, {0, 0}}, {{"div0", (void *)div0}, {0, 0}}, {{"exit", (void *)exit}}, {{"fontBig", (void *)fontBig}, {"fontSmall", (void *)fontSmall}}, {{"getTime", (void *)getTime}, {0, 0}}, {{"help", (void *)help}, {0, 0}}, {{"invalidOpCode", (void *)invalidOpCode}, {0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"ps", (void *)listAllProcesses}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{"testMem", (void *)createTestMem}, {"testMemInfo", (void *)createTestMemInfo}, {"testPrio", (void *)createTestPrio}, {"testProcesses", (void *)createTestProcesses}, {"testSync", (void *)createTestSync}}};
+static command_t commands[LETTERS][WORDS] = {{{0, 0}},
+                                             {{"block", (void *)block}},
+                                             {{"clear", (void *)clearCmd}, {0, 0}},
+                                             {{"div0", (void *)div0}, {0, 0}},
+                                             {{"exit", (void *)exit}},
+                                             {{"fontBig", (void *)fontBig}, {"fontSmall", (void *)fontSmall}},
+                                             {{"getTime", (void *)getTime}, {0, 0}},
+                                             {{"help", (void *)help}, {0, 0}},
+                                             {{"invalidOpCode", (void *)invalidOpCode}, {0, 0}},
+                                             {{0, 0}},
+                                             {{"kill", (void *)kill}},
+                                             {{"loop", (void *)loop}},
+                                             {{"mem", (void *)memStatusPrinter}},
+                                             {{"nice", (void *)nice}},
+                                             {{0, 0}},
+                                             {{"ps", (void *)listAllProcesses}},
+                                             {{0, 0}},
+                                             {{0, 0}},
+                                             {{0, 0}},
+                                             {{"testMem", (void *)createTestMem}, {"testMemInfo", (void *)createTestMemInfo}, {"testPrio", (void *)createTestPrio}, {"testProcesses", (void *)createTestProcesses}, {"testSync", (void *)createTestSync}}};
 
 static char *commandNotFoundMsg = "Command not found. Type 'help' to see the list of commands";
 static uint8_t cNotFoundSize = 51;
 static char *helpMsg = "PinguinOS - v.5.0\n\n"
+                       "block: Block a process\n"
                        "clear: Clear the screen\n"
                        "div0: Divide by zero\n"
                        "exit: Exit the shell\n"
@@ -53,9 +79,16 @@ static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "getTime: Get the current time\n"
                        "help: Show this message\n"
                        "invalidOpCode: Execute an invalid operation code\n"
+                       "kill: Kill a process\n"
+                       "loop: loop forever and print a salute and its PID\n"
+                       "mem: Show memory status\n"
+                       "nice: Change the priority of a process\n"
                        "ps: List all processes\n"
-                       "testMemInfo: Test memory info\n"
-                       "testSync: Test sync\n";
+                       "testMem: Tests memory allocation\n"
+                       "testMemInfo: Tests memory information\n"
+                       "testPrio: Tests priorities\n"
+                       "testProcesses: Tests processes\n"
+                       "testSync: Tests synchronization\n";
 static char *waitMsg = "Press any key to continue";
 // ###################################################################
 
@@ -623,9 +656,106 @@ int test_wait_shell(int argc, char *argv[])
     exitProc(0);
     return 0;
 }
+
 void listAllProcesses()
 {
-    char *toPrint = listProcessesInfo();
-    printf(toPrint);
-    freeMCaller(UNUSED, toPrint);
+    processInformation *toPrint = listProcessesInfo();
+    printf("| PID |Priority | State | S.Base           | S.Pointer        | Parent PID | Name\n");
+
+    char stackHex[9];
+    char stackPointerHex[9];
+
+    while (toPrint->pid != UINT64_MAX)
+    {
+        uint64ToHexString((uint64_t)toPrint->stack, stackHex, sizeof(stackHex));
+        uint64ToHexString((uint64_t)toPrint->stack_pointer, stackPointerHex, sizeof(stackPointerHex));
+
+        printf("|  %d  |    %d    |   %d   |     %s     |     %s     |     %d      | %s\n",
+               (int)toPrint->pid,
+               toPrint->priority,
+               toPrint->state,
+               stackHex,
+               stackPointerHex,
+               (int)toPrint->parent_pid,
+               toPrint->name);
+        toPrint++;
+    }
+
+    freeM(toPrint);
+}
+
+void loop(int argc, char *argv[])
+{
+    if (argc != 1)
+    {
+        printf("Usage: loop <seconds>\n");
+        return;
+    }
+    int pid = createProcess("loopPrinter", 4, loopPrinter, argc, argv);
+    waitPID(pid);
+}
+
+int loopPrinter(int argc, char *argv[])
+{
+    while (1)
+    {
+        printf("Hello, my PID is %d\n", getPID());
+        waitCaller(UNUSED, atoi(argv[0]));
+        // waitCaller(UNUSED, 10);
+    }
+    return 0;
+}
+
+void kill(int argc, char *argv[])
+{
+    int pid = atoi(argv[0]);
+    killProcess(pid);
+}
+
+void nice(int argc, char *argv[])
+{
+    int pid = atoi(argv[0]);
+    int priority = atoi(argv[1]);
+    changeProcessPriority(pid, priority);
+}
+
+void block(int argc, char *argv[])
+{
+    int pid = atoi(argv[0]);
+    processInformation *info = listProcessesInfo();
+    for (int i = 0; info[i].pid != UINT64_MAX; i++)
+    {
+        if (info[i].pid == pid)
+        {
+            if (info[i].state == BLOCKED)
+            {
+                unblockProcess(pid);
+                return;
+            }
+            else if (info[i].state == READY)
+            {
+                blockProcess(pid);
+                return;
+            }
+        }
+    }
+    freeM(info);
+}
+
+void memStatusPrinter(uint64_t argc, char *argv[])
+{
+    MemStatus *memStatus = memStatusCaller(UNUSED);
+    printf("Total memory: %d B\n", memStatus->total_mem);
+    printf("              %d KB\n", memStatus->total_mem / (1024));
+    printf("              %d MB\n", memStatus->total_mem / (1024 * 1024));
+    printf("\n");
+    printf("Free memory: %d B\n", memStatus->free_mem);
+    printf("             %d KB\n", memStatus->free_mem / (1024));
+    printf("             %d MB\n", memStatus->free_mem / (1024 * 1024));
+    printf("\n");
+    printf("Occupied memory: %d B\n", memStatus->occupied_mem);
+    printf("                 %d KB\n", memStatus->occupied_mem / (1024));
+    printf("                 %d MB\n", memStatus->occupied_mem / (1024 * 1024));
+
+    freeM(memStatus);
 }

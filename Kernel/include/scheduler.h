@@ -21,13 +21,19 @@
 
 #define DEFAULT_PRIORITY 2
 
-typedef struct toUserInformation
+#define DEFAULT_PRIORITY 2
+
+typedef struct processInformation
 {
     uint64_t pid;
     process_state_t state;
     char *name;
     int priority;
-} toUserInformation;
+    uint64_t *stack;
+    uint64_t *stack_pointer;
+    uint64_t parent_pid;
+
+} processInformation;
 
 typedef struct schedulerCDT *schedulerADT;
 
@@ -93,6 +99,10 @@ int getCurrentInputPipe();
 
 int getCurrentOutputPipe();
 
-char *getAllProcessesInformation();
+int getCurrentInputPipe();
+
+int getCurrentOutputPipe();
+
+processInformation *getAllProcessesInformation();
 
 #endif
