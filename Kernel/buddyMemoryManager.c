@@ -20,6 +20,7 @@ struct MemoryManagerCDT
 
 MemoryManagerADT createMemoryManager(void *const memoryForMemoryManager, void *const managedMemory) //@TODO: Chequear si le tenemos que pasar parámetro size
 {
+    ncPrint("C |");
     MemoryManagerADT mm = (MemoryManagerADT)memoryForMemoryManager;
     mm->mem_start = managedMemory;
     mm->total_size = TOTAL_MEM;
@@ -40,50 +41,87 @@ static size_t roundUpToPowerOf2(size_t size)
     return power;
 }
 
-static size_t getBlockSize(void *block, void *mem_start)
+static int isBuddy(void *block1, void *block2, size_t size)
 {
-    return ((struct Block *)block)->size;
+    // Me quedo en block1 con el más chico
+    if (block1 > block2)
+    {
+        void *temp = block1;
+        block1 = block2;
+        block2 = temp;
+    }
+
+    // Si están a size de diferencia => son buddies
+    return ((char *)block2 - (char *)block1) == size;
 }
 
-static void *getBuddy(void *block, size_t size, void *mem_start)
-{
-    size_t diff = (char *)block - (char *)mem_start;
-    return (void *)((char *)mem_start + (diff ^ size));
-}
-
-static int isBuddy(void *block1, void *block2, size_t size, void *mem_start)
-{
-    return block2 == getBuddy(block1, size, mem_start);
-}
+static int iteration = 0;
 
 void *allocMemory(MemoryManagerADT mm, size_t memoryToAllocate)
 {
     if (memoryToAllocate == 0 || memoryToAllocate > mm->free_mem)
         return NULL;
 
+    // Añado un "padding" (relleno) para alinear el bloque
+    size_t header_size = sizeof(struct Block);
+    size_t alignment = 8;
+    size_t padding = (alignment - (header_size % alignment)) % alignment;
+
     // Redondeo a la potencia de 2 más cercana y agrego el tamaño de un struct block
-    size_t total_size = roundUpToPowerOf2(memoryToAllocate + sizeof(struct Block));
+    size_t total_size = roundUpToPowerOf2(memoryToAllocate + sizeof(struct Block) + padding);
     struct Block *current = mm->free_blocks;
     struct Block *prev = NULL;
 
-    // Encuentro un bloque que pueda contener el tamaño solicitado
+    ncPrint("M ");
+    ncPrintDec(iteration);
+    iteration++;
+    ncPrint(" ");
+    ncPrintDec(total_size);
+    ncPrint(" ");
+
+    if (iteration == 23)
+    {
+        ncPrintHex(current);
+    }
+    //  Encuentro un bloque que pueda contener el tamaño solicitado
     while (current != NULL && current->size < total_size)
     {
+        if (iteration == 23)
+        {
+            ncPrint("->");
+        }
         prev = current;
         current = current->next;
+        if (iteration == 23)
+        {
+            ncPrintHex(current);
+        }
+    }
+    if (iteration == 23)
+    {
+        ncPrintHex(current);
+        ncPrint(" ");
     }
 
-    // Acá está el error con test_processes, por alguna razon se le pide 8912 bytes y dice que no tiene espacio
+    struct Block *aux = current;
+    struct Block *prev_aux = aux;
+    while (aux != NULL)
+    {
+        if (iteration == 23)
+        {
+            ncPrint("->");
+            ncPrintHex(aux);
+        }
+        prev_aux = aux;
+        aux = aux->next;
+    }
+    ncPrintHex(prev_aux);
+    ncPrint(" ");
+
     if (current == NULL)
         return NULL;
-    // Error end
 
-    // No llega a entrar acá en el alloc de 10MB
-    ncPrint("M ");
-    ncPrintDec(total_size);
-    ncPrint(" | ");
-
-    // Divido bloques hasta encontrar el tamaño adecuado (exactamente total_size)
+    // Divido bloques hasta encontrar el tamaño adecuado (va a ser exactamente total_size)
     while (current->size > total_size)
     {
         size_t new_size = current->size / 2;
@@ -92,6 +130,15 @@ void *allocMemory(MemoryManagerADT mm, size_t memoryToAllocate)
         buddy->next = current->next;
         current->size = new_size;
         current->next = buddy;
+        if (iteration - 1 == 22)
+        {
+            ncPrintHex(current);
+            ncPrint("+");
+            ncPrintHex(buddy);
+            ncPrint(" s:");
+            ncPrintDec(current->size);
+            ncPrint(" -- ");
+        }
     }
 
     // Saco el bloque de la lista de bloques libres
@@ -103,7 +150,21 @@ void *allocMemory(MemoryManagerADT mm, size_t memoryToAllocate)
     mm->free_mem -= current->size;
     mm->occupied_mem += current->size;
 
-    return (void *)((char *)current + sizeof(struct Block));
+    aux = mm->free_blocks;
+    if (iteration == 23)
+    {
+        ncPrint("After alloc: ");
+        while (aux != NULL)
+        {
+            ncPrintHex(aux);
+            ncPrint(" ");
+            aux = aux->next;
+        }
+    }
+
+    ncPrint(" | ");
+
+    return (void *)((char *)current + sizeof(struct Block) + padding);
 }
 
 void freeMemory(MemoryManagerADT mm, void *ptr)
@@ -113,7 +174,14 @@ void freeMemory(MemoryManagerADT mm, void *ptr)
         return;
 
     // Agarro el struct block
-    struct Block *block = (struct Block *)((char *)ptr - sizeof(struct Block));
+
+    // Calculate alignment and padding information (same as in allocMemory)
+    size_t header_size = sizeof(struct Block);
+    size_t alignment = 8;
+    size_t padding = (alignment - (header_size % alignment)) % alignment;
+
+    // Get back to the block header by subtracting header_size + padding
+    struct Block *block = (struct Block *)((char *)ptr - (sizeof(struct Block) + padding));
     size_t size = block->size;
 
     mm->free_mem += size;
@@ -150,7 +218,7 @@ void freeMemory(MemoryManagerADT mm, void *ptr)
         // Encuentro el buddy del bloque (si existe)
         while (current != NULL && !foundBuddy)
         {
-            if (current != block && isBuddy(block, current, size, mm->mem_start))
+            if (current != block && isBuddy(block, current, size))
             {
                 buddy = current;
                 buddy_prev = prev;
@@ -181,6 +249,7 @@ void freeMemory(MemoryManagerADT mm, void *ptr)
             size *= 2;
         }
     }
+    return;
 }
 
 void *allocMemoryKernel(size_t memoryToAllocate)
@@ -195,18 +264,10 @@ void freeMemoryKernel(void *ptr)
 
 MemStatus *memStatusKernel()
 {
-    ncPrint("S ");
+    ncPrint("S |");
     MemStatus *mem_status = allocMemoryKernel(sizeof(MemStatus));
     mem_status->total_mem = kernel_mm->total_size;
     mem_status->free_mem = kernel_mm->free_mem;
     mem_status->occupied_mem = kernel_mm->occupied_mem;
-    ncPrintHex(mem_status);
-    ncPrint(" ");
-    ncPrintDec(mem_status->free_mem);
-    ncPrint(" ");
-    ncPrintDec(mem_status->occupied_mem);
-    ncPrint(" ");
-    ncPrintDec(mem_status->total_mem);
-    ncPrint(" | ");
     return mem_status;
 }

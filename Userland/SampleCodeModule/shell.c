@@ -409,8 +409,13 @@ void launchShell()
     startNewLine();
     sPrintSelected(' ');
     buffer[count] = ' ';
+
+    // Debuggeo
     char *argvTest[2] = {"10", NULL};
-    createProcess("test_mem_info", 4, test_mem, 1, argvTest);
+    int debugging_pid = createProcess("test_mem_info", 4, test_mem, 1, argvTest);
+    waitPID(debugging_pid);
+    // Final debuggeo
+
     uint8_t key;
     while (!exitFlag)
     {
