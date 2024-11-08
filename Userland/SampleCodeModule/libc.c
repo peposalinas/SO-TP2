@@ -204,7 +204,7 @@ void itos(int num, char *buffer)
 
 void uint64ToHexString(uint64_t value, char *buffer, int bufferSize)
 {
-    const char *hexDigits = "0123456789ABCDEF";
+    const char hexDigits[17] = "0123456789ABCDEF";
     buffer[0] = '0';
     buffer[1] = 'x';
     buffer[bufferSize - 1] = '\0';

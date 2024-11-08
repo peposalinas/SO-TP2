@@ -290,7 +290,7 @@ void sCheckCommand()
             break;
         }
     }
-    printf(commandNotFoundMsg);
+    printf("Command %s not found. Type 'help' to see the list of commands\n", buffer + offsets[lineCount - 1]);
     buffer[offsets[lineCount]] = aux;
 }
 
@@ -412,6 +412,7 @@ int test_wait_shell(int argc, char *argv[])
 void listAllProcesses()
 {
     processInformation *toPrint = listProcessesInfo();
+    processInformation *toFree = toPrint;
     printf("| PID |Priority | State | S.Base           | S.Pointer        | Parent PID | Name\n");
 
     char stackHex[9];
@@ -432,8 +433,7 @@ void listAllProcesses()
                toPrint->name);
         toPrint++;
     }
-
-    freeM(toPrint);
+    freeM(toFree);
 }
 
 void loop(int argc, char *argv[])
@@ -449,12 +449,15 @@ void loop(int argc, char *argv[])
 
 int loopPrinter(int argc, char *argv[])
 {
-    while (1)
+    int i = 1;
+    while (i < 3)
     {
         printf("Hello, my PID is %d\n", getPID());
         waitCaller(UNUSED, atoi(argv[0]));
         // waitCaller(UNUSED, 10);
+        i++;
     }
+    exitProc(0);
     return 0;
 }
 

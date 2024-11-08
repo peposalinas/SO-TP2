@@ -21,8 +21,8 @@ static uint16_t leftSteps;
 static uint8_t fontSize;
 static uint8_t reset;
 
-static uint16_t offsets[4096] = {0};
-static char buffer[4096];
+static uint16_t offsets[65536] = {0};
+static char buffer[65536];
 static uint16_t count;
 
 void terminalInit() // TIENE QUE INICIALIZARSE CON EL STDIN EN TERMINAL_PIPE Y EL STDOUT NO IMPORTA
