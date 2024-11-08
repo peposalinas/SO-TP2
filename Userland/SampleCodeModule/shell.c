@@ -25,6 +25,10 @@ typedef struct command_t
 int test_wait_shell(int argc, char *argv[]);
 void createTestWaitShell(int argc, char *argv[]);
 
+static void sMoveRight();
+static void sMoveLeft();
+static void sDeleteChar();
+void sCheckCommand();
 static void listAllProcesses();
 static void clearCmd(int argc, char *argv[]);
 static void div0(int argc, char *argv[]);
@@ -67,8 +71,8 @@ static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{0, 0}},
                                              {{"testMem", (void *)createTestMem}, {"testMemInfo", (void *)createTestMemInfo}, {"testPrio", (void *)createTestPrio}, {"testProcesses", (void *)createTestProcesses}, {"testSync", (void *)createTestSync}}};
 
-static char *commandNotFoundMsg = "Command not found. Type 'help' to see the list of commands";
-static uint8_t cNotFoundSize = 51;
+static char *commandNotFoundMsg = "Command not found. Type 'help' to see the list of commands\n";
+// static uint8_t cNotFoundSize = 51;
 static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "block: Block a process\n"
                        "clear: Clear the screen\n"
@@ -88,147 +92,150 @@ static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "testMemInfo: Tests memory information\n"
                        "testPrio: Tests priorities\n"
                        "testProcesses: Tests processes\n"
-                       "testSync: Tests synchronization\n";
-static char *waitMsg = "Press any key to continue";
+                       "testSync: Tests synchronization\n\n";
+// static char *waitMsg = "Press any key to continue";
 // ###################################################################
 
-static uint16_t currentY;
-static uint16_t currentX;
-static uint16_t width;
-static uint16_t height;
+static uint16_t offsets[4096] = {0};
 static char buffer[4096];
 static uint16_t count;
-static uint16_t offsets[4096] = {0};
-static uint16_t lineCount;
-static uint16_t firstLineOnScreen;
-static uint16_t leftSteps;
-static uint16_t currentLine;
-static uint16_t previousCount;
 static uint8_t exitFlag;
-static uint8_t fontSize;
-static uint8_t reset;
+static uint16_t previousCount;
+static uint16_t lineCount;
+static uint16_t currentLine;
+static uint16_t leftSteps;
 
-void sPrintChar(uint8_t c)
+int launchShell(int argc, char *argv[])
 {
-    printCharCaller(UNUSED, c, currentX, currentY, WHITE, BLACK);
-}
-
-void sPrintSelected(uint8_t c)
-{
-    if (c == 0)
-        printCharCaller(UNUSED, c, currentX, currentY, WHITE, WHITE);
-    else
-        printCharCaller(UNUSED, c, currentX, currentY, BLACK, WHITE);
-}
-
-void startNewLine()
-{
-    currentX = 0;
-    sPrintChar('$');
-    currentX++;
-    sPrintChar('>');
-    currentX++;
-}
-
-void clearLineFrom(uint16_t x, uint16_t to)
-{
-    uint16_t auxX = currentX;
-    currentX = x;
-    while (currentX < width)
+    count = 0;
+    buffer[count] = ' ';
+    exitFlag = 0;
+    previousCount = 0;
+    currentLine = 1;
+    leftSteps = 0;
+    uint8_t key;
+    while (!exitFlag)
     {
-        printRectangleCaller(UNUSED, currentX * (8 * fontSize), currentY * (16 * fontSize), 8 * fontSize, 16 * fontSize, BLACK);
-        currentX++;
-    }
-    currentX = auxX;
-}
-void clear()
-{
-    uint16_t auxX = currentX, auxY = currentY;
-    currentX = 0;
-    currentY = 0;
-    while (currentY < height)
-    {
-        clearLineFrom(0, width);
-        currentY++;
-    }
-    currentX = auxX;
-    currentY = auxY;
-}
-
-void sMoveScreenUp(uint8_t n)
-{
-    clear();
-    uint16_t y = currentY - n + 1, l = firstLineOnScreen + n;
-    currentY = 0;
-
-    while (y != currentY)
-    {
-        startNewLine();
-        for (uint16_t i = 0; i < offsets[l + 1] - offsets[l]; i++)
+        key = getChar();
+        switch (key)
         {
-            if (currentX == width)
-            {
-                currentY++;
-                currentX = 0;
-            }
-            sPrintChar(buffer[offsets[l] + i]);
-
-            currentX++;
-        }
-        l++;
-        currentY++;
-    }
-
-    firstLineOnScreen += n;
-}
-
-void sPrintNewLine()
-{
-    if (!reset)
-    {
-        if (currentY < height - 1)
-            currentY++;
-        else
-            sMoveScreenUp(1);
-    }
-    startNewLine();
-    reset = 0;
-}
-
-void printMsgAndWait(const char *msg, uint8_t size)
-{
-    if (currentY < height - 2)
-        currentY++;
-    else
-        sMoveScreenUp(2 + size / width);
-    currentX = 0;
-    for (uint16_t i = 0; i < size; i++)
-    {
-        sPrintChar(msg[i]);
-        if (currentX == width - 1)
+        case UP_ARROW:
+            shellErrSound();
+            // sGetLastLine();
+            break;
+        case DOWN_ARROW:
+            shellErrSound();
+            break;
+        case RIGHT_ARROW:
+            putChar(key);
+            sMoveRight();
+            break;
+        case LEFT_ARROW:
+            putChar(key);
+            sMoveLeft();
+            break;
+        case DELETE:
+            putChar(key);
+            sDeleteChar();
+            break;
+        case '\n':
+            putChar(key);
+            sCheckCommand();
+            previousCount = 0;
+            offsets[lineCount++] = count;
+            offsets[lineCount] = offsets[lineCount - 1]; // la linea esta vacia
+            currentLine = lineCount;
+            break;
+        // case '\t':
+        //     // if (offsets[lineCount] - offsets[lineCount - 1] == 1)
+        //     // {
+        //     //     char c = getCommandIdx(buffer[count - 1]);
+        //     //     char *aux = commands[(unsigned char)c][0].name + 1;
+        //     //     while (*aux)
+        //     //     {
+        //     //         sPrintChar(*aux);
+        //     //         buffer[count++] = *aux;
+        //     //         aux++;
+        //     //         currentX++;
+        //     //     }
+        //     //     offsets[lineCount] = count;
+        //     //     buffer[count] = ' ';
+        //     //     sPrintSelected(' ');
+        //     }
+        case 0:
+            break;
+        default:
         {
-            currentX = 0;
-            currentY++;
+
+            // for (uint16_t i = 0; i < leftSteps; i++)
+            // {
+            //     buffer[count - i] = buffer[count - i - 1];
+            //     sPrintChar(buffer[count - i]);
+            //     if (currentX == 0)
+            //     {
+            //         currentX = width - 1;
+            //         currentY--;
+            //     }
+            //     else
+            //         currentX--;
+            // }
+            // currentX = auxX;
+            // currentY = auxY;
+            buffer[count - leftSteps] = key;
+            count++;
+            offsets[lineCount] = count;
+            buffer[count] = 0;
+            putChar(key);
+            // currentX++;
+            // if (currentX == width)
+            // {
+            //     if (currentY < height - 1)
+            //         currentY++;
+            //     else
+            //         sMoveScreenUp(1);
+            //     currentX = 0;
+            // }
+            // sPrintSelected(buffer[count - leftSteps]);
         }
-        else
-            currentX++;
+        }
     }
-    currentY++;
-    currentX = 0;
-    for (uint8_t j = 0; waitMsg[j]; j++)
-    {
-        sPrintChar(waitMsg[j]);
-        currentX++;
-    }
-    char c = 0;
-    while (!(c = getChar()))
-        ;
-    for (uint8_t i = 0; i < 2 + size / width; i++)
-    {
-        clearLineFrom(0, i);
-        currentY--;
-    }
+    return 0;
 }
+
+// void sGetLastLine()
+// {
+//     uint16_t currentOffset = offsets[lineCount] - offsets[lineCount - 1], l;
+//     do
+//     {
+//         if (currentLine)
+//             currentLine--;
+//         else
+//             return;
+//         l = offsets[currentLine + 1] - offsets[currentLine];
+//     } while (!l);
+//     previousCount += l;
+//     clearLineFrom(2, width);
+//     count -= currentOffset;
+//     currentX = 2;
+//     for (uint16_t i = 0; i < l; i++)
+//     {
+//         if (currentX == width)
+//         {
+//             if (currentY < height - 1)
+//                 currentY++;
+//             else
+//                 sMoveScreenUp(1);
+//             currentX = 0;
+//         }
+//         uint8_t aux = buffer[count - previousCount];
+//         buffer[count++] = aux;
+//         sPrintChar(aux);
+//         currentX++;
+//     }
+//     buffer[count] = ' ';
+//     offsets[lineCount] = count;
+//     sPrintSelected(' ');
+// }
 
 char getCommandIdx(char c)
 {
@@ -256,7 +263,7 @@ void sCheckCommand()
     char c = getCommandIdx(command_tokens[0][0]);
     if (c < 0 || c >= LETTERS)
     {
-        printMsgAndWait(commandNotFoundMsg, cNotFoundSize);
+        printf(commandNotFoundMsg);
         return;
     }
 
@@ -283,7 +290,7 @@ void sCheckCommand()
             break;
         }
     }
-    printMsgAndWait(commandNotFoundMsg, cNotFoundSize);
+    printf(commandNotFoundMsg);
     buffer[offsets[lineCount]] = aux;
 }
 
@@ -307,306 +314,51 @@ char **getArgs(char *buffer)
     return argv;
 }
 
-void sDeleteChar()
-{
-    if (offsets[lineCount - 1] == count - leftSteps)
-        return;
-    if (currentX == 0)
-    {
-        currentY--;
-        currentX = width - 1;
-    }
-    else
-        currentX--;
-    uint16_t auxX = currentX, auxY = currentY;
-    for (uint16_t i = 0; i <= leftSteps; i++)
-    {
-        buffer[count - leftSteps + i - 1] = buffer[count - leftSteps + i];
-        sPrintChar(buffer[count - leftSteps + i]);
-        if (currentX == width - 1)
-        {
-            currentX = 0;
-            currentY++;
-        }
-        else
-            currentX++;
-    }
-    sPrintChar(buffer[count]);
-    currentX = auxX;
-    currentY = auxY;
-    sPrintSelected(buffer[count - leftSteps - 1]);
-    count--;
-
-    offsets[lineCount]--;
-}
-
-void sMoveLeft()
-{
-    if (offsets[lineCount - 1] == count - leftSteps)
-    {
-        shellErrSound();
-        return;
-    }
-    sPrintChar(buffer[count - leftSteps]);
-    if (currentX == 0)
-    {
-        currentX = width - 1;
-        currentY--;
-    }
-    else
-        currentX--;
-    leftSteps++;
-    sPrintSelected(buffer[count - leftSteps]);
-}
-
-void sMoveRight()
-{
-    if (leftSteps == 0)
-    {
-        shellErrSound();
-        return;
-    }
-    sPrintChar(buffer[count - leftSteps]);
-    if (currentX == width)
-    {
-        currentX = 0;
-        currentY++;
-    }
-    else
-        currentX++;
-    leftSteps--;
-    sPrintSelected(buffer[count - leftSteps]);
-}
-
-void sGetLastLine()
-{
-    uint16_t currentOffset = offsets[lineCount] - offsets[lineCount - 1], l;
-    do
-    {
-        if (currentLine)
-            currentLine--;
-        else
-            return;
-        l = offsets[currentLine + 1] - offsets[currentLine];
-    } while (!l);
-    previousCount += l;
-    clearLineFrom(2, width);
-    count -= currentOffset;
-    currentX = 2;
-    for (uint16_t i = 0; i < l; i++)
-    {
-        if (currentX == width)
-        {
-            if (currentY < height - 1)
-                currentY++;
-            else
-                sMoveScreenUp(1);
-            currentX = 0;
-        }
-        uint8_t aux = buffer[count - previousCount];
-        buffer[count++] = aux;
-        sPrintChar(aux);
-        currentX++;
-    }
-    buffer[count] = ' ';
-    offsets[lineCount] = count;
-    sPrintSelected(' ');
-}
-
-void printBufferFrom(uint16_t start, uint16_t end)
-{
-    for (int i = start; i < end; i++)
-    {
-        sPrintChar(buffer[i]);
-        currentX++;
-    }
-}
-
-int launchShell(int argc, char *argv[])
-{
-    newPipe(1);
-    count = 0;
-    lineCount = 1;
-    firstLineOnScreen = 0;
-    leftSteps = 0;
-    currentLine = 1;
-    previousCount = 0;
-    fontSize = 1;
-    reset = 0;
-    width = getScreenWidthCaller(UNUSED) / 8 / fontSize;
-    height = getScreenHeightCaller(UNUSED) / 16 / fontSize;
-    clear();
-    currentX = 0;
-    currentY = 0;
-    exitFlag = 0;
-    startNewLine();
-    sPrintSelected(' ');
-    buffer[count] = ' ';
-    uint8_t key;
-    while (!exitFlag)
-    {
-        key = getChar();
-        switch (key)
-        {
-        case RIGHT_ARROW:
-            sMoveRight();
-            break;
-        case LEFT_ARROW:
-            sMoveLeft();
-            break;
-        case UP_ARROW:
-            sGetLastLine();
-            break;
-        case DOWN_ARROW:
-            shellErrSound();
-            break;
-        case DELETE:
-            sDeleteChar();
-            break;
-        case '\n':
-            sPrintChar(buffer[count - leftSteps]);
-            sCheckCommand();
-            leftSteps = 0;
-            previousCount = 0;
-            sPrintNewLine();
-            sPrintSelected(buffer[count]);
-            offsets[lineCount++] = count;
-            offsets[lineCount] = offsets[lineCount - 1]; // la linea esta vacia
-            currentLine = lineCount;
-            break;
-        case '\t':
-            if (offsets[lineCount] - offsets[lineCount - 1] == 1)
-            {
-                char c = getCommandIdx(buffer[count - 1]);
-                char *aux = commands[(unsigned char)c][0].name + 1;
-                while (*aux)
-                {
-                    sPrintChar(*aux);
-                    buffer[count++] = *aux;
-                    aux++;
-                    currentX++;
-                }
-                offsets[lineCount] = count;
-                buffer[count] = ' ';
-                sPrintSelected(' ');
-            }
-        case 0:
-            break;
-        default:
-        {
-            uint16_t auxX = currentX, auxY = currentY;
-            if (currentX + leftSteps >= width)
-                currentY++;
-            currentX = (currentX + leftSteps) % width;
-            for (uint16_t i = 0; i < leftSteps; i++)
-            {
-                buffer[count - i] = buffer[count - i - 1];
-                sPrintChar(buffer[count - i]);
-                if (currentX == 0)
-                {
-                    currentX = width - 1;
-                    currentY--;
-                }
-                else
-                    currentX--;
-            }
-            currentX = auxX;
-            currentY = auxY;
-            buffer[count - leftSteps] = key;
-            count++;
-            offsets[lineCount] = count;
-            buffer[count] = 0;
-            sPrintChar(key);
-            currentX++;
-            if (currentX == width)
-            {
-                if (currentY < height - 1)
-                    currentY++;
-                else
-                    sMoveScreenUp(1);
-                currentX = 0;
-            }
-            sPrintSelected(buffer[count - leftSteps]);
-        }
-        }
-    }
-    while (fontSizeDownCaller(UNUSED))
-        fontSize--;
-
-    return 0;
-}
-
 // comandos de la terminal
 
 void fontBig(int argc, char *argv[])
 {
-    if (fontSize == 2)
-    {
-        shellErrSound();
-        return;
-    }
     fontSizeUpCaller(UNUSED);
-    fontSize = 2;
-    height /= 2;
-    width /= 2;
-    sMoveScreenUp((currentLine - firstLineOnScreen) / 2);
-    reset = 1;
 }
 
 void exit(int argc, char *argv[])
 {
     exitFlag = 1;
-    firstLineOnScreen = lineCount - 1;
-    currentX = 0;
-    currentY = 0;
+    // firstLineOnScreen = lineCount - 1;
+    // currentX = 0;
+    // currentY = 0;
 }
 
 void div0(int argc, char *argv[])
 {
-    fontSize = 1;
+    // fontSize = 1;
     divZero();
 }
 
 void fontSmall(int argc, char *argv[])
 {
-    if (fontSize == 1)
-    {
-        shellErrSound();
-        return;
-    }
     fontSizeDownCaller(UNUSED);
-    fontSize = 1;
-    height *= 2;
-    width *= 2;
-    sMoveScreenUp(0);
-    reset = 1;
 }
 
 void clearCmd(int argc, char *argv[])
 {
-    clear();
-    reset = 1;
-    firstLineOnScreen = lineCount - 1;
-    currentX = 0;
-    currentY = 0;
+    clearTerminalCaller(UNUSED);
 }
 
 void getTime(int argc, char *argv[]) // Chequear
 {
     char clock[20];
     getTimeCaller(UNUSED, (char *)clock);
-    printMsgAndWait(clock, 8);
+    printf(clock);
 }
 
 void help(int argc, char *argv[])
 {
     printf(helpMsg);
-    // printMsgAndWait(helpMsg, hMsgSize);
 }
 
 void invalidOpCode(int argc, char *argv[])
 {
-    fontSize = 1;
     opcode();
 }
 
@@ -758,4 +510,38 @@ void memStatusPrinter(uint64_t argc, char *argv[])
     printf("                 %d MB\n", memStatus->occupied_mem / (1024 * 1024));
 
     freeM(memStatus);
+}
+
+void sMoveRight()
+{
+    if (leftSteps == 0)
+    {
+        // shellErrSound();
+        return;
+    }
+    leftSteps--;
+}
+
+void sMoveLeft()
+{
+    if (offsets[lineCount - 1] == count - leftSteps)
+    {
+        // shellErrSound();
+        return;
+    }
+    leftSteps++;
+}
+
+void sDeleteChar()
+{
+    if (offsets[lineCount - 1] == count - leftSteps)
+        return;
+
+    for (uint16_t i = 0; i <= leftSteps; i++)
+    {
+        buffer[count - leftSteps + i - 1] = buffer[count - leftSteps + i];
+    }
+    count--;
+
+    offsets[lineCount]--;
 }

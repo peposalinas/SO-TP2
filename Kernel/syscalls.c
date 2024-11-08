@@ -310,3 +310,8 @@ int newPipe(int id)
 {
 	return createPipe(id);
 }
+
+void clearTerminal()
+{
+	clear();
+}

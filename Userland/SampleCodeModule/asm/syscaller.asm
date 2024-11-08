@@ -32,6 +32,7 @@ GLOBAL createStandardProcCaller
 GLOBAL getRunningOutputPipeCaller
 GLOBAL getRunningInputPipeCaller
 GLOBAL newPipeCaller
+GLOBAL clearTerminalCaller
 
 section .text
 
@@ -122,3 +123,5 @@ getRunningInputPipeCaller:
     syscaller 32
 newPipeCaller:
     syscaller 33
+clearTerminalCaller:
+    syscaller 34

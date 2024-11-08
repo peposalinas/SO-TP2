@@ -5,6 +5,7 @@
 #include "scheduler.h"
 #include "semaphores.h"
 #include "MemoryManagerADT.h"
+#include "terminal.h"
 
 typedef enum FD
 {
@@ -46,5 +47,6 @@ int createStandardProc(char *process_name, int (*entry_point)(int, char **), int
 int getRunningOutputPipe();
 int getRunningInputPipe();
 int newPipe(int id);
+void clearTerminal();
 
 #endif
