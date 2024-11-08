@@ -29,6 +29,7 @@
     "keyboarddriver.h": "c",
     "pipes.h": "c",
     "xutility": "c",
-    "cstdlib": "c"
+    "cstdlib": "c",
+    "definitions.h": "c"
   }
 }

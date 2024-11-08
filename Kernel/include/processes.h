@@ -16,20 +16,20 @@ typedef enum
     READY,
     BLOCKED,
     TERMINATED
-} process_state_t;
+} processState_t;
 
 typedef struct process_t
 {
     uint64_t pid;
-    process_state_t state;
-    uint64_t *stack_end;
+    processState_t state;
+    uint64_t *stackEnd;
     uint64_t *stack;
-    uint64_t *stack_pointer;
+    uint64_t *stackPointer;
     char **argv;
     char *name;
     int priority;
-    uint64_t parent_pid;
-    uint64_t return_value; // Como hacer para que retorne un string o void*
+    uint64_t parentPid;
+    uint64_t returnValue; // Como hacer para que retorne un string o void*
     int isBeingWaited;
     int inputPipe;
     int outputPipe;

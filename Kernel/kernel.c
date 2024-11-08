@@ -8,7 +8,6 @@
 #include <videoDriver.h>
 #include <idtLoader.h>
 #include <time.h>
-#include "./include/test_util.h"
 #include <interrupts.h>
 #include <scheduler.h>
 #include "semaphores.h"
@@ -24,13 +23,11 @@ static const uint64_t PageSize = 0x1000;
 
 static void *const sampleCodeModuleAddress = (void *)0x400000;
 static void *const sampleDataModuleAddress = (void *)0x500000;
+static void *const memForMM = (void *)0x600000;
+static void *const memToManage = (void *)0x700000;
 
-static int idle(int argc, char *argv[]);
-int64_t test_processes(uint64_t argc, char *argv[]);
-void test_prio(uint64_t argc, char *argvTestPrio[]);
-
-int test_waitpid();
-int test_child();
+static int
+idle(int argc, char *argv[]);
 
 typedef int (*EntryPoint)();
 
@@ -41,9 +38,7 @@ void clearBSS(void *bssAddress, uint64_t bssSize)
 
 void *getStackBase()
 {
-	return (void *)((uint64_t)&endOfKernel + PageSize * 8 // The size of the stack itself, 32KiB
-					- sizeof(uint64_t)					  // Begin at the top of the stack
-	);
+	return (void *)((uint64_t)&endOfKernel + PageSize * 8 - sizeof(uint64_t));
 }
 
 void *initializeKernelBinary()
@@ -96,46 +91,31 @@ void *initializeKernelBinary()
 int main()
 {
 	_cli();
+
+	// Se inicializan recursos esenciales para el funcionamiento del sistema.
 	load_idt();
-
-	void *dir1 = (void *)0x600000;
-	void *dir2 = (void *)0x700000;
-
-	createMemoryManager(dir1, dir2);
+	createMemoryManager(memForMM, memToManage);
 	schedulerInit();
 	semInit();
 	keyboardInit();
 
+	// Se crea el proceso idle.
 	char *argvIdle[2] = {"idle", NULL};
 	schedulerAddStandardProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
-	// schedulerAddProcess("test_waitpid", HIGHEST_PRIO, test_waitpid, 1, argvIdle);
 
-	// Test_processes
-
-	// char *argvTest[2] = {"10", NULL};
-	// schedulerAddProcess("test", HIGHEST_PRIO, test_processes, 1, argvTest);
-
-	// Fin Test_processes
-
-	// Test_prio
-
-	// char *argvTestPrio[2] = {"test_prio", NULL};
-	// uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
-
-	// Fin Test_prio
-
-	// int val = wait_pid(test_pid);
-	// ncPrintDec(val);
+	// Se crea la terminal y el sampleCodeModule.
 	char *argvTerminal[2] = {"terminal", NULL};
 	int terminalPipes[2] = {TERMINAL_PIPE, TERMINAL_PIPE};
-	uint64_t terminal_pid = schedulerAddProcess("terminal", MEDIUM_PRIO, (EntryPoint)terminalInit, 1, argvTerminal, terminalPipes);
-	char *argvSampleCode[2] = {"shell", NULL};
-	uint64_t sample_code_pid = schedulerAddStandardProcess("sampleCodeModule", MEDIUM_PRIO, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
-	_sti();
-	wait_pid(terminal_pid);	   // Hace falta??? DA UN WARNING
-	wait_pid(sample_code_pid); // Hace falta??? DA UN WARNING
+	uint64_t terminalPid = schedulerAddProcess("terminal", MEDIUM_PRIO, (EntryPoint)terminalInit, 1, argvTerminal, terminalPipes);
 
-	//  testMM("100000");
+	char *argvSampleCode[2] = {"sampleCodeModule", NULL};
+	uint64_t sampleCodePid = schedulerAddStandardProcess("sampleCodeModule", MEDIUM_PRIO, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
+
+	_sti();
+
+	// CHEQUEAR (Hace falta o no??)
+	waitPid(terminalPid);
+	waitPid(sampleCodePid);
 
 	return 0;
 }
@@ -143,41 +123,6 @@ int main()
 int idle(int argc, char *argv[])
 {
 	while (1)
-	{
-	};
-	return 0;
-}
-
-int test_waitpid()
-{
-	char *argvTest[1] = {NULL};
-	ncNewline();
-	ncPrint("Empece (parent): ");
-	ncPrintDec(getRunningPid());
-	ncNewline();
-	ncPrint("Waiting for my child");
-	int pidChild = schedulerAddStandardProcess("test_child", MEDIUM_PRIO, test_child, 1, argvTest);
-	wait_pid(pidChild);
-	ncPrint("My child has finished");
-	exitProcess(0);
-	return 0;
-}
-
-int test_child(int argc, char *argv[])
-{
-	ncNewline();
-	ncPrint("Empece (child)");
-	schedulerYield();
-	ncNewline();
-	for (int i = 0; i < 5; i++)
-	{
-		ncNewline();
-		ncPrintDec(i);
-		ncNewline();
-		bussy_wait(10000000);
-	}
-	ncPrint("Termine (child)");
-	ncNewline();
-	exitProcess(0);
+		;
 	return 0;
 }

@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "test_util.h"
 
 #define MB *1024 * 1024
 #define AMOUNT_OF_MB 128
@@ -23,10 +22,6 @@ typedef struct MemStatus
  * y lo usa en las funciones allocMemoryKernel y freeMemoryKernel.
  */
 MemoryManagerADT createMemoryManager(void *const memoryForMemoryManager, void *const managedMemory);
-
-void *allocMemory(MemoryManagerADT memoryManager, size_t memoryToAllocate);
-
-void freeMemory(MemoryManagerADT mm, void *ptr);
 
 /**
  * Otorga memoria usando el MM del kernel

@@ -7,17 +7,17 @@ void semInit()
     allSemaphores = createLinkedList();
 }
 
-static bool compareSem(void *s1_ptr, void *id_ptr)
+static bool compareSem(void *s1Ptr, void *idPtr)
 {
-    sem_t *s1 = (sem_t *)s1_ptr;
-    int id = *((int *)id_ptr);
+    sem_t *s1 = (sem_t *)s1Ptr;
+    int id = *((int *)idPtr);
     return (s1->id == id);
 }
 
 int semOpen(int id, int value)
 {
-    int id_temp = id;
-    sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
+    int idTemp = id;
+    sem_t *sem = findElem(allSemaphores, &idTemp, compareSem);
 
     if (sem == NULL)
     {
@@ -44,23 +44,23 @@ int semOpen(int id, int value)
 
 void semClose(int id)
 {
-    int id_temp = id;
-    sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
+    int idTemp = id;
+    sem_t *sem = findElem(allSemaphores, &idTemp, compareSem);
     if (sem == NULL)
         return;
     sem->openedCount--;
     if (sem->openedCount == 0)
     {
         destroyLinkedList(sem->blockedPids, _nop);
-        removeElem(allSemaphores, &id_temp, compareSem);
+        removeElem(allSemaphores, &idTemp, compareSem);
         freeMemoryKernel(sem);
     }
 }
 
 void semWait(int id)
 {
-    int id_temp = id;
-    sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
+    int idTemp = id;
+    sem_t *sem = findElem(allSemaphores, &idTemp, compareSem);
     if (sem == NULL)
         return;
 
@@ -82,8 +82,8 @@ void semWait(int id)
 
 void semPost(int id)
 {
-    int id_temp = id;
-    sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
+    int idTemp = id;
+    sem_t *sem = findElem(allSemaphores, &idTemp, compareSem);
     if (sem == NULL)
         return;
 

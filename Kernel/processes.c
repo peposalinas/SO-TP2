@@ -30,8 +30,8 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
 {
     memoryForProcess->pid = process_pid;
     memoryForProcess->state = READY;
-    memoryForProcess->stack_end = allocMemoryKernel(STACK_SIZE);
-    memoryForProcess->stack = (uint64_t *)(((uint64_t)(memoryForProcess->stack_end) + STACK_SIZE) & ~ALIGN);
+    memoryForProcess->stackEnd = allocMemoryKernel(STACK_SIZE);
+    memoryForProcess->stack = (uint64_t *)(((uint64_t)(memoryForProcess->stackEnd) + STACK_SIZE) & ~ALIGN);
     stack_frame *stackFrame = (stack_frame *)((uint64_t *)memoryForProcess->stack - sizeof(stack_frame) / sizeof(uint64_t));
 
     stackFrame->ss = 0x0;
@@ -42,10 +42,10 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
     stackFrame->rdi = (uint64_t)argc;
     stackFrame->rsi = (uint64_t)argv;
 
-    memoryForProcess->stack_pointer = (uint64_t *)stackFrame;
+    memoryForProcess->stackPointer = (uint64_t *)stackFrame;
     memoryForProcess->name = process_name;
     memoryForProcess->priority = process_priority;
-    memoryForProcess->parent_pid = parent_pid;
+    memoryForProcess->parentPid = parent_pid;
     memoryForProcess->isBeingWaited = 0;
     memoryForProcess->inputPipe = pipesIO[0];
     memoryForProcess->outputPipe = pipesIO[1];
@@ -55,7 +55,7 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
 
 int killProcess(process process)
 {
-    freeMemoryKernel(process->stack_end);
+    freeMemoryKernel(process->stackEnd);
     freeMemoryKernel(process);
     freeMemoryKernel(process);
     return 0;

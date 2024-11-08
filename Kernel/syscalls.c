@@ -51,23 +51,6 @@ long int write(int pipeId, const uint8_t *string, uint32_t size)
 		written++;
 	}
 	return written;
-
-	// uint32_t height = getHeight() / 16;
-	// uint32_t width = getWidth();
-	// uint32_t colour = fd == STDOUT ? WHITE : RED;
-	// int i = 0;
-	// while (i < size)
-	// {
-	// 	if (string[i] == '\n' || (lastCharX + 1) * 8 == width)
-	// 	{
-	// 		lastCharY++;
-	// 		lastCharX = 0;
-	// 	}
-	// 	if (string[i] != '\n')
-	// 		drawchar(string[i], lastCharX++, lastCharY % height, colour, BLACK);
-	// 	i++;
-	// }
-	// return i;
 }
 
 void printRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t color)
@@ -174,7 +157,6 @@ static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base)
 	char *p1, *p2;
 	uint32_t digits = 0;
 
-	// Calculate characters for each digit
 	do
 	{
 		uint32_t remainder = value % base;
@@ -182,10 +164,8 @@ static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base)
 		digits++;
 	} while (value /= base);
 
-	// Terminate string in buffer.
 	*p = 0;
 
-	// Reverse string in buffer.
 	p1 = (char *)buffer;
 	p2 = p - 1;
 	while (p1 < p2)
@@ -210,21 +190,20 @@ void freeM(void *ptr)
 	freeMemoryKernel(ptr);
 }
 
-//@TODO: implementar
 MemStatus *memStatus()
 {
 	return memStatusKernel();
 }
 
-int createProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[], int *pipesIO)
+int createProc(char *processName, int (*entry_point)(int, char **), int argc, char *argv[], int *pipesIO)
 {
-	return schedulerAddProcess(process_name, DEFAULT_PRIORITY, entry_point, argc, argv, pipesIO);
+	return schedulerAddProcess(processName, DEFAULT_PRIORITY, entry_point, argc, argv, pipesIO);
 }
 
-int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[])
+int createStandardProc(char *processName, int (*entry_point)(int, char **), int argc, char *argv[])
 {
 	int pipesIO[2] = {KEYBOARD_PIPE, TERMINAL_PIPE};
-	return createProc(process_name, entry_point, argc, argv, pipesIO);
+	return createProc(processName, entry_point, argc, argv, pipesIO);
 }
 
 void exitProc(uint64_t returnVal)
@@ -269,7 +248,7 @@ void yieldProc()
 
 uint64_t waitPID(uint64_t pid)
 {
-	return wait_pid(pid);
+	return waitPid(pid);
 }
 
 int openSem(int id, int value)
