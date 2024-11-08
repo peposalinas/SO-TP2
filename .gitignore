@@ -5,6 +5,5 @@
 compile.sh
 init.sh
 clean_objects.sh
-run.sh
 *.o
 *.bin
