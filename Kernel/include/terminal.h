@@ -14,6 +14,7 @@
 #define UP_ARROW 253
 #define DOWN_ARROW 254
 
+void heyTerminal();
 void terminalInit();
 void tFontSmall();
 void tFontBig();

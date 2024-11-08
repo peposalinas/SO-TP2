@@ -57,6 +57,5 @@ int killProcess(process process)
 {
     freeMemoryKernel(process->stack_end);
     freeMemoryKernel(process);
-    freeMemoryKernel(process);
     return 0;
 }

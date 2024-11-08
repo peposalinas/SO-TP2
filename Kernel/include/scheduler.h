@@ -19,9 +19,7 @@
 #define LOW_PRIO 1
 #define LOWEST_PRIO 0
 
-#define DEFAULT_PRIORITY 2
-
-#define DEFAULT_PRIORITY 2
+#define DEFAULT_PRIORITY 4
 
 typedef struct processInformation
 {

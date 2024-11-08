@@ -25,6 +25,71 @@ static uint16_t offsets[65536] = {0};
 static char buffer[65536];
 static uint16_t count;
 
+void heyTerminal()
+{
+    uint8_t c = 0;
+    while (!c)
+        read(1, &c, 1);
+    switch (c)
+    {
+    case RIGHT_ARROW:
+        sMoveRight();
+        break;
+    case LEFT_ARROW:
+        sMoveLeft();
+        break;
+    case DELETE:
+        sDeleteChar();
+        break;
+    case '\n':
+        sPrintChar(buffer[count - leftSteps]);
+        leftSteps = 0;
+        sPrintNewLine();
+        sPrintSelected(buffer[count]);
+        offsets[lineCount++] = count;
+        offsets[lineCount] = offsets[lineCount - 1]; // la linea esta vacia
+        break;
+    case 0:
+        break;
+    default:
+    {
+        uint16_t auxX = currentX, auxY = currentY;
+        if (currentX + leftSteps >= width)
+            currentY++;
+        currentX = (currentX + leftSteps) % width;
+        for (uint16_t i = 0; i < leftSteps; i++)
+        {
+            buffer[count - i] = buffer[count - i - 1];
+            sPrintChar(buffer[count - i]);
+            if (currentX == 0)
+            {
+                currentX = width - 1;
+                currentY--;
+            }
+            else
+                currentX--;
+        }
+        currentX = auxX;
+        currentY = auxY;
+        buffer[count - leftSteps] = c;
+        count++;
+        offsets[lineCount] = count;
+        buffer[count] = 0;
+        sPrintChar(c);
+        currentX++;
+        if (currentX == width)
+        {
+            if (currentY < height - 1)
+                currentY++;
+            else
+                sMoveScreenUp(1);
+            currentX = 0;
+        }
+        sPrintSelected(buffer[count - leftSteps]);
+    }
+    }
+}
+
 void terminalInit() // TIENE QUE INICIALIZARSE CON EL STDIN EN TERMINAL_PIPE Y EL STDOUT NO IMPORTA
 {
     newPipe(TERMINAL_PIPE);
@@ -43,71 +108,6 @@ void terminalInit() // TIENE QUE INICIALIZARSE CON EL STDIN EN TERMINAL_PIPE Y E
 
     startNewLine();
     sPrintSelected(' ');
-
-    while (1)
-    { // VER CONDICION DE LOOP
-        uint8_t c = 0;
-        while (!c)
-            read(getRunningInputPipe(), &c, 1);
-        switch (c)
-        {
-        case RIGHT_ARROW:
-            sMoveRight();
-            break;
-        case LEFT_ARROW:
-            sMoveLeft();
-            break;
-        case DELETE:
-            sDeleteChar();
-            break;
-        case '\n':
-            sPrintChar(buffer[count - leftSteps]);
-            leftSteps = 0;
-            sPrintNewLine();
-            sPrintSelected(buffer[count]);
-            offsets[lineCount++] = count;
-            offsets[lineCount] = offsets[lineCount - 1]; // la linea esta vacia
-            break;
-        case 0:
-            break;
-        default:
-        {
-            uint16_t auxX = currentX, auxY = currentY;
-            if (currentX + leftSteps >= width)
-                currentY++;
-            currentX = (currentX + leftSteps) % width;
-            for (uint16_t i = 0; i < leftSteps; i++)
-            {
-                buffer[count - i] = buffer[count - i - 1];
-                sPrintChar(buffer[count - i]);
-                if (currentX == 0)
-                {
-                    currentX = width - 1;
-                    currentY--;
-                }
-                else
-                    currentX--;
-            }
-            currentX = auxX;
-            currentY = auxY;
-            buffer[count - leftSteps] = c;
-            count++;
-            offsets[lineCount] = count;
-            buffer[count] = 0;
-            sPrintChar(c);
-            currentX++;
-            if (currentX == width)
-            {
-                if (currentY < height - 1)
-                    currentY++;
-                else
-                    sMoveScreenUp(1);
-                currentX = 0;
-            }
-            sPrintSelected(buffer[count - leftSteps]);
-        }
-        }
-    }
 }
 
 void sPrintChar(uint8_t c)

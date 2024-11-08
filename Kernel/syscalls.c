@@ -37,6 +37,11 @@ long int write(int pipeId, const uint8_t *string, uint32_t size)
 	{
 		return -1;
 	}
+	else if (size == 0)
+	{
+		return 0;
+	}
+
 	int written = 0;
 	while (written < size)
 	{
@@ -47,6 +52,11 @@ long int write(int pipeId, const uint8_t *string, uint32_t size)
 		{
 			pipe->currentWritePos = 0;
 		}
+		if (pipeId == TERMINAL_PIPE)
+		{
+			heyTerminal();
+		}
+
 		string++;
 		written++;
 	}
