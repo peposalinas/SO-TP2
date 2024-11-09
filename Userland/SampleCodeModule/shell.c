@@ -49,10 +49,14 @@ static void kill(int argc, char *argv[]);
 static void nice(int argc, char *argv[]);
 static void block(int argc, char *argv[]);
 static void memStatusPrinter(uint64_t argc, char *argv[]);
+static int findAndExecCmd(char *cmdName, int argc, char *argv[]);
+static int createNewPipe();
+static void catCmd(int argc, char *argv[]);
+static int catProc(int argc, char *argv[]);
 
 static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{"block", (void *)block}},
-                                             {{"clear", (void *)clearCmd}, {0, 0}},
+                                             {{"cat", (void *)catCmd}, {"clear", (void *)clearCmd}, {0, 0}},
                                              {{"div0", (void *)div0}, {0, 0}},
                                              {{"exit", (void *)exit}},
                                              {{"fontBig", (void *)fontBig}, {"fontSmall", (void *)fontSmall}},
@@ -71,7 +75,7 @@ static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{0, 0}},
                                              {{"testMem", (void *)createTestMem}, {"testMemInfo", (void *)createTestMemInfo}, {"testPrio", (void *)createTestPrio}, {"testProcesses", (void *)createTestProcesses}, {"testSync", (void *)createTestSync}}};
 
-static char *commandNotFoundMsg = "Command not found. Type 'help' to see the list of commands\n";
+static char *commandNotFoundMsg = "Command %s not found. Type 'help' to see the list of commands\n";
 // static uint8_t cNotFoundSize = 51;
 static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "block: Block a process\n"
@@ -92,7 +96,9 @@ static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "testMemInfo: Tests memory information\n"
                        "testPrio: Tests priorities\n"
                        "testProcesses: Tests processes\n"
-                       "testSync: Tests synchronization\n\n";
+                       "testSync: Tests synchronization\n"
+                       "cat: Reads from keyboard or from output of piped command and prints\n\n";
+;
 // static char *waitMsg = "Press any key to continue";
 // ###################################################################
 
@@ -104,6 +110,7 @@ static uint16_t previousCount;
 static uint16_t lineCount;
 static uint16_t currentLine;
 static uint16_t leftSteps;
+static int IOPipes[2];
 
 int launchShell(int argc, char *argv[])
 {
@@ -114,6 +121,8 @@ int launchShell(int argc, char *argv[])
     currentLine = 1;
     leftSteps = 0;
     uint8_t key;
+    IOPipes[0] = KEYBOARD_PIPE;
+    IOPipes[1] = TERMINAL_PIPE;
     while (!exitFlag)
     {
         key = getChar();
@@ -242,6 +251,21 @@ char getCommandIdx(char c)
     return c - 'a';
 }
 
+int sCheckPiped(char *tokens[MAX_ARGS + 1])
+{
+    int i = 0;
+    while (tokens[i] != NULL)
+    {
+        if (strcmp(tokens[i], "|") == 0)
+        {
+            tokens[i] = NULL;
+            return i;
+        }
+        i++;
+    }
+    return -1;
+}
+
 void sCheckCommand()
 {
     if (offsets[lineCount] == offsets[lineCount - 1])
@@ -259,12 +283,41 @@ void sCheckCommand()
         command_tokens[j++] = token;
         command = NULL;
     } while (token);
+    int pipePos = sCheckPiped(command_tokens);
+    if (pipePos != -1)
+    {
+        printf("Piped command!!!\n");
+        int connectionPipeId = createNewPipe();
+        if (connectionPipeId == -1)
+        {
+            return;
+        }
+        IOPipes[1] = connectionPipeId;
+        if (findAndExecCmd(command_tokens[0], pipePos - 1, command_tokens + 1) == 1)
+        {
+            IOPipes[0] = connectionPipeId;
+            IOPipes[1] = TERMINAL_PIPE;
+            findAndExecCmd(command_tokens[pipePos + 1], j - pipePos - 3, command_tokens + pipePos + 2);
+            printf("Piped command executed!!!\n");
+            buffer[offsets[lineCount]] = aux;
+        }
+        IOPipes[0] = KEYBOARD_PIPE;
+    }
+    else
+    {
+        printf("Normal command!!!\n");
+        findAndExecCmd(command_tokens[0], j - 2, command_tokens + 1);
+        buffer[offsets[lineCount]] = aux;
+    }
+}
 
-    char c = getCommandIdx(command_tokens[0][0]);
+int findAndExecCmd(char *cmdName, int argc, char *argv[])
+{
+    char c = getCommandIdx(cmdName[0]);
     if (c < 0 || c >= LETTERS)
     {
-        printf(commandNotFoundMsg);
-        return;
+        printf(commandNotFoundMsg, cmdName);
+        return 0;
     }
 
     buffer[offsets[lineCount]] = 0;
@@ -273,16 +326,15 @@ void sCheckCommand()
     {
         if (auxC[i].name != NULL)
         {
-            int cmp = strcmp(buffer + offsets[lineCount - 1], auxC[i].name);
+            int cmp = strcmp(cmdName, auxC[i].name);
             if (cmp < 0)
             {
                 break;
             }
             else if (cmp == 0)
             {
-                auxC[i].function(j - 2, command_tokens + 1);
-                buffer[offsets[lineCount]] = aux;
-                return;
+                auxC[i].function(argc, argv);
+                return 1;
             }
         }
         else
@@ -290,8 +342,25 @@ void sCheckCommand()
             break;
         }
     }
-    printf("Command %s not found. Type 'help' to see the list of commands\n", buffer + offsets[lineCount - 1]);
-    buffer[offsets[lineCount]] = aux;
+    printf(commandNotFoundMsg, cmdName);
+    return 0;
+}
+
+int createNewPipe()
+{
+    int created = -1;
+    int i = 1;
+    while (created == -1 && i < MAX_PIPES)
+    {
+        i++;
+        created = newPipe(i);
+    }
+    if (created == -1)
+    {
+        printf("No more pipes available\n");
+        return -1;
+    }
+    return i;
 }
 
 char **getArgs(char *buffer)
@@ -364,37 +433,37 @@ void invalidOpCode(int argc, char *argv[])
 
 void createTestSync(int argc, char *argv[])
 {
-    int pid = createStandardProc("test_sync", test_sync, argc, argv);
+    int pid = createProcess("test_sync", test_sync, argc, argv, IOPipes);
     waitPID(pid);
 }
 
 void createTestMemInfo(int argc, char *argv[])
 {
-    int pid = createStandardProc("test_mem", test_mem, argc, argv);
+    int pid = createProcess("test_mem", test_mem, argc, argv, IOPipes);
     waitPID(pid);
 }
 
 void createTestProcesses(int argc, char *argv[])
 {
-    int pid = createStandardProc("test_processes", test_processes, argc, argv);
+    int pid = createProcess("test_processes", test_processes, argc, argv, IOPipes);
     waitPID(pid);
 }
 
 void createTestPrio(int argc, char *argv[])
 {
-    int pid = createStandardProc("test_prio", test_prio, argc, argv);
+    int pid = createProcess("test_prio", test_prio, argc, argv, IOPipes);
     waitPID(pid);
 }
 
 void createTestMem(int argc, char *argv[])
 {
-    int pid = createStandardProc("test_mm", test_mm, argc, argv);
+    int pid = createProcess("test_mm", test_mm, argc, argv, IOPipes);
     waitPID(pid);
 }
 
 void createTestWaitShell(int argc, char *argv[])
 {
-    int pid = createStandardProc("test_wait_shell", test_wait_shell, argc, argv);
+    int pid = createProcess("test_wait_shell", test_wait_shell, argc, argv, IOPipes);
     waitPID(pid);
 }
 
@@ -443,7 +512,7 @@ void loop(int argc, char *argv[])
         printf("Usage: loop <seconds>\n");
         return;
     }
-    int pid = createStandardProc("loopPrinter", loopPrinter, argc, argv);
+    int pid = createProcess("loopPrinter", loopPrinter, argc, argv, IOPipes);
     waitPID(pid);
 }
 
@@ -513,6 +582,25 @@ void memStatusPrinter(uint64_t argc, char *argv[])
     printf("                 %d MB\n", memStatus->occupied_mem / (1024 * 1024));
 
     freeM(memStatus);
+}
+
+void catCmd(int argc, char *argv[])
+{
+    int pid = createProcess("cat", catProc, argc, argv, IOPipes);
+    waitPID(pid);
+}
+
+int catProc(int argc, char *argv[])
+{
+    char c = 0;
+    while (c != '\t') // CHEQUEAR esto tiene que ser EOF, falta implementar Ctrl+D
+    {
+        c = getChar();
+        putChar(c);
+    }
+    printf("CAT HAS FINISHED\n");
+    exitProc(0);
+    return 1;
 }
 
 void sMoveRight()

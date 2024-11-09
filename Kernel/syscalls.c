@@ -17,7 +17,10 @@ uint32_t read(int pipeId, uint8_t *buffer, uint32_t size)
 	int bytesRead = 0;
 	while (bytesRead < size)
 	{
-		semWait(pipe->semRead);
+		if (pipeId != TERMINAL_PIPE)
+		{
+			semWait(pipe->semRead);
+		}
 		*buffer = pipe->buffer[pipe->currentReadPos++];
 		semPost(pipe->semWrite);
 		if (pipe->currentReadPos == PIPE_SIZE)
@@ -47,7 +50,10 @@ long int write(int pipeId, const uint8_t *string, uint32_t size)
 	{
 		semWait(pipe->semWrite);
 		pipe->buffer[pipe->currentWritePos++] = *string;
-		semPost(pipe->semRead);
+		if (pipeId != TERMINAL_PIPE)
+		{
+			semPost(pipe->semRead);
+		}
 		if (pipe->currentWritePos == PIPE_SIZE)
 		{
 			pipe->currentWritePos = 0;

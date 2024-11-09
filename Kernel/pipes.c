@@ -5,7 +5,7 @@ int semId = FIRST_SEM_FOR_PIPES;
 
 int createPipe(int id)
 {
-    if (pipeArray[id] != NULL)
+    if (pipeArray[id] != NULL || id < 0 || id >= MAX_PIPES)
     {
         return -1;
     }

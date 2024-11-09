@@ -9,6 +9,7 @@
 #include <libc.h>
 #include <stdarg.h>
 #include "test_util.h"
+#include "definitions.h"
 
 int launchShell(int argc, char *argv[]);
 
