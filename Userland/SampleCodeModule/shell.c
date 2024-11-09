@@ -412,8 +412,10 @@ void launchShell()
 
     // Debuggeo
     char *argvTest[2] = {"10", NULL};
-    int debugging_pid = createProcess("test_mem_info", 4, test_mem, 1, argvTest);
-    waitPID(debugging_pid);
+    int debugging_pid_2 = createProcess("test_sync", 4, test_prio, 0, argvTest);
+    waitPID(debugging_pid_2);
+    // int debugging_pid = createProcess("test_mem_info", 4, test_mem, 0, argvTest);
+    // waitPID(debugging_pid);
     // Final debuggeo
 
     uint8_t key;

@@ -33,7 +33,7 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
     {
         return -1;
     }
-    memoryForProcess->stack = (uint64_t)(memoryForProcess->stack_end + STACK_SIZE);
+    memoryForProcess->stack = (uint64_t)(memoryForProcess->stack_end + STACK_SIZE) & ~ALIGN;
     stack_frame *stackFrame = memoryForProcess->stack - sizeof(stack_frame);
 
     stackFrame->ss = 0x0;

@@ -8,6 +8,7 @@
 #define MB *1024 * 1024
 #define AMOUNT_OF_MB 256
 #define TOTAL_MEM AMOUNT_OF_MB MB
+#define TOTAL_POWERS_OF_2 29 //@TODO: hacer que esto sea log2(TOTAL_MEM)+1
 
 typedef struct MemoryManagerCDT *MemoryManagerADT;
 

@@ -8,14 +8,14 @@ ifeq ($(MM_TYPE),BUDDY)
     MM_SOURCES=buddyMemoryManager.c
     EXTRA_FLAGS=-DUSE_BUDDY_MM
 else ifeq ($(MM_TYPE),CUSTOM)
-    MM_SOURCES=MemoryManagerCDT.c
-    EXTRA_FLAGS=-DUSE_CUSTOM_MM
+    MM_SOURCES=myBuddy.c
+    EXTRA_FLAGS=-DUSE_MYBUDDY_MM
 else
     MM_SOURCES=MemoryManagerCDT.c
     EXTRA_FLAGS=-DUSE_CUSTOM_MM
 endif
 
-BASE_SOURCES=$(filter-out buddyMemoryManager.c MemoryManagerCDT.c, $(wildcard *.c))
+BASE_SOURCES=$(filter-out buddyMemoryManager.c MemoryManagerCDT.c myBuddy.c, $(wildcard *.c))
 SOURCES=$(BASE_SOURCES) $(MM_SOURCES)
 SOURCES_ASM=$(wildcard asm/*.asm)
 OBJECTS=$(SOURCES:.c=.o)

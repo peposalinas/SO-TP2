@@ -19,6 +19,11 @@ debug_buddy: clean kernel userland image
 	cd Kernel; make debug
 	cd Userland; make debug
 
+debug_myMM: export MM_TYPE=CUSTOM
+debug_myMM: clean kernel userland image
+	cd Kernel; make debug
+	cd Userland; make debug
+
 kernel:
 	cd Kernel; make all
 
