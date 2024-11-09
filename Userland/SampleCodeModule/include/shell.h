@@ -9,7 +9,8 @@
 #include <libc.h>
 #include <stdarg.h>
 #include "test_util.h"
+#include "definitions.h"
 
-void launchShell();
+int launchShell(int argc, char *argv[]);
 
 #endif

@@ -1,6 +1,10 @@
 #ifndef _KEYBOARD_DRIVER_H
 #define _KEYBOARD_DRIVER_H
 #include <stdint.h>
+#include "lib.h"
+#include "regsDump.h"
+#include "pipes.h"
+#include "syscalls.h"
 
 #define RIGHTKEY 0x4D
 #define LEFTKEY 0x4B
@@ -28,7 +32,7 @@
 #define RIGHT_SHIFT_B 0xB6
 #define LEFT_CTRL_B 0x9D
 
-#define BUFF_SIZE 512
+void keyboardInit();
 
 uint8_t keyHandler();
 

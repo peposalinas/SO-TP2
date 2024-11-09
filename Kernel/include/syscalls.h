@@ -5,6 +5,7 @@
 #include "scheduler.h"
 #include "semaphores.h"
 #include "MemoryManagerADT.h"
+#include "terminal.h"
 
 typedef enum FD
 {
@@ -12,8 +13,8 @@ typedef enum FD
     STDERR = 2
 } FD;
 
-uint32_t read(uint8_t *buffer, uint32_t size);                                                 // 0
-long int write(FD fd, const uint8_t *string, uint32_t size);                                   // 1
+uint32_t read(int pipeId, uint8_t *buffer, uint32_t size);                                     // 0
+long int write(int pipeId, const uint8_t *string, uint32_t size);                              // 1
 void printRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t colors); // 2
 uint64_t getScreenWidth();                                                                     // 3
 uint64_t getScreenHeight();                                                                    // 4
@@ -27,10 +28,10 @@ uint8_t fontSizeDown();                                                         
 void getTime(uint8_t pb[]);                                                                    // 12
 void *allocM(size_t memoryToAllocate);
 void freeM(void *ptr);
-int createProc(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char *argv[]);
+int createProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[], int *pipesIO);
 void exitProc(uint64_t returnVal);
 uint64_t getPID();
-char *listAllProcessesInformation();
+processInformation *listAllProcessesInformation();
 int killProc(uint32_t pid);
 uint64_t changeProcPriority(uint64_t pid, int priority);
 int blockProc(uint32_t pid);
@@ -42,5 +43,10 @@ void closeSem(int id);
 void waitSem(int id);
 void postSem(int id);
 MemStatus *memStatus();
+int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[]);
+int getRunningOutputPipe();
+int getRunningInputPipe();
+int newPipe(int id);
+void clearTerminal();
 
 #endif

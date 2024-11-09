@@ -2,7 +2,7 @@
 #include "test_util.h"
 #include "libc.h"
 
-uint64_t test_mem(int argc, char *argv[])
+int test_mem(int argc, char *argv[])
 {
     MemStatus *mem = memStatus();
     if (mem == NULL)
@@ -10,7 +10,7 @@ uint64_t test_mem(int argc, char *argv[])
         printf("Error getting memory status\n");
         exitProc(1);
     }
-    size_t freeMemo = mem->free_mem / (1024 * 1024); // To convert from Bytes to MB
+    size_t freeMemo = mem->free_mem / (1024 * 1024);
     size_t totalMemo = mem->total_mem / (1024 * 1024);
     size_t occupiedMemo = mem->occupied_mem / (1024 * 1024);
     // Printfs tiran excepcion 8 en modo texto
@@ -35,7 +35,8 @@ uint64_t test_mem(int argc, char *argv[])
     mem = memStatus();
     freeMemo = mem->free_mem / (1024 * 1024);
     totalMemo = mem->total_mem / (1024 * 1024);
-    occupiedMemo = mem->occupied_mem / (1024 * 1024);
-    printf("Total mem: %d MB\nOccupied mem: %d MB\nFree mem: %d MB\n", totalMemo, occupiedMemo, freeMemo);
+    occupiedMemo = mem->occupied_mem / (1024 * 1024); // CHEQUEAR SACAR EL \t DE ABAJO (FINAL DEL PRINTF)
+    printf("Total mem: %d MB\nOccupied mem: %d MB\nFree mem: %d MB\n\t", totalMemo, occupiedMemo, freeMemo);
     exitProc(0);
+    return 0;
 }

@@ -2,20 +2,13 @@
 #include "test_util.h"
 #include "libc.h"
 
-enum State
-{
-    RUNNING,
-    BLOCKED,
-    KILLED
-};
-
 typedef struct P_rq
 {
     int32_t pid;
-    enum State state;
+    process_state_t state;
 } p_rq;
 
-int64_t test_processes(uint64_t argc, char *argv[])
+int test_processes(int argc, char *argv[])
 {
     uint8_t rq;
     uint8_t alive = 0;
@@ -37,7 +30,7 @@ int64_t test_processes(uint64_t argc, char *argv[])
         // Create max_processes processes
         for (rq = 0; rq < max_processes; rq++)
         {
-            p_rqs[rq].pid = createProcess("endless_loop", 4, endless_loop, 0, argvAux);
+            p_rqs[rq].pid = createStandardProc("endless_loop", endless_loop, 0, argvAux);
 
             if (p_rqs[rq].pid == -1)
             {
@@ -69,7 +62,7 @@ int64_t test_processes(uint64_t argc, char *argv[])
                             printf("test_processes: ERROR killing process\n");
                             exitProc(-1);
                         }
-                        p_rqs[rq].state = KILLED;
+                        p_rqs[rq].state = TERMINATED;
                         alive--;
                     }
                     break;

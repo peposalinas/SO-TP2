@@ -28,6 +28,11 @@ GLOBAL waitSemCaller
 GLOBAL postSemCaller
 GLOBAL memStatusCaller
 GLOBAL listProcessesInfoCaller
+GLOBAL createStandardProcCaller
+GLOBAL getRunningOutputPipeCaller
+GLOBAL getRunningInputPipeCaller
+GLOBAL newPipeCaller
+GLOBAL clearTerminalCaller
 
 section .text
 
@@ -110,3 +115,13 @@ memStatusCaller:
     syscaller 28
 listProcessesInfoCaller:
     syscaller 29
+createStandardProcCaller:
+    syscaller 30
+getRunningOutputPipeCaller:
+    syscaller 31
+getRunningInputPipeCaller:
+    syscaller 32
+newPipeCaller:
+    syscaller 33
+clearTerminalCaller:
+    syscaller 34

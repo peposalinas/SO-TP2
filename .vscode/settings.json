@@ -27,6 +27,12 @@
     "font.h": "c",
     "videodriver.h": "c",
     "keyboarddriver.h": "c",
+    "shell.h": "c",
+    "pipes.h": "c",
+    "xutility": "c",
+    "cstdlib": "c",
+    "terminal.h": "c",
+    "definitions.h": "c",
     "shell.h": "c"
   }
 }

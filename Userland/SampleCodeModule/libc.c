@@ -43,21 +43,22 @@ int printf(const char *fmt, ...)
 
 int putChar(char c)
 {
-    return writeCaller(UNUSED, 1, &c, 1);
+    return writeCaller(UNUSED, getRunningOutputPipeCaller(UNUSED), &c, 1);
 }
 
 int getChar()
 {
+
     char c = 0;
     while (!c)
-        readCaller(UNUSED, &c, 1);
+        readCaller(UNUSED, getRunningInputPipeCaller(UNUSED), &c, 1);
     return c;
 }
 
 void cleanBuffer()
 {
     char c;
-    while (readCaller(UNUSED, &c, 1))
+    while (readCaller(UNUSED, getRunningInputPipeCaller(UNUSED), &c, 1))
         ;
 }
 
@@ -201,6 +202,27 @@ void itos(int num, char *buffer)
     return;
 }
 
+void uint64ToHexString(uint64_t value, char *buffer, int bufferSize)
+{
+    const char hexDigits[17] = "0123456789ABCDEF";
+    buffer[0] = '0';
+    buffer[1] = 'x';
+    buffer[bufferSize - 1] = '\0';
+
+    int index = bufferSize - 2;
+
+    for (int i = 0; i < 6; i++)
+    {
+        buffer[index--] = hexDigits[value % 16];
+        value /= 16;
+    }
+
+    while (index >= 2)
+    {
+        buffer[index--] = '0';
+    }
+}
+
 int strcmp(char *s1, char *s2)
 {
     if (s1 == NULL && s2 == NULL)
@@ -231,9 +253,14 @@ MemStatus *memStatus()
     return memStatusCaller(UNUSED);
 }
 
-int createProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[])
+processInformation *listProcessesInfo()
 {
-    return createProcCaller(UNUSED, process_name, process_priority, entry_point, argc, argv);
+    return listProcessesInfoCaller(UNUSED);
+}
+
+int createProcess(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[], int *pipesIO)
+{
+    return createProcCaller(UNUSED, process_name, entry_point, argc, argv, pipesIO);
 }
 
 void exitProc(int returnVal)
@@ -298,9 +325,14 @@ void postSem(int id)
     postSemCaller(UNUSED, id);
 }
 
-char *listProcessesInfo()
+int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[])
 {
-    return listProcessesInfoCaller(UNUSED);
+    return createStandardProcCaller(UNUSED, process_name, entry_point, argc, argv);
+}
+
+int newPipe(int id)
+{
+    return newPipeCaller(UNUSED, id);
 }
 
 void clearScreen()

@@ -15,27 +15,25 @@
 
 int64_t prio[TOTAL_PROCESSES] = {LOWEST, LOW, MEDIUM, HIGH, HIGHEST};
 
-uint64_t test_mem(int argc, char *argv[]);
-
-void test_prio(uint64_t argc, char *argv1[])
+int test_prio(int argc, char *argv1[])
 {
-
+    char c = getChar();
     int64_t pids[TOTAL_PROCESSES];
     char *argv[] = {MINOR_WAIT};
     uint64_t i;
-
+    printf("Me escribieron: %c\n", c);
     printf("CREATING PROCESSES...\n");
     for (int j = 0; j < WAIT; j++)
         ;
-    for (int k = 0; k < TOTAL_PROCESSES; k++)
+    for (i = 0; i < TOTAL_PROCESSES; i++)
     {
-        pids[k] = createProcess("endless_loop_print", prio[4], endless_loop_print, 1, argv);
-        printf("Process %d created with pid %d\n", k, pids[k]);
-        if (pids[k] == -1)
+        pids[i] = createStandardProc("endless_loop_print", endless_loop_print, 1, argv);
+        if (pids[i] == -1)
         {
             printf("Error creating process\n");
             exitProc(1);
         }
+        changeProcessPriority(pids[i], prio[4]);
     }
 
     printf("\nCHANGING PRIORITIES...\n");
@@ -85,4 +83,5 @@ void test_prio(uint64_t argc, char *argv1[])
         ;
 
     exitProc(0);
+    return 0;
 }

@@ -19,7 +19,7 @@ void setMem(void *ptr, uint8_t value, uint32_t size)
     }
 }
 
-uint64_t test_mm(uint64_t argc, char *argv[])
+int test_mm(int argc, char *argv[])
 {
 
     mm_rq mm_rqs[MAX_BLOCKS];
@@ -71,4 +71,5 @@ uint64_t test_mm(uint64_t argc, char *argv[])
             if (mm_rqs[i].address)
                 freeM(mm_rqs[i].address);
     }
+    return 0;
 }

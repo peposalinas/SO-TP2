@@ -1,0 +1,12 @@
+#ifndef _DEFINITIONS_H_
+#define _DEFINITIONS_H_
+
+#define MAX_PIPES 256
+#define PIPE_SIZE 1024
+#define FIRST_SEM_FOR_PIPES 1024
+#define LAST_SEM_FOR_PIPES 1024 + MAX_PIPES * 2
+
+#define KEYBOARD_PIPE 0
+#define TERMINAL_PIPE 1
+
+#endif

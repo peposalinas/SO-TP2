@@ -13,7 +13,7 @@
 #define MAX_BLOCKS 128
 #define TICKS 100
 
-static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base);
+// static uint32_t uintToBase(uint64_t value, char *buffer, uint32_t base);
 
 // Random
 static uint32_t m_z = 362436069;
@@ -89,16 +89,15 @@ void bussy_wait(uint64_t wait_time)
     return;
 }
 
-void endless_loop()
+int endless_loop(int argc, char **argv)
 {
     while (1)
         ;
+    return 0;
 }
 
-int endless_loop_print(uint64_t wait)
+int endless_loop_print(int argc, char **argv)
 {
-    uint64_t pid = getRunningPid();
-
     while (1)
     {
         // bussy_wait(wait);
@@ -172,34 +171,34 @@ uint64_t testMM(char *c)
     }
 }
 
-static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base)
-{
-    char *p = buffer;
-    char *p1, *p2;
-    uint32_t digits = 0;
+// uint32_t uintToBase(uint64_t value, char *buffer, uint32_t base)
+// {
+//     char *p = buffer;
+//     char *p1, *p2;
+//     uint32_t digits = 0;
 
-    // Calculate characters for each digit
-    do
-    {
-        uint32_t remainder = value % base;
-        *p++ = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
-        digits++;
-    } while (value /= base);
+//     // Calculate characters for each digit
+//     do
+//     {
+//         uint32_t remainder = value % base;
+//         *p++ = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
+//         digits++;
+//     } while (value /= base);
 
-    // Terminate string in buffer.
-    *p = 0;
+//     // Terminate string in buffer.
+//     *p = 0;
 
-    // Reverse string in buffer.
-    p1 = buffer;
-    p2 = p - 1;
-    while (p1 < p2)
-    {
-        char tmp = *p1;
-        *p1 = *p2;
-        *p2 = tmp;
-        p1++;
-        p2--;
-    }
+//     // Reverse string in buffer.
+//     p1 = buffer;
+//     p2 = p - 1;
+//     while (p1 < p2)
+//     {
+//         char tmp = *p1;
+//         *p1 = *p2;
+//         *p2 = tmp;
+//         p1++;
+//         p2--;
+//     }
 
-    return digits;
-}
+//     return digits;
+// }

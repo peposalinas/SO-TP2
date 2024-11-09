@@ -15,7 +15,7 @@ void slowInc(int64_t *p, int64_t inc)
     *p = aux;
 }
 
-uint64_t my_process_inc(uint64_t argc, char *argv[])
+int my_process_inc(int argc, char *argv[])
 {
     uint64_t n;
     int8_t inc;
@@ -57,14 +57,18 @@ uint64_t my_process_inc(uint64_t argc, char *argv[])
     }
 
     exitProc(0);
+    return 0;
 }
 
-uint64_t test_sync(uint64_t argc, char *argv[])
+int test_sync(int argc, char *argv[])
 {
     uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
 
     if (argc != 2)
+    {
+        printf("Usage: test_sync <n> <useSem>\n");
         exitProc(-1);
+    }
 
     char *argvDec[] = {argv[0], "-1", argv[1], NULL};
     char *argvInc[] = {argv[0], "1", argv[1], NULL};
@@ -74,8 +78,8 @@ uint64_t test_sync(uint64_t argc, char *argv[])
 
     for (i = 0; i < TOTAL_PAIR_PROCESSES; i++)
     {
-        pids[i] = createProcess("my_process_dec", 4, my_process_inc, 3, argvDec);
-        pids[i + TOTAL_PAIR_PROCESSES] = createProcess("my_process_inc", 4, my_process_inc, 3, argvInc);
+        pids[i] = createStandardProc("my_process_dec", my_process_inc, 3, argvDec);
+        pids[i + TOTAL_PAIR_PROCESSES] = createStandardProc("my_process_inc", my_process_inc, 3, argvInc);
     }
 
     for (i = 0; i < TOTAL_PAIR_PROCESSES; i++)
@@ -86,4 +90,5 @@ uint64_t test_sync(uint64_t argc, char *argv[])
     printf("\nFinal value: %d\n", global);
 
     exitProc(0);
+    return 0;
 }

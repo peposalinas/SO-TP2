@@ -6,7 +6,6 @@
 #include <syscaller.h>
 
 #define EOF -1
-#define NULL 0
 
 int printf(const char *fmt, ...);
 int putChar(char c);
@@ -19,7 +18,7 @@ int strcmp(char *s1, char *s2);
 void *allocM(int memoryToAllocate);
 void freeM(void *ptr);
 MemStatus *memStatus();
-int createProcess(char *process_name, int process_priority, void (*entry_point)(void), int argc, char *argv[]);
+int createProcess(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[], int *pipesIO);
 void exitProc(int returnVal);
 int getPID();
 // void listProcesses();
@@ -36,7 +35,10 @@ void postSem(int id);
 void clearScreen();
 char *strtok(char *str, const char *delim);
 char *strchr(const char *str, int c);
+void uint64ToHexString(uint64_t value, char *buffer, int bufferSize);
 
-char *listProcessesInfo();
+processInformation *listProcessesInfo();
+int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[]);
+int newPipe(int id);
 
 #endif

@@ -17,14 +17,14 @@ int ticks_elapsed()
 
 int seconds_elapsed()
 {
-	return ticks / 1000;
+	return ticks / 18.1818;
 }
 
-void timer_wait(uint32_t tick)
+void timer_wait(uint32_t second)
 {
 	_sti();
-	int now = ticks_elapsed();
-	while (ticks_elapsed() - now < tick)
+	int now = seconds_elapsed();
+	while (seconds_elapsed() - now < second)
 	{
 	}
 	return;
