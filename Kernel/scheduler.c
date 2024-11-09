@@ -11,6 +11,7 @@ typedef struct schedulerCDT
     process processes[MAX_PROCESSES];
     process_list *priority[QTY_PRIORITIES];
     uint64_t running_process_pid;
+    uint64_t foregroundPid;
 } schedulerCDT;
 
 schedulerADT scheduler_kernel;
@@ -127,6 +128,16 @@ uint64_t *schedulerRun(uint64_t *current_stack_pointer)
     scheduler_kernel->running_process_pid = toRun->pid;
     toRun->state = RUNNING;
     return toRun->stack_pointer;
+}
+
+void setAsForegroundProcess(uint64_t pid)
+{
+    scheduler_kernel->foregroundPid = pid;
+}
+
+void schedulerKillForegroundProcess()
+{
+    schedulerKillProcess(scheduler_kernel->foregroundPid);
 }
 
 int schedulerKillProcess(uint32_t pid)

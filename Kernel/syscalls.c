@@ -331,3 +331,8 @@ void clearTerminal()
 {
 	clearCmd();
 }
+
+void setForegroundProcess(uint64_t pid)
+{
+	setAsForegroundProcess(pid);
+}

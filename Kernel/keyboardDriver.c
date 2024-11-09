@@ -132,6 +132,15 @@ void keyboard_handler()
 			printRegisters("REGISTERS", regs);
 			ctrlOn = 0;
 		}
+		else if (ctrlOn && keyVal == D_MAKE_CODE)
+		{
+			write(KEYBOARD_PIPE, -1, 1);
+		}
+		else if (ctrlOn && keyVal == C_MAKE_CODE)
+		{
+			schedulerKillForegroundProcess();
+			unblockProc(2);
+		}
 		else
 		{
 			write(KEYBOARD_PIPE, &(asccode[keyVal][shiftOn + capsLock * 2]), 1);

@@ -48,5 +48,6 @@ int getRunningOutputPipe();
 int getRunningInputPipe();
 int newPipe(int id);
 void clearTerminal();
+void setForegroundProcess(uint64_t pid);
 
 #endif

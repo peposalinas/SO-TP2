@@ -103,4 +103,8 @@ int getCurrentOutputPipe();
 
 processInformation *getAllProcessesInformation();
 
+void schedulerKillForegroundProcess();
+
+void setAsForegroundProcess(uint64_t pid);
+
 #endif

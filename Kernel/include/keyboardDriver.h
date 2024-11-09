@@ -5,6 +5,7 @@
 #include "regsDump.h"
 #include "pipes.h"
 #include "syscalls.h"
+#include "scheduler.h"
 
 #define RIGHTKEY 0x4D
 #define LEFTKEY 0x4B
@@ -21,6 +22,8 @@
 #define ESC_BREAK_CODE 0x81
 #define R_MAKE_CODE 0x13
 #define R_BREAK_CODE 0x93
+#define D_MAKE_CODE 0x20
+#define C_MAKE_CODE 0x2E
 #define ENTER_B 0x9C
 #define CAPS_LOCK 0x3A
 

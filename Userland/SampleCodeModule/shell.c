@@ -350,6 +350,7 @@ int findAndExecCmd(char *cmdName, int argc, char *argv[], int foreground)
                 auxC[i].function(argc, argv);
                 if (foreground == -1)
                 {
+                    setForegroundProcessCaller(UNUSED, toWaitPID);
                     waitPID(toWaitPID);
                 }
 
