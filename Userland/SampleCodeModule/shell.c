@@ -53,6 +53,7 @@ static int findAndExecCmd(char *cmdName, int argc, char *argv[]);
 static int createNewPipe();
 static void catCmd(int argc, char *argv[]);
 static int catProc(int argc, char *argv[]);
+static char **getArgs(char *buffer);
 
 static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{"block", (void *)block}},
@@ -272,17 +273,23 @@ void sCheckCommand()
         return;
     uint8_t aux = buffer[offsets[lineCount]];
 
-    char *command_tokens[MAX_ARGS + 1];
     char *token;
     char *command = &buffer[offsets[lineCount - 1]];
+    char **command_tokens = getArgs(command);
 
     uint8_t j = 0;
     do
     {
-        token = strtok(command, " ");
-        command_tokens[j++] = token;
-        command = NULL;
-    } while (token);
+        j++;
+    } while (command_tokens[j] != NULL);
+    j++;
+    // uint8_t j = 0;
+    // // do
+    // // {
+    // //     token = strtok(command, " ");
+    // //     command_tokens[j++] = token;
+    // //     command = NULL;
+    // // } while (token);
     int pipePos = sCheckPiped(command_tokens);
     if (pipePos != -1)
     {
@@ -513,18 +520,18 @@ void loop(int argc, char *argv[])
         return;
     }
     int pid = createProcess("loopPrinter", loopPrinter, argc, argv, IOPipes);
-    waitPID(pid);
+    // waitPID(pid);
 }
 
 int loopPrinter(int argc, char *argv[])
 {
-    int i = 1;
-    while (i < 3)
+    int seconds = atoi(argv[0]);
+    while (1)
     {
-        printf("Hello, my PID is %d\n", getPID());
-        waitCaller(UNUSED, atoi(argv[0]));
+        printf("Second %d\n", seconds);
+        // printf("Hello, my PID is %d\n", getPID());
+        waitCaller(UNUSED, seconds);
         // waitCaller(UNUSED, 10);
-        i++;
     }
     exitProc(0);
     return 0;
