@@ -10,6 +10,7 @@ void sDeleteChar();
 void sPrintNewLine();
 void sPrintChar(uint8_t c);
 void sMoveScreenUp(uint8_t n);
+void clear();
 
 static uint16_t currentY;
 static uint16_t currentX;
@@ -158,6 +159,17 @@ void clear()
     }
     currentX = auxX;
     currentY = auxY;
+}
+
+void clearCmd()
+{
+    clear();
+    reset = 1;
+    firstLineOnScreen = lineCount - 1;
+    currentX = 0;
+    currentY = 0;
+    startNewLine();
+    sPrintSelected(' ');
 }
 
 void sMoveScreenUp(uint8_t n)
@@ -314,29 +326,32 @@ void printBufferFrom(uint16_t start, uint16_t end)
     }
 }
 
-void tFontBig()
+int tFontBig()
 {
     if (fontSize == 2)
     {
-        return;
+        return 0;
     }
-    fontSizeBigger();
+    int toRet = fontSizeBigger();
     fontSize = 2;
     height /= 2;
     width /= 2;
+    sMoveScreenUp((lineCount - firstLineOnScreen) / 2);
     reset = 1;
+    return toRet;
 }
 
-void tFontSmall()
+int tFontSmall()
 {
     if (fontSize == 1)
     {
-        return;
+        return 0;
     }
-    fontSizeSmaller();
+    int toRet = fontSizeSmaller();
     fontSize = 1;
     height *= 2;
     width *= 2;
     sMoveScreenUp(0);
     reset = 1;
+    return toRet;
 }

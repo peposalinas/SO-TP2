@@ -16,8 +16,8 @@
 
 void heyTerminal();
 void terminalInit();
-void tFontSmall();
-void tFontBig();
-void clear();
+int tFontSmall();
+int tFontBig();
+void clearCmd();
 
 #endif

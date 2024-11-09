@@ -128,12 +128,12 @@ void beepSyscall(uint32_t frequence, uint32_t waitTicks)
 
 uint8_t fontSizeUp()
 {
-	return fontSizeBigger();
+	return tFontBig();
 }
 
 uint8_t fontSizeDown()
 {
-	return fontSizeSmaller();
+	return tFontSmall();
 }
 
 void getTime(uint8_t pb[])
@@ -323,5 +323,5 @@ int newPipe(int id)
 
 void clearTerminal()
 {
-	clear();
+	clearCmd();
 }

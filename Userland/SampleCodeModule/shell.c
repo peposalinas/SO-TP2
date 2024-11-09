@@ -120,11 +120,11 @@ int launchShell(int argc, char *argv[])
         switch (key)
         {
         case UP_ARROW:
-            shellErrSound();
-            // sGetLastLine();
+            // shellErrSound();
+            //  sGetLastLine();
             break;
         case DOWN_ARROW:
-            shellErrSound();
+            // shellErrSound();
             break;
         case RIGHT_ARROW:
             putChar(key);
