@@ -11,6 +11,7 @@
 #define RIGHT_ARROW 252
 #define UP_ARROW 253
 #define DOWN_ARROW 254
+#define ETX 0x03
 
 #define LETTERS 'z' - 'a' + 1
 #define WORDS 5
@@ -107,9 +108,9 @@ static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "testPrio: Tests priorities\n"
                        "testProcesses: Tests processes\n"
                        "testSync: Tests synchronization\n"
-                       "cat: Reads from keyboard or from output of piped command and prints\n\n"
-                       "wc: Counts words, lines and characters\n\n"
-                       "filter: Filters vowels\n";
+                       "cat: Reads from keyboard or from output of piped command and prints\n"
+                       "wc: Counts words, lines and characters\n"
+                       "filter: Filters vowels\n\n";
 ;
 // static char *waitMsg = "Press any key to continue";
 // ###################################################################
@@ -141,6 +142,7 @@ int launchShell(int argc, char *argv[])
     uint8_t key;
     IOPipes[0] = KEYBOARD_PIPE;
     IOPipes[1] = TERMINAL_PIPE;
+    toWaitPID = -1;
     while (!exitFlag)
     {
         key = getChar();
@@ -190,6 +192,8 @@ int launchShell(int argc, char *argv[])
         //     //     sPrintSelected(' ');
         //     }
         case 0:
+            break;
+        case ETX:
             break;
         default:
         {
@@ -334,6 +338,7 @@ void sCheckCommand()
         {
             IOPipes[0] = connectionPipeId;
             IOPipes[1] = TERMINAL_PIPE;
+
             findAndExecCmd(command_tokens[pipePos + 1], j - pipePos - 3, command_tokens + pipePos + 2, ampersandPos);
             // printf("Piped command executed!!!\n");
             buffer[offsets[lineCount]] = aux;
@@ -476,38 +481,32 @@ void invalidOpCode(int argc, char *argv[])
 
 void createTestSync(int argc, char *argv[])
 {
-    int pid = createProcess("test_sync", test_sync, argc, argv, IOPipes);
-    waitPID(pid);
+    toWaitPID = createProcess("test_sync", test_sync, argc, argv, IOPipes);
 }
 
 void createTestMemInfo(int argc, char *argv[])
 {
-    int pid = createProcess("test_mem", test_mem, argc, argv, IOPipes);
-    waitPID(pid);
+    toWaitPID = createProcess("test_mem", test_mem, argc, argv, IOPipes);
 }
 
 void createTestProcesses(int argc, char *argv[])
 {
-    int pid = createProcess("test_processes", test_processes, argc, argv, IOPipes);
-    waitPID(pid);
+    toWaitPID = createProcess("test_processes", test_processes, argc, argv, IOPipes);
 }
 
 void createTestPrio(int argc, char *argv[])
 {
-    int pid = createProcess("test_prio", test_prio, argc, argv, IOPipes);
-    waitPID(pid);
+    toWaitPID = createProcess("test_prio", test_prio, argc, argv, IOPipes);
 }
 
 void createTestMem(int argc, char *argv[])
 {
-    int pid = createProcess("test_mm", test_mm, argc, argv, IOPipes);
-    waitPID(pid);
+    toWaitPID = createProcess("test_mm", test_mm, argc, argv, IOPipes);
 }
 
 void createTestWaitShell(int argc, char *argv[])
 {
-    int pid = createProcess("test_wait_shell", test_wait_shell, argc, argv, IOPipes);
-    waitPID(pid);
+    toWaitPID = createProcess("test_wait_shell", test_wait_shell, argc, argv, IOPipes);
 }
 
 int test_wait_shell(int argc, char *argv[])
@@ -636,7 +635,7 @@ int catProc(int argc, char *argv[])
     char c = 0;
     int i = 0;
     char toPrint[BUFF_MAX / 2];
-    while (c != 0x04 && i < BUFF_MAX / 2)
+    while (c != ETX && i < BUFF_MAX / 2)
     {
         c = getChar();
         toPrint[i++] = c;
@@ -662,12 +661,8 @@ int wcProc(int argc, char *argv[])
     int lines = 0;
     int chars = 0;
 
-    while (c != 0x04)
+    while ((c = getChar()) != ETX)
     {
-        c = getChar();
-        if (c == 0x04)
-            break;
-
         chars++;
 
         if (c == '\n')
@@ -709,10 +704,10 @@ void filter(int argc, char *argv[])
 int filterVowelProc(int argc, char *argv[])
 {
     char c = 0;
-    while (c != 0x04)
+    while (c != ETX)
     {
         c = getChar();
-        if (c == 0x04)
+        if (c == ETX)
             break;
 
         if (c != 'a' && c != 'e' && c != 'i' && c != 'o' && c != 'u')

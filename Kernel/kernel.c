@@ -105,6 +105,7 @@ int main()
 	schedulerInit();
 	semInit();
 	keyboardInit();
+	terminalInit();
 
 	char *argvIdle[2] = {"idle", NULL};
 	schedulerAddStandardProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
@@ -129,7 +130,7 @@ int main()
 
 	char *argvTerminal[2] = {"terminal", NULL};
 	int terminalPipes[2] = {TERMINAL_PIPE, TERMINAL_PIPE};
-	uint64_t terminal_pid = schedulerAddProcess("terminal", DEFAULT_PRIORITY, (EntryPoint)terminalInit, 1, argvTerminal, terminalPipes);
+	uint64_t terminal_pid = schedulerAddProcess("terminal", DEFAULT_PRIORITY, (EntryPoint)terminalProcess, 1, argvTerminal, terminalPipes);
 	char *argvSampleCode[2] = {"sampleCodeModule", NULL};
 	uint64_t sample_code_pid = schedulerAddStandardProcess("sampleCodeModule", DEFAULT_PRIORITY, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
 	_sti();

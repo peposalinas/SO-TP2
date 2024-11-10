@@ -10,9 +10,16 @@ typedef struct pipe_t
     int currentWritePos;
     int semWrite;
     int semRead;
+    int inUse;
+    int readers;
+    int writers;
 } pipe_t;
 
 pipe_t *getPipe(int id);
 int createPipe(int id);
+int closePipe(int id, int isReader);
+int openPipe(int id, int isReader);
+int writeToPipe(int pipeId, const uint8_t *string, uint32_t size);
+int readFromPipe(int pipeId, uint8_t *buffer, uint32_t size);
 
 #endif
