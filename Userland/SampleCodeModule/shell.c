@@ -55,13 +55,17 @@ static void catCmd(int argc, char *argv[]);
 static int catProc(int argc, char *argv[]);
 static char **getArgs(char *buffer);
 static int sCheckToken(char *tokens[MAX_ARGS + 1], char *token);
+static void wc(int argc, char *argv[]);
+static int wcProc(int argc, char *argv[]);
+static void filter(int argc, char *argv[]);
+static int filterVowelProc(int argc, char *argv[]);
 
 static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{"block", (void *)block}},
                                              {{"cat", (void *)catCmd}, {"clear", (void *)clearCmd}, {0, 0}},
                                              {{"div0", (void *)div0}, {0, 0}},
                                              {{"exit", (void *)exit}},
-                                             {{"fontBig", (void *)fontBig}, {"fontSmall", (void *)fontSmall}},
+                                             {{"filter", (void *)filter}, {"fontBig", (void *)fontBig}, {"fontSmall", (void *)fontSmall}},
                                              {{"getTime", (void *)getTime}, {0, 0}},
                                              {{"help", (void *)help}, {0, 0}},
                                              {{"invalidOpCode", (void *)invalidOpCode}, {0, 0}},
@@ -75,9 +79,12 @@ static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{0, 0}},
                                              {{0, 0}},
                                              {{0, 0}},
-                                             {{"testMem", (void *)createTestMem}, {"testMemInfo", (void *)createTestMemInfo}, {"testPrio", (void *)createTestPrio}, {"testProcesses", (void *)createTestProcesses}, {"testSync", (void *)createTestSync}}};
+                                             {{"testMem", (void *)createTestMem}, {"testMemInfo", (void *)createTestMemInfo}, {"testPrio", (void *)createTestPrio}, {"testProcesses", (void *)createTestProcesses}, {"testSync", (void *)createTestSync}},
+                                             {{0, 0}},
+                                             {{0, 0}},
+                                             {{"wc", (void *)wc}}};
 
-static char *commandNotFoundMsg = "Command %s not found. Type 'help' to see the list of commands\n";
+static char *commandNotFoundMsg = "Command '%s' not found. Type 'help' to see the list of commands\n";
 // static uint8_t cNotFoundSize = 51;
 static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "block: Block a process\n"
@@ -99,7 +106,9 @@ static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "testPrio: Tests priorities\n"
                        "testProcesses: Tests processes\n"
                        "testSync: Tests synchronization\n"
-                       "cat: Reads from keyboard or from output of piped command and prints\n\n";
+                       "cat: Reads from keyboard or from output of piped command and prints\n\n"
+                       "wc: Counts words, lines and characters\n\n"
+                       "filter: Filters vowels\n";
 ;
 // static char *waitMsg = "Press any key to continue";
 // ###################################################################
@@ -294,9 +303,9 @@ void sCheckCommand()
     // // } while (token);
     int pipePos = sCheckToken(command_tokens, "|");
     int ampersandPos = sCheckToken(command_tokens, "&");
-    if (ampersandPos != -1)
+    if (ampersandPos != -1) // CHEQUEAR
     {
-        j = j - 1;
+        j--;
     }
     if (pipePos != -1)
     {
@@ -611,14 +620,92 @@ void catCmd(int argc, char *argv[])
 int catProc(int argc, char *argv[])
 {
     char c = 0;
-    printf("Press CTRL+D for EOT\n");
-    while (c != 0x04) // CHEQUEAR esto tiene que ser EOF, falta implementar Ctrl+D
+    int i = 0;
+    char toPrint[BUFF_MAX / 2];
+    while (c != 0x04 && i < BUFF_MAX / 2)
     {
         c = getChar();
-        // printf("%c", c);
+        toPrint[i++] = c;
         putChar(c);
     }
-    printf("CAT HAS FINISHED\n");
+    toPrint[i] = 0;
+    // printf("\n%s\n", toPrint);
+    exitProc(0);
+    return 1;
+}
+
+void wc(int argc, char *argv[])
+{
+    int pid = createProcess("wc", wcProc, argc, argv, IOPipes);
+    waitPID(pid);
+}
+
+int wcProc(int argc, char *argv[])
+{
+    char c = 0;
+    int inWord = 0;
+    int words = 0;
+    int lines = 0;
+    int chars = 0;
+
+    while (c != 0x04)
+    {
+        c = getChar();
+        if (c == 0x04)
+            break;
+
+        chars++;
+
+        if (c == '\n')
+        {
+            lines++;
+        }
+        if (c == ' ' || c == '\n' || c == '\t')
+        {
+            if (inWord)
+            {
+                words++;
+                inWord = 0;
+            }
+        }
+        else
+        {
+            inWord = 1;
+        }
+
+        putChar(c);
+    }
+    if (inWord)
+    {
+        words++;
+        lines++;
+    }
+
+    printf("\nWords: %d\nLines: %d\nChars: %d\n", words, lines, chars);
+    exitProc(0);
+    return 1;
+}
+
+void filter(int argc, char *argv[])
+{
+    int pid = createProcess("filter", filterVowelProc, argc, argv, IOPipes);
+    waitPID(pid);
+}
+
+int filterVowelProc(int argc, char *argv[])
+{
+    char c = 0;
+    while (c != 0x04)
+    {
+        c = getChar();
+        if (c == 0x04)
+            break;
+
+        if (c != 'a' && c != 'e' && c != 'i' && c != 'o' && c != 'u')
+        {
+            putChar(c);
+        }
+    }
     exitProc(0);
     return 1;
 }

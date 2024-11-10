@@ -189,6 +189,7 @@ void exitProcess(uint64_t returnVal)
 
 uint64_t wait_pid(uint64_t pid)
 {
+    scheduler_kernel->processes[pid]->return_value = 1;
     if (checkPID(pid) == -1 || scheduler_kernel->processes[pid]->parent_pid != scheduler_kernel->running_process_pid)
     {
         return -1;
