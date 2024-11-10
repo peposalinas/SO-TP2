@@ -62,23 +62,13 @@ int test_prio(int argc, char *argv1[])
         unblockProcess(pids[i]);
 
     printf("\nKILLING...\n");
-    MemStatus *status;
     for (int j = 0; j < WAIT; j++)
         ;
     for (i = 0; i < TOTAL_PROCESSES; i++)
     {
         killProcess(pids[i]);
-        status = memStatus();
-        size_t freeMemo = status->free_mem / (1024 * 1024); // To convert from Bytes to MB
-        size_t occupiedMemo = status->occupied_mem / (1024 * 1024);
-        printf("\nFree memory: %d MB\nOccupied memory: %d MB\n", freeMemo, occupiedMemo);
-        freeM(status);
     }
-    // char *argvDebug[] = {NULL};
-    // test_mem(0, argvDebug);
 
-    while (1)
-        ;
     for (int j = 0; j < WAIT; j++)
         ;
 

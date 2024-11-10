@@ -7,20 +7,12 @@ bootloader:
 buddy: export MM_TYPE=BUDDY
 buddy: clean kernel userland image
 
-myMM: export MM_TYPE=CUSTOM
-myMM: clean kernel userland image
-
 debug: all
 	cd Kernel; make debug
 	cd Userland; make debug
 
 debug_buddy: export MM_TYPE=BUDDY
 debug_buddy: clean kernel userland image
-	cd Kernel; make debug
-	cd Userland; make debug
-
-debug_myMM: export MM_TYPE=CUSTOM
-debug_myMM: clean kernel userland image
 	cd Kernel; make debug
 	cd Userland; make debug
 
