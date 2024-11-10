@@ -533,7 +533,6 @@ void loop(int argc, char *argv[])
         return;
     }
     toWaitPID = createProcess("loopPrinter", loopPrinter, argc, argv, IOPipes);
-    // waitPID(pid);
 }
 
 int loopPrinter(int argc, char *argv[])
@@ -544,7 +543,6 @@ int loopPrinter(int argc, char *argv[])
         // printf("Second %d\n", seconds);
         printf("Hello, my PID is %d\n", getPID());
         waitCaller(UNUSED, seconds);
-        // waitCaller(UNUSED, 10);
     }
     exitProc(0);
     return 0;
@@ -613,9 +611,11 @@ void catCmd(int argc, char *argv[])
 int catProc(int argc, char *argv[])
 {
     char c = 0;
-    while (c != '\t') // CHEQUEAR esto tiene que ser EOF, falta implementar Ctrl+D
+    printf("Press CTRL+D for EOT\n");
+    while (c != 0x04) // CHEQUEAR esto tiene que ser EOF, falta implementar Ctrl+D
     {
         c = getChar();
+        // printf("%c", c);
         putChar(c);
     }
     printf("CAT HAS FINISHED\n");

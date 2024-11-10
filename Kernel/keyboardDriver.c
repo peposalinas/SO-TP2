@@ -134,7 +134,7 @@ void keyboard_handler()
 		}
 		else if (ctrlOn && keyVal == D_MAKE_CODE)
 		{
-			write(KEYBOARD_PIPE, -1, 1);
+			write(KEYBOARD_PIPE, (uint8_t[]){0x04}, 1);
 		}
 		else if (ctrlOn && keyVal == C_MAKE_CODE)
 		{
