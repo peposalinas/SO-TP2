@@ -59,6 +59,7 @@ static void wc(int argc, char *argv[]);
 static int wcProc(int argc, char *argv[]);
 static void filter(int argc, char *argv[]);
 static int filterVowelProc(int argc, char *argv[]);
+void resetShell();
 
 static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{"block", (void *)block}},
@@ -113,8 +114,8 @@ static char *helpMsg = "PinguinOS - v.5.0\n\n"
 // static char *waitMsg = "Press any key to continue";
 // ###################################################################
 
-static uint16_t offsets[4096] = {0};
-static char buffer[4096];
+static uint16_t offsets[BUFF_MAX] = {0};
+static char buffer[BUFF_MAX];
 static uint16_t count;
 static uint8_t exitFlag;
 static uint16_t previousCount;
@@ -124,7 +125,7 @@ static uint16_t leftSteps;
 static int IOPipes[2];
 static uint64_t toWaitPID;
 
-int launchShell(int argc, char *argv[])
+void resetShell()
 {
     count = 0;
     buffer[count] = ' ';
@@ -132,6 +133,11 @@ int launchShell(int argc, char *argv[])
     previousCount = 0;
     currentLine = 1;
     leftSteps = 0;
+}
+
+int launchShell(int argc, char *argv[])
+{
+    resetShell();
     uint8_t key;
     IOPipes[0] = KEYBOARD_PIPE;
     IOPipes[1] = TERMINAL_PIPE;
@@ -204,9 +210,17 @@ int launchShell(int argc, char *argv[])
             // currentY = auxY;
             buffer[count - leftSteps] = key;
             count++;
-            offsets[lineCount] = count;
-            buffer[count] = 0;
-            putChar(key);
+            if (count == BUFF_MAX)
+            {
+                resetShell();
+                printf("Buffer full, shell was restarted\n");
+            }
+            else
+            {
+                offsets[lineCount] = count;
+                buffer[count] = 0;
+                putChar(key);
+            }
             // currentX++;
             // if (currentX == width)
             // {
@@ -510,28 +524,28 @@ int test_wait_shell(int argc, char *argv[])
 void listAllProcesses()
 {
     processInformation *toPrint = listProcessesInfo();
-    processInformation *toFree = toPrint;
     printf("| PID |Priority | State | S.Base           | S.Pointer        | Parent PID | Name\n");
 
     char stackHex[9];
     char stackPointerHex[9];
+    int i = 0;
 
-    while (toPrint->pid != UINT64_MAX)
+    while (toPrint[i].pid != UINT64_MAX)
     {
-        uint64ToHexString((uint64_t)toPrint->stack, stackHex, sizeof(stackHex));
-        uint64ToHexString((uint64_t)toPrint->stack_pointer, stackPointerHex, sizeof(stackPointerHex));
+        uint64ToHexString((uint64_t)toPrint[i].stack, stackHex, sizeof(stackHex));
+        uint64ToHexString((uint64_t)toPrint[i].stack_pointer, stackPointerHex, sizeof(stackPointerHex));
 
         printf("|  %d  |    %d    |   %d   |     %s     |     %s     |     %d      | %s\n",
-               (int)toPrint->pid,
-               toPrint->priority,
-               toPrint->state,
+               (int)toPrint[i].pid,
+               toPrint[i].priority,
+               toPrint[i].state,
                stackHex,
                stackPointerHex,
-               (int)toPrint->parent_pid,
-               toPrint->name);
-        toPrint++;
+               (int)toPrint[i].parent_pid,
+               toPrint[i].name);
+        i++;
     }
-    freeM(toFree);
+    freeM(toPrint);
 }
 
 void loop(int argc, char *argv[])
@@ -629,7 +643,7 @@ int catProc(int argc, char *argv[])
         putChar(c);
     }
     toPrint[i] = 0;
-    // printf("\n%s\n", toPrint);
+    printf("\n%s\n", toPrint);
     exitProc(0);
     return 1;
 }

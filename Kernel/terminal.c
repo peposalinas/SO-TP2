@@ -10,6 +10,7 @@ void sDeleteChar();
 void sPrintNewLine();
 void sPrintChar(uint8_t c);
 void sMoveScreenUp(uint8_t n);
+void resetTerminal();
 void clear();
 
 static uint16_t currentY;
@@ -22,84 +23,181 @@ static uint16_t leftSteps;
 static uint8_t fontSize;
 static uint8_t reset;
 
-static uint16_t offsets[65536] = {0};
-static char buffer[65536];
+static uint16_t offsets[MAX_BUFFER] = {0};
+static char buffer[MAX_BUFFER];
 static uint16_t count;
 
-void heyTerminal()
-{
-    uint8_t c = 0;
-    while (!c)
-        read(1, &c, 1);
-    switch (c)
-    {
-    case RIGHT_ARROW:
-        sMoveRight();
-        break;
-    case LEFT_ARROW:
-        sMoveLeft();
-        break;
-    case DELETE:
-        sDeleteChar();
-        break;
-    case '\n':
-        sPrintChar(buffer[count - leftSteps]);
-        leftSteps = 0;
-        sPrintNewLine();
-        sPrintSelected(buffer[count]);
-        offsets[lineCount++] = count;
-        offsets[lineCount] = offsets[lineCount - 1]; // la linea esta vacia
-        break;
-    case 0:
-        break;
-    default:
-    {
-        uint16_t auxX = currentX, auxY = currentY;
-        if (currentX + leftSteps >= width)
-            currentY++;
-        currentX = (currentX + leftSteps) % width;
-        for (uint16_t i = 0; i < leftSteps; i++)
-        {
-            buffer[count - i] = buffer[count - i - 1];
-            sPrintChar(buffer[count - i]);
-            if (currentX == 0)
-            {
-                currentX = width - 1;
-                currentY--;
-            }
-            else
-                currentX--;
-        }
-        currentX = auxX;
-        currentY = auxY;
-        buffer[count - leftSteps] = c;
-        count++;
-        offsets[lineCount] = count;
-        buffer[count] = 0;
-        sPrintChar(c);
-        currentX++;
-        if (currentX == width)
-        {
-            if (currentY < height - 1)
-                currentY++;
-            else
-                sMoveScreenUp(1);
-            currentX = 0;
-        }
-        sPrintSelected(buffer[count - leftSteps]);
-    }
-    }
-}
+// // void heyTerminal()
+// // {
+// //     uint8_t c = 0;
+// //     while (!c)
+// //         read(1, &c, 1);
+// //     switch (c)
+// //     {
+// //     case RIGHT_ARROW:
+// //         sMoveRight();
+// //         break;
+// //     case LEFT_ARROW:
+// //         sMoveLeft();
+// //         break;
+// //     case DELETE:
+// //         sDeleteChar();
+// //         break;
+// //     case '\n':
+// //         sPrintChar(buffer[count - leftSteps]);
+// //         leftSteps = 0;
+// //         sPrintNewLine();
+// //         sPrintSelected(buffer[count]);
+// //         offsets[lineCount++] = count;
+// //         offsets[lineCount] = offsets[lineCount - 1]; // la linea esta vacia
+// //         break;
+// //     case 0:
+// //         break;
+// //     default:
+// //     {
+// //         uint16_t auxX = currentX, auxY = currentY;
+// //         if (currentX + leftSteps >= width)
+// //             currentY++;
+// //         currentX = (currentX + leftSteps) % width;
+// //         for (uint16_t i = 0; i < leftSteps; i++)
+// //         {
+// //             buffer[count - i] = buffer[count - i - 1];
+// //             sPrintChar(buffer[count - i]);
+// //             if (currentX == 0)
+// //             {
+// //                 currentX = width - 1;
+// //                 currentY--;
+// //             }
+// //             else
+// //                 currentX--;
+// //         }
+// //         currentX = auxX;
+// //         currentY = auxY;
+// //         buffer[count - leftSteps] = c;
+// //         count++;
+// //         offsets[lineCount] = count;
+// //         buffer[count] = 0;
+// //         sPrintChar(c);
+// //         currentX++;
+// //         if (currentX == width)
+// //         {
+// //             if (currentY < height - 1)
+// //                 currentY++;
+// //             else
+// //                 sMoveScreenUp(1);
+// //             currentX = 0;
+// //         }
+// //         sPrintSelected(buffer[count - leftSteps]);
+// //     }
+// //     }
+// // }
+
+// // void terminalInit() // TIENE QUE INICIALIZARSE CON EL STDIN EN TERMINAL_PIPE Y EL STDOUT NO IMPORTA
+// // {
+// //     newPipe(TERMINAL_PIPE);
+// //     lineCount = 1;
+// //     firstLineOnScreen = 0;
+// //     leftSteps = 0;
+// //     fontSize = 1;
+// //     reset = 0;
+// //     count = 0;
+// //     buffer[count] = ' ';
+// //     width = getWidth() / 8 / fontSize;
+// //     height = getHeight() / 16 / fontSize;
+// //     clear();
+// //     currentX = 0;
+// //     currentY = 0;
+
+// //     startNewLine();
+// //     sPrintSelected(' ');
+// }
 
 void terminalInit() // TIENE QUE INICIALIZARSE CON EL STDIN EN TERMINAL_PIPE Y EL STDOUT NO IMPORTA
 {
     newPipe(TERMINAL_PIPE);
+    resetTerminal();
+
+    while (1)
+    { // VER CONDICION DE LOOP
+        uint8_t c = 0;
+        while (!c)
+            read(getRunningInputPipe(), &c, 1);
+        switch (c)
+        {
+        case RIGHT_ARROW:
+            sMoveRight();
+            break;
+        case LEFT_ARROW:
+            sMoveLeft();
+            break;
+        case DELETE:
+            sDeleteChar();
+            break;
+        case '\n':
+            sPrintChar(buffer[count - leftSteps]);
+            leftSteps = 0;
+            sPrintNewLine();
+            sPrintSelected(buffer[count]);
+            offsets[lineCount++] = count;
+            offsets[lineCount] = offsets[lineCount - 1]; // la linea esta vacia
+            break;
+        case 0:
+            break;
+        default:
+        {
+            uint16_t auxX = currentX, auxY = currentY;
+            if (currentX + leftSteps >= width)
+                currentY++;
+            currentX = (currentX + leftSteps) % width;
+            for (uint16_t i = 0; i < leftSteps; i++)
+            {
+                buffer[count - i] = buffer[count - i - 1];
+                sPrintChar(buffer[count - i]);
+                if (currentX == 0)
+                {
+                    currentX = width - 1;
+                    currentY--;
+                }
+                else
+                    currentX--;
+            }
+            currentX = auxX;
+            currentY = auxY;
+            buffer[count - leftSteps] = c;
+            count++;
+            if (count == MAX_BUFFER)
+            {
+                resetTerminal();
+                        }
+            else
+            {
+                offsets[lineCount] = count;
+                buffer[count] = 0;
+                sPrintChar(c);
+                currentX++;
+                if (currentX == width)
+                {
+                    if (currentY < height - 1)
+                        currentY++;
+                    else
+                        sMoveScreenUp(1);
+                    currentX = 0;
+                }
+                sPrintSelected(buffer[count - leftSteps]);
+            }
+        }
+        }
+    }
+}
+
+void resetTerminal()
+{
+    count = 0;
     lineCount = 1;
     firstLineOnScreen = 0;
     leftSteps = 0;
     fontSize = 1;
     reset = 0;
-    count = 0;
     buffer[count] = ' ';
     width = getWidth() / 8 / fontSize;
     height = getHeight() / 16 / fontSize;

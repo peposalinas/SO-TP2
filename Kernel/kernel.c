@@ -127,10 +127,13 @@ int main()
 	// int val = wait_pid(test_pid);
 	// ncPrintDec(val);
 
-	terminalInit();
+	char *argvTerminal[2] = {"terminal", NULL};
+	int terminalPipes[2] = {TERMINAL_PIPE, TERMINAL_PIPE};
+	uint64_t terminal_pid = schedulerAddProcess("terminal", DEFAULT_PRIORITY, (EntryPoint)terminalInit, 1, argvTerminal, terminalPipes);
 	char *argvSampleCode[2] = {"sampleCodeModule", NULL};
 	uint64_t sample_code_pid = schedulerAddStandardProcess("sampleCodeModule", DEFAULT_PRIORITY, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
 	_sti();
+	wait_pid(terminal_pid);
 	wait_pid(sample_code_pid); // Hace falta??? DA UN WARNING
 
 	//  testMM("100000");
