@@ -1,7 +1,5 @@
 include ../Makefile.inc
 
-# @TODO: ver si hay mejor forma de compilar también los archivos dentro de "tests" (todos los .c dentro de subcarpetas) 
-
 MODULE=0000-sampleCodeModule.bin
 MODULE_ELF=$(MODULE:.bin=.elf)
 

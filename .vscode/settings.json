@@ -36,6 +36,8 @@
     "atomic": "cpp",
     "cstdint": "cpp",
     "audiodriver.h": "c",
-    "list.h": "c"
+    "list.h": "c",
+    "userlib.h": "c",
+    "shellcommands.h": "c"
   }
 }
