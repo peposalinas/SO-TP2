@@ -8,3 +8,7 @@ clean_objects.sh
 run.sh
 *.o
 *.bin
+.bash_history
+*.out
+*.log
+.gdb_history
