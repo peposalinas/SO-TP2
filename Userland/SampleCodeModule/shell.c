@@ -125,10 +125,6 @@ int launchShell(int argc, char *argv[])
         }
         }
     }
-    clearTerminalCaller(UNUSED);
-    printf("Goodbye! We hope you enjoyed PinguinOS - v.5.0");
-    waitCaller(UNUSED, 2);
-    putChar(EXIT);
     exitProc(0);
     return 0;
 }
@@ -322,4 +318,9 @@ void sDeleteChar()
 void exit(int argc, char *argv[])
 {
     exitFlag = 1;
+    clearTerminalCaller(UNUSED);
+    fontSizeUpCaller(UNUSED);
+    printf("\n\n        Goodbye! We hope you enjoyed PinguinOS - v.5.0");
+    waitCaller(UNUSED, 2);
+    putChar(EXIT);
 }

@@ -1,5 +1,6 @@
 .git
 .vscode
+settings.json
 .DS_STORE
 .idea
 compile.sh
@@ -12,3 +13,9 @@ run.sh
 *.out
 *.log
 .gdb_history
+.bash_history
+*.sys
+*.img
+*.qcow2
+*.vdi
+*.vmdk
