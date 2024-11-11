@@ -50,6 +50,7 @@ void schedulerInit()
     }
     scheduler_kernel = scheduler;
     scheduler_kernel->running_process_pid = 0;
+    scheduler_kernel->foregroundPid = -1;
     return;
 }
 
@@ -137,7 +138,11 @@ void setAsForegroundProcess(uint64_t pid)
 
 void schedulerKillForegroundProcess()
 {
-    schedulerKillProcess(scheduler_kernel->foregroundPid);
+    if (scheduler_kernel->foregroundPid != -1)
+    {
+        schedulerKillProcess(scheduler_kernel->foregroundPid);
+        scheduler_kernel->foregroundPid = -1;
+    }
 }
 
 int schedulerKillProcess(uint32_t pid)
@@ -155,20 +160,26 @@ int schedulerKillProcess(uint32_t pid)
     {
         scheduler_kernel->priority[priority]->ready_process_count--;
     }
-
-    if (removeElem(scheduler_kernel->priority[priority]->processList, toKill, compareProcesses) == NULL)
+    toKill->state = TERMINATED;
+    if (toKill->isBeingWaited)
     {
-        return -1;
+        schedulerUnblockProcess(toKill->parent_pid);
     }
-
-    killProcess(toKill);
-    scheduler_kernel->processes[pid] = NULL;
-
-    if (pid == scheduler_kernel->running_process_pid)
+    else
     {
-        schedulerYield();
-    }
 
+        if (removeElem(scheduler_kernel->priority[priority]->processList, toKill, compareProcesses) == NULL)
+        {
+            return -1;
+        }
+        killProcess(toKill);
+        scheduler_kernel->processes[pid] = NULL;
+
+        if (pid == scheduler_kernel->running_process_pid)
+        {
+            schedulerYield();
+        }
+    }
     return pid;
 }
 

@@ -3,6 +3,7 @@
 void keyboardInit()
 {
 	createPipe(0);
+	openPipe(0, 0);
 }
 
 extern const uint64_t regs[19];
@@ -65,7 +66,7 @@ uint8_t asccode[58][4] =
 		{'/', '?', '/', '?'},
 		{0, 0, 0, 0},
 		{0, 0, 0, 0},
-		{0, 0, 0, 0},
+		{ETX, ETX, ETX, ETX},
 		{' ', ' ', ' ', ' '},
 };
 
@@ -134,12 +135,11 @@ void keyboard_handler()
 		}
 		else if (ctrlOn && keyVal == D_MAKE_CODE)
 		{
-			write(KEYBOARD_PIPE, (uint8_t[]){0x04}, 1);
+			write(KEYBOARD_PIPE, &(asccode[56][0]), 1);
 		}
 		else if (ctrlOn && keyVal == C_MAKE_CODE)
 		{
 			schedulerKillForegroundProcess();
-			unblockProc(2);
 		}
 		else
 		{

@@ -112,11 +112,14 @@ static uint16_t count;
 // //     sPrintSelected(' ');
 // }
 
-void terminalInit() // TIENE QUE INICIALIZARSE CON EL STDIN EN TERMINAL_PIPE Y EL STDOUT NO IMPORTA
+void terminalInit()
 {
     newPipe(TERMINAL_PIPE);
     resetTerminal();
+}
 
+void terminalProcess() // TIENE QUE INICIALIZARSE CON EL STDIN EN TERMINAL_PIPE Y EL STDOUT NO IMPORTA
+{
     while (1)
     { // VER CONDICION DE LOOP
         uint8_t c = 0;
@@ -143,6 +146,8 @@ void terminalInit() // TIENE QUE INICIALIZARSE CON EL STDIN EN TERMINAL_PIPE Y E
             break;
         case 0:
             break;
+        case ETX:
+            break;
         default:
         {
             uint16_t auxX = currentX, auxY = currentY;
@@ -168,7 +173,7 @@ void terminalInit() // TIENE QUE INICIALIZARSE CON EL STDIN EN TERMINAL_PIPE Y E
             if (count == MAX_BUFFER)
             {
                 resetTerminal();
-                        }
+            }
             else
             {
                 offsets[lineCount] = count;

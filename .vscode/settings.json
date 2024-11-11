@@ -32,6 +32,8 @@
     "cstdlib": "c",
     "terminal.h": "c",
     "definitions.h": "c",
-    "shell.h": "c"
+    "shell.h": "c",
+    "atomic": "cpp",
+    "cstdint": "cpp"
   }
 }

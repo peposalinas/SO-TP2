@@ -64,13 +64,7 @@ int test_sync(int argc, char *argv[])
 {
     uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
 
-    if (argc != 2)
-    {
-        printf("Usage: test_sync <n> <useSem>\n");
-        exitProc(-1);
-    }
-
-    char *argvDec[] = {argv[0], "-1", argv[1], NULL};
+        char *argvDec[] = {argv[0], "-1", argv[1], NULL};
     char *argvInc[] = {argv[0], "1", argv[1], NULL};
     global = 0;
 
