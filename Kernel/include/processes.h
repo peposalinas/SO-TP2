@@ -10,7 +10,7 @@
 #define ALIGN 7
 #define MAX_PIPES_PER_PROCESS 10
 
-int closePipe(int id, int isReader);
+int closePipe(int id, int isReader, int closerPid);
 int openPipe(int id, int isReader);
 
 typedef enum

@@ -705,8 +705,7 @@ void catCmd(int argc, char *argv[])
         printf("Usage: cat");
         return;
     }
-    int pid = createProcess("cat", catProc, argc, argv, IOPipes);
-    waitPID(pid);
+    toWaitPID = createProcess("cat", catProc, argc, argv, IOPipes);
 }
 
 int catProc(int argc, char *argv[])
@@ -786,12 +785,8 @@ void filter(int argc, char *argv[])
 int filterVowelProc(int argc, char *argv[])
 {
     char c = 0;
-    while (c != ETX)
+    while ((c = getChar()) != ETX)
     {
-        c = getChar();
-        if (c == ETX)
-            break;
-
         if (c != 'a' && c != 'e' && c != 'i' && c != 'o' && c != 'u')
         {
             putChar(c);
