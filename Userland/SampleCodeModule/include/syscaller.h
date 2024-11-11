@@ -46,7 +46,6 @@ uint8_t fontSizeDownCaller(uint8_t __unused);
 void getTimeCaller(uint8_t __unused, char bp[]);
 void *allocMCaller(uint8_t __unused, size_t memoryToAllocate);
 void freeMCaller(uint8_t __unused, void *ptr);
-// char * memStatusCaller();
 int createProcCaller(uint8_t __unused, char *process_name, int (*entry_point)(int, char **), int argc, char *argv[], int *pipesIO);
 void exitProcCaller(uint8_t __unused, uint64_t returnVal);
 uint64_t getPIDCaller(uint8_t __unused);

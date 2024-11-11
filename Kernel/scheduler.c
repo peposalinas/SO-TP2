@@ -69,8 +69,11 @@ int chooseNextPID()
 int schedulerAddProcess(char *process_name, int process_priority, int (*entry_point)(int, char **), int argc, char **argv, int *pipesIO)
 {
     process newProcess = (process)allocMemoryKernel(sizeof(process_t));
+    if (newProcess == NULL)
+        return -1;
     int next_pid = chooseNextPID();
-    createProcess(newProcess, process_name, next_pid, process_priority, entry_point, argc, argv, scheduler_kernel->running_process_pid, pipesIO); // Chequear  si esta bien lo del parent
+    if (createProcess(newProcess, process_name, next_pid, process_priority, entry_point, argc, argv, scheduler_kernel->running_process_pid, pipesIO) < 0) // Chequear  si esta bien lo del parent
+        return -1;
     scheduler_kernel->processes[newProcess->pid] = newProcess;
     insertLast(scheduler_kernel->priority[newProcess->priority]->processList, newProcess);
     scheduler_kernel->priority[newProcess->priority]->ready_process_count++;
