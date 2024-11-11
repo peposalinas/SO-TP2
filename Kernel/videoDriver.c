@@ -162,3 +162,32 @@ uint8_t fontSizeSmaller()
 	font_size--;
 	return 1;
 }
+
+void moveScreenUp(uint16_t n)
+{
+	uint8_t *framebuffer = (uint8_t *)(uintptr_t)VBE_mode_info->framebuffer;
+	uint64_t pitch = VBE_mode_info->pitch;
+	uint64_t height = VBE_mode_info->height;
+	uint64_t width = VBE_mode_info->width * BYTES_PER_PIXEL;
+
+	// Move the screen up by n rows
+	for (uint64_t i = 0; i < height - n; i++)
+	{
+		uint64_t src_offset = (i + n) * pitch;
+		uint64_t dest_offset = i * pitch;
+		for (uint64_t j = 0; j < width; j++)
+		{
+			framebuffer[dest_offset + j] = framebuffer[src_offset + j];
+		}
+	}
+
+	// Clear the bottom n rows
+	for (uint64_t i = height - n; i < height; i++)
+	{
+		uint64_t offset = i * pitch;
+		for (uint64_t j = 0; j < width; j++)
+		{
+			framebuffer[offset + j] = 0x00;
+		}
+	}
+}

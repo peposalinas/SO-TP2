@@ -277,24 +277,12 @@ void clearCmd()
 
 void sMoveScreenUp(uint8_t n)
 {
-    clear();
     uint16_t y = currentY - n + 1, l = firstLineOnScreen + n;
     currentY = 0;
 
+    moveScreenUp(n * 16);
     while (y != currentY)
     {
-        startNewLine();
-        for (uint16_t i = 0; i < offsets[l + 1] - offsets[l]; i++)
-        {
-            if (currentX == width)
-            {
-                currentY++;
-                currentX = 0;
-            }
-            sPrintChar(buffer[offsets[l] + i]);
-
-            currentX++;
-        }
         l++;
         currentY++;
     }
