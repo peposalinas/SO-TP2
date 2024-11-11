@@ -19,6 +19,7 @@
 #define DOWNKEY 0x50
 
 #define DELETE 127
+#define SHELL_NL 250
 #define LEFT_ARROW 251
 #define RIGHT_ARROW 252
 #define UP_ARROW 253

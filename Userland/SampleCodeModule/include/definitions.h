@@ -21,6 +21,7 @@
 #define UP_ARROW 253
 #define DOWN_ARROW 254
 #define ETX 0x03
+#define SHELL_NL 250
 
 #define LETTERS 'z' - 'a' + 1
 #define WORDS 5

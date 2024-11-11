@@ -394,6 +394,7 @@ int filterVowelProc(int argc, char *argv[])
             putChar(c);
         }
     }
+    putChar('\n');
     exitProc(0);
     return 1;
 }

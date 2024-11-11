@@ -72,6 +72,7 @@ int launchShell(int argc, char *argv[])
     uint8_t key;
     setIOPipes(KEYBOARD_PIPE, TERMINAL_PIPE);
     setWaitPID(-1);
+    putChar(SHELL_NL);
     while (!exitFlag)
     {
         key = getChar();
@@ -96,6 +97,7 @@ int launchShell(int argc, char *argv[])
         case '\n':
             putChar(key);
             sCheckCommand();
+            putChar(SHELL_NL);
             previousCount = 0;
             offsets[lineCount++] = count;
             offsets[lineCount] = offsets[lineCount - 1];
