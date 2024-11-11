@@ -14,6 +14,13 @@ static bool compareSem(void *s1_ptr, void *id_ptr)
     return (s1->id == id);
 }
 
+static bool compareInt(void *i1, void *i2)
+{
+    intptr_t i1_temp = ((intptr_t)i1);
+    int i2_temp = *((int *)i2);
+    return i1_temp == i2_temp;
+}
+
 int semOpen(int id, int value)
 {
     int id_temp = id;
@@ -100,4 +107,14 @@ void semPost(int id)
     }
 
     up(&(sem->mutex));
+}
+
+void semDeleteWaiter(int semId, int pid)
+{
+    int id_temp = semId;
+    sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
+    if (sem == NULL)
+        return;
+    int pid_temp = pid;
+    removeElem(sem->blockedPids, &pid_temp, compareInt);
 }

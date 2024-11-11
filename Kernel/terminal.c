@@ -146,6 +146,8 @@ void terminalProcess() // TIENE QUE INICIALIZARSE CON EL STDIN EN TERMINAL_PIPE 
             break;
         case 0:
             break;
+        case ETX:
+            break;
         default:
         {
             uint16_t auxX = currentX, auxY = currentY;

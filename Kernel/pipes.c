@@ -51,7 +51,7 @@ int openPipe(int id, int isReader)
     return 0;
 }
 
-int closePipe(int id, int isReader)
+int closePipe(int id, int isReader, int closerPid)
 {
     if (PIPE_WRONG(id))
     {
@@ -59,6 +59,7 @@ int closePipe(int id, int isReader)
     }
     if (isReader)
     {
+        semDeleteWaiter(pipeArray[id].semRead, closerPid);
         pipeArray[id].readers--;
         if (pipeArray[id].readers == 0 && pipeArray[id].writers == 0)
         {
