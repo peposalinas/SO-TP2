@@ -43,5 +43,6 @@ int createStandardProc(char *process_name, int (*entry_point)(int, char **), int
 int newPipe(int id);
 void postSemMutex(int id);
 void waitSemMutex(int id);
+void deleteWaiterSem(int semId, int pid);
 
 #endif

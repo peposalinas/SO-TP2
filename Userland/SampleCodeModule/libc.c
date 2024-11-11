@@ -408,3 +408,8 @@ void postSemMutex(int id)
 {
     postSemMutexCaller(UNUSED, id);
 }
+
+void deleteWaiterSem(int semId, int pid)
+{
+    deleteWaiterSemCaller(UNUSED, semId, pid);
+}

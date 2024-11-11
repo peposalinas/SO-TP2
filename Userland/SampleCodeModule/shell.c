@@ -62,10 +62,8 @@ static int wcProc(int argc, char *argv[]);
 static void filter(int argc, char *argv[]);
 static int filterVowelProc(int argc, char *argv[]);
 static void philo(int argc, char *argv[]);
-static void philo2(int argc, char *argv[]);
 static void resetShell();
-int philosophersRun(int argc, char *argv[]);
-int runPhilosophers(int argc, char **argv);
+int philosophersRun(int argc, char **argv);
 int listAllProcessesProc(int argc, char *argv[]);
 
 static command_t commands[LETTERS][WORDS] = {{{0, 0}},
@@ -83,7 +81,7 @@ static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{"mem", (void *)memStatusPrinter}},
                                              {{"nice", (void *)nice}},
                                              {{0, 0}},
-                                             {{"philo", (void *)philo}, {"philo2", (void *)philo2}, {"ps", (void *)listAllProcesses}},
+                                             {{"philo", (void *)philo}, {"ps", (void *)listAllProcesses}},
                                              {{0, 0}},
                                              {{0, 0}},
                                              {{0, 0}},
@@ -799,11 +797,6 @@ void filter(int argc, char *argv[])
 static void philo(int argc, char *argv[])
 {
     toWaitPID = createProcess("phylos", philosophersRun, argc, argv, IOPipes);
-}
-
-static void philo2(int argc, char *argv[])
-{
-    toWaitPID = createProcess("phylos", runPhilosophers, argc, argv, IOPipes);
 }
 
 int filterVowelProc(int argc, char *argv[])

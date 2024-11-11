@@ -36,6 +36,7 @@ GLOBAL clearTerminalCaller
 GLOBAL setForegroundProcessCaller
 GLOBAL waitSemMutexCaller
 GLOBAL postSemMutexCaller
+GLOBAL deleteWaiterSemCaller
 
 section .text
 
@@ -135,3 +136,5 @@ waitSemMutexCaller:
     syscaller 36
 postSemMutexCaller:
     syscaller 37
+deleteWaiterSemCaller:
+    syscaller 38

@@ -35,6 +35,7 @@
     "definitions.h": "c",
     "atomic": "cpp",
     "cstdint": "cpp",
-    "audiodriver.h": "c"
+    "audiodriver.h": "c",
+    "list.h": "c"
   }
 }

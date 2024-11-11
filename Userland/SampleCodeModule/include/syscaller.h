@@ -61,6 +61,7 @@ void waitSemCaller(uint8_t __unused, int id);
 void postSemCaller(uint8_t __unused, int id);
 void waitSemMutexCaller(uint8_t __unused, int id);
 void postSemMutexCaller(uint8_t __unused, int id);
+void deleteWaiterSemCaller(uint8_t __unused, int id, int pid);
 
 MemStatus *memStatusCaller(uint8_t __unused);
 processInformation *listProcessesInfoCaller(uint8_t __unused);

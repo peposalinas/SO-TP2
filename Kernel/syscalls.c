@@ -253,6 +253,11 @@ void postSemMutex(int id)
 	return semMutexPost(id);
 }
 
+void deleteWaiterSem(int semId, int pid)
+{
+	semDeleteWaiter(semId, pid);
+}
+
 int getRunningInputPipe()
 {
 	return getCurrentInputPipe();
