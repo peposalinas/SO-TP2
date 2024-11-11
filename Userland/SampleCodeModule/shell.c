@@ -157,7 +157,7 @@ int launchShell(int argc, char *argv[])
         {
         case UP_ARROW:
             // shellErrSound();
-            //  sGetLastLine();
+            // sGetLastLine();
             break;
         case DOWN_ARROW:
             // shellErrSound();
@@ -382,11 +382,19 @@ int findAndExecCmd(char *cmdName, int argc, char *argv[], int foreground)
             }
             else if (cmp == 0)
             {
+                if (foreground != -1)
+                {
+                    IOPipes[0] = -1;
+                }
                 auxC[i].function(argc, argv);
                 if (foreground == -1)
                 {
                     setForegroundProcessCaller(UNUSED, toWaitPID);
                     waitPID(toWaitPID);
+                }
+                else
+                {
+                    IOPipes[0] = KEYBOARD_PIPE;
                 }
 
                 return 1;
