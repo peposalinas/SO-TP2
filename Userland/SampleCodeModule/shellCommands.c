@@ -51,6 +51,7 @@ int getWaitPID()
 void fontBig(int argc, char *argv[])
 {
     fontSizeUpCaller(UNUSED);
+    clearTerminalCaller(UNUSED);
 }
 
 void div0(int argc, char *argv[])
@@ -66,6 +67,7 @@ void div0(int argc, char *argv[])
 void fontSmall(int argc, char *argv[])
 {
     fontSizeDownCaller(UNUSED);
+    clearTerminalCaller(UNUSED);
 }
 
 void clearCmd(int argc, char *argv[])
@@ -122,9 +124,9 @@ void createTestMemInfo(int argc, char *argv[])
 
 void createTestProcesses(int argc, char *argv[])
 {
-    if (argc != 0)
+    if (argc != 1)
     {
-        printf("Usage: testProcesses\n");
+        printf("Usage: testProcesses <max_processes>\n");
         return;
     }
     toWaitPID = createProcess("test_processes", test_processes, argc, argv, IOPipes);

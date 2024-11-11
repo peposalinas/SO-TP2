@@ -280,7 +280,7 @@ void sMoveScreenUp(uint8_t n)
     uint16_t y = currentY - n + 1, l = firstLineOnScreen + n;
     currentY = 0;
 
-    moveScreenUp(n * 16);
+    moveScreenUp(n * 16 * fontSize);
     while (y != currentY)
     {
         l++;
