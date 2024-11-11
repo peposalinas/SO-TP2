@@ -243,6 +243,16 @@ void postSem(int id)
 	return semPost(id);
 }
 
+void waitSemMutex(int id)
+{
+	return semMutexWait(id);
+}
+
+void postSemMutex(int id)
+{
+	return semMutexPost(id);
+}
+
 int getRunningInputPipe()
 {
 	return getCurrentInputPipe();

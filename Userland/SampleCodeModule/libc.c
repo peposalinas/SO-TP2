@@ -398,3 +398,13 @@ void wait(uint32_t tick)
 {
     waitCaller(UNUSED, tick);
 }
+
+void waitSemMutex(int id)
+{
+    waitSemMutexCaller(UNUSED, id);
+}
+
+void postSemMutex(int id)
+{
+    postSemMutexCaller(UNUSED, id);
+}

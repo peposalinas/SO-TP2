@@ -34,6 +34,8 @@ GLOBAL getRunningInputPipeCaller
 GLOBAL newPipeCaller
 GLOBAL clearTerminalCaller
 GLOBAL setForegroundProcessCaller
+GLOBAL waitSemMutexCaller
+GLOBAL postSemMutexCaller
 
 section .text
 
@@ -128,3 +130,8 @@ clearTerminalCaller:
     syscaller 34
 setForegroundProcessCaller:
     syscaller 35
+
+waitSemMutexCaller:
+    syscaller 36
+postSemMutexCaller:
+    syscaller 37

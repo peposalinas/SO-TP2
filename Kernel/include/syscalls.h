@@ -42,6 +42,8 @@ int openSem(int id, int value);
 void closeSem(int id);
 void waitSem(int id);
 void postSem(int id);
+void waitSemMutex(int id);
+void postSemMutex(int id);
 MemStatus *memStatus();
 int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[]);
 int getRunningOutputPipe();

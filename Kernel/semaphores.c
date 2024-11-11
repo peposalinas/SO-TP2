@@ -109,6 +109,28 @@ void semPost(int id)
     up(&(sem->mutex));
 }
 
+void semMutexWait(int id)
+{
+    semWait(id);
+}
+
+void semMutexPost(int id)
+{
+    int id_temp = id;
+    sem_t *sem = findElem(allSemaphores, &id_temp, compareSem);
+    if (sem == NULL)
+        return;
+
+    down(&(sem->mutex));
+    if (sem->value < 1)
+    {
+        up(&(sem->mutex));
+        semPost(id);
+        return;
+    }
+    up(&(sem->mutex));
+}
+
 void semDeleteWaiter(int semId, int pid)
 {
     int id_temp = semId;

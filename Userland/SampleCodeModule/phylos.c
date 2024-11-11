@@ -29,9 +29,9 @@ typedef struct
 } philosopher_t;
 
 static int philosopher(int argc, char *argv[]);
-static void takeForks(int philosopher);
+static void takeForks(int philosopher, int firstFork, int secondFork);
 static void takeFork(int philosopher, int fork);
-static void putDownForks(int philosopher);
+static void putDownForks(int philosopher, int firstFork, int secondFork);
 static void displayTableState();
 static void addPhilo();
 static void removePhilo();
@@ -80,14 +80,14 @@ int philosophersRun(int argc, char *argv[])
             break;
         }
     }
-    waitSem(MUTEX_SEM);
+    waitSemMutex(MUTEX_SEM);
     for (int i = 0; i < currentPhilosopherAmount; i++)
     {
         killProcess(philosophers[i].pid);
         closeSem(i);
         destroyLinkedList(philosWaitingForFork[i]);
     }
-    postSem(MUTEX_SEM);
+    postSemMutex(MUTEX_SEM);
     closeSem(MUTEX_SEM);
     exitProc(0);
     return 0;
@@ -95,12 +95,12 @@ int philosophersRun(int argc, char *argv[])
 
 static void addPhilo()
 {
-    waitSem(MUTEX_SEM);
+    waitSemMutex(MUTEX_SEM);
     // char numberStr[MAX_NUMBER_CHARS];
     if (currentPhilosopherAmount == MAX_PHILOSOPHERS)
     {
         printf("No se pueden agregar más filosofos\n");
-        postSem(MUTEX_SEM);
+        postSemMutex(MUTEX_SEM);
         return;
     }
     philosWaitingForFork[currentPhilosopherAmount] = createLinkedList();
@@ -115,38 +115,42 @@ static void addPhilo()
     philosophers[currentPhilosopherAmount].pid = createStandardProc("philosopher", philosopher, 1, argvs[currentPhilosopherAmount]);
 
     currentPhilosopherAmount++;
-    postSem(MUTEX_SEM);
+    postSemMutex(MUTEX_SEM);
 }
 
 static void removePhilo()
 {
-    waitSem(MUTEX_SEM);
+    waitSemMutex(MUTEX_SEM);
     if (currentPhilosopherAmount == 0)
     {
-        printf("No hay filósofos para remover\n");
-        postSem(MUTEX_SEM);
+        printf("No hay filosofos para remover\n");
+        postSemMutex(MUTEX_SEM);
         return;
     }
     else if (currentPhilosopherAmount == MIN_PHILOSOPHERS)
     {
-        printf("No se pueden remover más filosofos\n");
-        postSem(MUTEX_SEM);
+        printf("No se pueden remover mas filosofos\n");
+        postSemMutex(MUTEX_SEM);
         return;
     }
     int toRemove = currentPhilosopherAmount - 1;
+
+    while (philosophers[toRemove - 1].state != THINKING)
+    {
+        postSemMutex(MUTEX_SEM);
+        waitSemMutex(toRemove);
+        waitSemMutex(MUTEX_SEM);
+    }
+
     killProcess(philosophers[toRemove].pid);
     closeSem(toRemove);
     destroyLinkedList(philosWaitingForFork[toRemove]);
-    for (int i = 0; i < toRemove; i++)
-    {
-        removeElem(philosWaitingForFork[i], toRemove);
-    }
-    // Solo tomo en cuenta el tenedor izquierdo, pues el derecho es el que remuevo
-    if (philosophers[toRemove].hasLeftFork)
-    {
-    }
+
+    removeElem(philosWaitingForFork[0], toRemove);
+    postSemMutex(0);
+
     currentPhilosopherAmount--;
-    postSem(MUTEX_SEM);
+    postSemMutex(MUTEX_SEM);
 }
 
 static int philosopher(int argc, char *argv[])
@@ -165,51 +169,33 @@ static int philosopher(int argc, char *argv[])
     while (1)
     {
         think();
-        takeForks(philosopher);
+
+        waitSemMutex(MUTEX_SEM);
+        int firstFork = philosopher % 2 == 0 ? rightFork(philosopher) : leftFork(philosopher);
+        int secondFork = philosopher % 2 == 0 ? leftFork(philosopher) : rightFork(philosopher);
+        philosophers[philosopher].state = HUNGRY;
+        postSemMutex(MUTEX_SEM);
+
+        takeForks(philosopher, firstFork, secondFork);
         eat();
-        putDownForks(philosopher);
+        putDownForks(philosopher, firstFork, secondFork);
     }
     exitProc(1);
     return 1;
 }
 
-static void takeForks(int philosopher)
+static void takeForks(int philosopher, int firstFork, int secondFork)
 {
-    // A la derecha del filósofo i, está el tenedor i. A su izquierda, el tenedor i+1%currentPhilosopherAmount
+    // A la izquierda del filósofo i, está el tenedor i. A su derecha, el tenedor i+1%currentPhilosopherAmount
     // Los filósofos pares toman primero el tenedor de su derecha, los impares el de su izquierda
-    waitSem(MUTEX_SEM);
-    int firstFork = philosopher % 2 == 0 ? rightFork(philosopher) : leftFork(philosopher);
-    int secondFork = philosopher % 2 == 0 ? leftFork(philosopher) : rightFork(philosopher);
-    philosophers[philosopher].state = HUNGRY;
-    postSem(MUTEX_SEM);
 
     takeFork(philosopher, firstFork);
-    waitSem(MUTEX_SEM);
-    if (philosopher % 2 == 0)
-    {
-        philosophers[philosopher].hasRightFork = 1;
-    }
-    else
-    {
-        philosophers[philosopher].hasLeftFork = 1;
-    }
-    postSem(MUTEX_SEM);
     takeFork(philosopher, secondFork);
-    waitSem(MUTEX_SEM);
-    if (philosopher % 2 == 0)
-    {
-        philosophers[philosopher].hasLeftFork = 1;
-    }
-    else
-    {
-        philosophers[philosopher].hasRightFork = 1;
-    }
-    postSem(MUTEX_SEM);
 
-    waitSem(MUTEX_SEM);
+    waitSemMutex(MUTEX_SEM);
     philosophers[philosopher].state = EATING;
     displayTableState();
-    postSem(MUTEX_SEM);
+    postSemMutex(MUTEX_SEM);
 }
 
 static void takeFork(int philosopher, int fork)
@@ -218,30 +204,27 @@ static void takeFork(int philosopher, int fork)
     insertLast(philosWaitingForFork[fork], philosopher);
     while (!amFirst)
     {
-        waitSem(fork);
+        waitSemMutex(fork);
         amFirst = (peekFirst(philosWaitingForFork[fork]) == philosopher);
         if (!amFirst)
         {
-            postSem(fork);
+            postSemMutex(fork);
         }
     }
     removeFirst(philosWaitingForFork[fork]);
 }
 
-static void putDownForks(int philosopher)
+static void putDownForks(int philosopher, int firstFork, int secondFork)
 {
-    waitSem(MUTEX_SEM);
-    int firstFork = philosopher % 2 == 0 ? rightFork(philosopher) : leftFork(philosopher);
-    int secondFork = philosopher % 2 == 0 ? leftFork(philosopher) : rightFork(philosopher);
-
+    waitSemMutex(MUTEX_SEM);
     philosophers[philosopher].state = THINKING;
     displayTableState();
 
-    postSem(firstFork);
-    postSem(secondFork);
+    postSemMutex(firstFork);
+    postSemMutex(secondFork);
     philosophers[philosopher].hasLeftFork = 0;
     philosophers[philosopher].hasRightFork = 0;
-    postSem(MUTEX_SEM);
+    postSemMutex(MUTEX_SEM);
 }
 
 static void displayTableState()

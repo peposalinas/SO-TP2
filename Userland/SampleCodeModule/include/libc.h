@@ -41,5 +41,7 @@ void uint64ToHexString(uint64_t value, char *buffer, int bufferSize);
 processInformation *listProcessesInfo();
 int createStandardProc(char *process_name, int (*entry_point)(int, char **), int argc, char *argv[]);
 int newPipe(int id);
+void postSemMutex(int id);
+void waitSemMutex(int id);
 
 #endif
