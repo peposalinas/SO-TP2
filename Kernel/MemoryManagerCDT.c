@@ -46,7 +46,7 @@ MemoryManagerADT createMemoryManager(void *const memoryForMemoryManager, void *c
 
 void *allocMemoryKernel(size_t memoryToAllocate)
 {
-    allocMemory(kernel_mm, memoryToAllocate);
+    return allocMemory(kernel_mm, memoryToAllocate);
 }
 
 void freeMemoryKernel(void *ptr)
