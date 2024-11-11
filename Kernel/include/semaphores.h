@@ -22,5 +22,6 @@ int semOpen(int id, int value);
 void semClose(int id);
 void semWait(int id);
 void semPost(int id);
+void semDeleteWaiter(int semId, int pid);
 
 #endif

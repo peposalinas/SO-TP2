@@ -33,6 +33,7 @@ GLOBAL getRunningOutputPipeCaller
 GLOBAL getRunningInputPipeCaller
 GLOBAL newPipeCaller
 GLOBAL clearTerminalCaller
+GLOBAL setForegroundProcessCaller
 
 section .text
 
@@ -125,3 +126,5 @@ newPipeCaller:
     syscaller 33
 clearTerminalCaller:
     syscaller 34
+setForegroundProcessCaller:
+    syscaller 35

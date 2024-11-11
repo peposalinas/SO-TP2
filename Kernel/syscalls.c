@@ -9,65 +9,12 @@ static uint32_t uintToBase(uint64_t value, uint8_t *buffer, uint32_t base);
 
 uint32_t read(int pipeId, uint8_t *buffer, uint32_t size)
 {
-	pipe_t *pipe = getPipe(pipeId);
-	if (pipe == NULL)
-	{
-		return -1;
-	}
-	int bytesRead = 0;
-	while (bytesRead < size)
-	{
-		semWait(pipe->semRead);
-		*buffer = pipe->buffer[pipe->currentReadPos++];
-		semPost(pipe->semWrite);
-		if (pipe->currentReadPos == PIPE_SIZE)
-		{
-			pipe->currentReadPos = 0;
-		}
-		bytesRead++;
-		buffer++;
-	}
-	return bytesRead;
+	return readFromPipe(pipeId, buffer, size);
 }
 
 long int write(int pipeId, const uint8_t *string, uint32_t size)
 {
-	pipe_t *pipe = getPipe(pipeId);
-	if (pipe == NULL)
-	{
-		return -1;
-	}
-	int written = 0;
-	while (written < size)
-	{
-		semWait(pipe->semWrite);
-		pipe->buffer[pipe->currentWritePos++] = *string;
-		semPost(pipe->semRead);
-		if (pipe->currentWritePos == PIPE_SIZE)
-		{
-			pipe->currentWritePos = 0;
-		}
-		string++;
-		written++;
-	}
-	return written;
-
-	// uint32_t height = getHeight() / 16;
-	// uint32_t width = getWidth();
-	// uint32_t colour = fd == STDOUT ? WHITE : RED;
-	// int i = 0;
-	// while (i < size)
-	// {
-	// 	if (string[i] == '\n' || (lastCharX + 1) * 8 == width)
-	// 	{
-	// 		lastCharY++;
-	// 		lastCharX = 0;
-	// 	}
-	// 	if (string[i] != '\n')
-	// 		drawchar(string[i], lastCharX++, lastCharY % height, colour, BLACK);
-	// 	i++;
-	// }
-	// return i;
+	return writeToPipe(pipeId, string, size);
 }
 
 void printRectangle(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t color)
@@ -118,12 +65,12 @@ void beepSyscall(uint32_t frequence, uint32_t waitTicks)
 
 uint8_t fontSizeUp()
 {
-	return fontSizeBigger();
+	return tFontBig();
 }
 
 uint8_t fontSizeDown()
 {
-	return fontSizeSmaller();
+	return tFontSmall();
 }
 
 void getTime(uint8_t pb[])
@@ -313,5 +260,10 @@ int newPipe(int id)
 
 void clearTerminal()
 {
-	clear();
+	clearCmd();
+}
+
+void setForegroundProcess(uint64_t pid)
+{
+	setAsForegroundProcess(pid);
 }

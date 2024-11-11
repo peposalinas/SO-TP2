@@ -394,3 +394,8 @@ char *strchr(const char *str, int c)
     }
     return NULL;
 }
+
+void wait(uint32_t tick)
+{
+    waitCaller(UNUSED, tick);
+}

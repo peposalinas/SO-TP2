@@ -69,4 +69,6 @@ int getRunningInputPipeCaller(uint8_t __unused);
 int newPipeCaller(uint8_t __unused, int id);
 void clearTerminalCaller(uint8_t __unused);
 
+void setForegroundProcessCaller(uint8_t __unused, uint64_t pid);
+
 #endif

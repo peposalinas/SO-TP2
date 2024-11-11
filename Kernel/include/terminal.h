@@ -4,6 +4,8 @@
 #include "definitions.h"
 #include "syscalls.h"
 
+#define MAX_BUFFER 32768
+
 #define WHITE 0x00FFFFFF
 #define BLACK 0x00000000
 #define NEW_LINE_GREEN 0x000BE675
@@ -15,8 +17,9 @@
 #define DOWN_ARROW 254
 
 void terminalInit();
-void tFontSmall();
-void tFontBig();
-void clear();
+void terminalProcess();
+int tFontSmall();
+int tFontBig();
+void clearCmd();
 
 #endif

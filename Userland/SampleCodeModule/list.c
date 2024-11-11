@@ -1,11 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "listADTuser.h"
+#include "libc.h"
+#include "list.h"
 
 // Definimos la estructura de un nodo
 typedef struct Node
 {
-    void *data;
+    int data;
     struct Node *next;
 } Node;
 
@@ -17,13 +16,13 @@ struct LinkedList
 };
 
 // Función para crear un nuevo nodo
-static Node *create_node(void *data)
+static Node *create_node(int data)
 {
-    Node *new_node = (Node *)malloc(sizeof(Node));
+    Node *new_node = allocM(sizeof(Node));
     if (new_node == NULL)
     {
-        fprintf(stderr, "Error al asignar memoria para el nodo.\n");
-        exit(EXIT_FAILURE);
+        printf("Error al asignar memoria para el nodo.\n");
+        return NULL;
     }
     new_node->data = data;
     new_node->next = NULL;
@@ -33,11 +32,11 @@ static Node *create_node(void *data)
 // Crear una nueva lista enlazada
 LinkedList *createLinkedList()
 {
-    LinkedList *list = (LinkedList *)malloc(sizeof(LinkedList));
+    LinkedList *list = allocM(sizeof(LinkedList));
     if (list == NULL)
     {
-        fprintf(stderr, "Error al asignar memoria para la lista.\n");
-        exit(EXIT_FAILURE);
+        printf("Error al asignar memoria para el nodo.\n");
+        return NULL;
     }
     list->head = NULL;
     list->size = 0;
@@ -45,7 +44,7 @@ LinkedList *createLinkedList()
 }
 
 // Insertar un elemento al principio
-void insertFirst(LinkedList *list, void *data)
+void insertFirst(LinkedList *list, int data)
 {
     Node *new_node = create_node(data);
     new_node->next = list->head;
@@ -54,7 +53,7 @@ void insertFirst(LinkedList *list, void *data)
 }
 
 // Insertar un elemento al final
-void insertLast(LinkedList *list, void *data)
+void insertLast(LinkedList *list, int data)
 {
     Node *new_node = create_node(data);
     if (list->head == NULL)
@@ -74,7 +73,7 @@ void insertLast(LinkedList *list, void *data)
 }
 
 // Eliminar un elemento de la lista
-void removeElem(LinkedList *list, void *data, bool (*compare)(void *, void *))
+void removeElem(LinkedList *list, int data)
 {
     if (list->head == NULL)
         return;
@@ -82,7 +81,7 @@ void removeElem(LinkedList *list, void *data, bool (*compare)(void *, void *))
     Node *temp = list->head;
     Node *prev = NULL;
 
-    while (temp != NULL && !compare(temp->data, data))
+    while (temp != NULL && temp->data != data)
     {
         prev = temp;
         temp = temp->next;
@@ -101,23 +100,23 @@ void removeElem(LinkedList *list, void *data, bool (*compare)(void *, void *))
         prev->next = temp->next;
     }
 
-    free(temp);
+    freeM(temp);
     list->size--;
 }
 
 // Buscar un elemento en la lista
-void *findElem(LinkedList *list, void *data, bool (*compare)(void *, void *))
+int findElem(LinkedList *list, int data)
 {
     Node *temp = list->head;
     while (temp != NULL)
     {
-        if (compare(temp->data, data))
+        if (temp->data == data)
         {
             return temp->data;
         }
         temp = temp->next;
     }
-    return NULL; // No se encontró el elemento
+    return -1; // No se encontró el elemento
 }
 
 // Obtener el tamaño de la lista
@@ -127,35 +126,41 @@ int getSize(LinkedList *list)
 }
 
 // Destruir la lista y liberar la memoria
-void destroyLinkedList(LinkedList *list, void (*free_data)(void *))
+void destroyLinkedList(LinkedList *list)
 {
     Node *temp = list->head;
     while (temp != NULL)
     {
         Node *next = temp->next;
-        if (free_data != NULL)
-        {
-            free_data(temp->data); // Libera la memoria de los datos si es necesario
-        }
-        free(temp); // Libera el nodo
+        freeM(temp); // Libera el nodo
         temp = next;
     }
-    free(list); // Libera la lista
+    freeM(list); // Libera la lista
 }
 
-void *removeFirst(LinkedList *list)
+int removeFirst(LinkedList *list)
 {
     if (list->head == NULL)
     {
-        return NULL; // Si la lista está vacía, no hay nada que devolver
+        return -1; // Si la lista está vacía, no hay nada que devolver
     }
 
     Node *node_to_remove = list->head; // Guardamos el nodo que vamos a eliminar
-    void *data = node_to_remove->data; // Guardamos el dato que vamos a devolver
+    int data = node_to_remove->data;   // Guardamos el dato que vamos a devolver
 
     list->head = list->head->next; // Actualizamos la cabeza de la lista
-    free(node_to_remove);          // Liberamos la memoria del nodo, pero no de los datos
+    freeM(node_to_remove);         // Liberamos la memoria del nodo, pero no de los datos
 
     list->size--; // Reducimos el tamaño de la lista
     return data;  // Devolvemos el dato
+}
+
+int peekFirst(LinkedList *list)
+{
+    if (list->head == NULL)
+    {
+        return -1; // Si la lista está vacía, no hay nada que devolver
+    }
+
+    return list->head->data; // Devolvemos el dato del primer nodo
 }

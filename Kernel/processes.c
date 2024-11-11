@@ -47,7 +47,9 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
     memoryForProcess->priority = process_priority;
     memoryForProcess->parent_pid = parent_pid;
     memoryForProcess->isBeingWaited = 0;
+    openPipe(pipesIO[0], 1);
     memoryForProcess->inputPipe = pipesIO[0];
+    openPipe(pipesIO[1], 0);
     memoryForProcess->outputPipe = pipesIO[1];
 
     return memoryForProcess->pid;
@@ -55,6 +57,8 @@ int createProcess(process memoryForProcess, char *process_name, uint64_t process
 
 int killProcess(process process)
 {
+    closePipe(process->inputPipe, 1, process->pid);
+    closePipe(process->outputPipe, 0, process->pid);
     freeMemoryKernel(process->stack_end);
     freeMemoryKernel(process);
     return 0;

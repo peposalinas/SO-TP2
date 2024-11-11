@@ -17,11 +17,11 @@ int64_t prio[TOTAL_PROCESSES] = {LOWEST, LOW, MEDIUM, HIGH, HIGHEST};
 
 int test_prio(int argc, char *argv1[])
 {
-
+    char c = getChar();
     int64_t pids[TOTAL_PROCESSES];
     char *argv[] = {MINOR_WAIT};
     uint64_t i;
-
+    printf("Me escribieron: %c\n", c);
     printf("CREATING PROCESSES...\n");
     for (int i = 0; i < WAIT; i++)
         ;

@@ -11,6 +11,7 @@ typedef struct schedulerCDT
     process processes[MAX_PROCESSES];
     process_list *priority[QTY_PRIORITIES];
     uint64_t running_process_pid;
+    uint64_t foregroundPid;
 } schedulerCDT;
 
 schedulerADT scheduler_kernel;
@@ -49,6 +50,7 @@ void schedulerInit()
     }
     scheduler_kernel = scheduler;
     scheduler_kernel->running_process_pid = 0;
+    scheduler_kernel->foregroundPid = -1;
     return;
 }
 
@@ -129,6 +131,20 @@ uint64_t *schedulerRun(uint64_t *current_stack_pointer)
     return toRun->stack_pointer;
 }
 
+void setAsForegroundProcess(uint64_t pid)
+{
+    scheduler_kernel->foregroundPid = pid;
+}
+
+void schedulerKillForegroundProcess()
+{
+    if (scheduler_kernel->foregroundPid != -1)
+    {
+        schedulerKillProcess(scheduler_kernel->foregroundPid);
+        scheduler_kernel->foregroundPid = -1;
+    }
+}
+
 int schedulerKillProcess(uint32_t pid)
 {
 
@@ -144,20 +160,26 @@ int schedulerKillProcess(uint32_t pid)
     {
         scheduler_kernel->priority[priority]->ready_process_count--;
     }
-
-    if (removeElem(scheduler_kernel->priority[priority]->processList, toKill, compareProcesses) == NULL)
+    toKill->state = TERMINATED;
+    if (toKill->isBeingWaited)
     {
-        return -1;
+        schedulerUnblockProcess(toKill->parent_pid);
     }
-
-    killProcess(toKill);
-    scheduler_kernel->processes[pid] = NULL;
-
-    if (pid == scheduler_kernel->running_process_pid)
+    else
     {
-        schedulerYield();
-    }
 
+        if (removeElem(scheduler_kernel->priority[priority]->processList, toKill, compareProcesses) == NULL)
+        {
+            return -1;
+        }
+        killProcess(toKill);
+        scheduler_kernel->processes[pid] = NULL;
+
+        if (pid == scheduler_kernel->running_process_pid)
+        {
+            schedulerYield();
+        }
+    }
     return pid;
 }
 
@@ -178,6 +200,7 @@ void exitProcess(uint64_t returnVal)
 
 uint64_t wait_pid(uint64_t pid)
 {
+    scheduler_kernel->processes[pid]->return_value = 1;
     if (checkPID(pid) == -1 || scheduler_kernel->processes[pid]->parent_pid != scheduler_kernel->running_process_pid)
     {
         return -1;
