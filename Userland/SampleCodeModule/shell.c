@@ -36,8 +36,8 @@ static void div0(int argc, char *argv[]);
 static void exit(int argc, char *argv[]);
 static void fontSmall(int argc, char *argv[]);
 static void fontBig(int argc, char *argv[]);
-static void getTime(int argc, char *argv[]);
 static void help(int argc, char *argv[]);
+static int helpProc(int argc, char *argv[]);
 static void invalidOpCode(int argc, char *argv[]);
 static void createTestSync(int argc, char *argv[]);
 static void createTestMemInfo(int argc, char *argv[]);
@@ -49,7 +49,8 @@ static int loopPrinter(int argc, char *argv[]);
 static void kill(int argc, char *argv[]);
 static void nice(int argc, char *argv[]);
 static void block(int argc, char *argv[]);
-static void memStatusPrinter(uint64_t argc, char *argv[]);
+static int memStatusProc(int argc, char *argv[]);
+static void memStatusPrinter(int argc, char *argv[]);
 static int findAndExecCmd(char *cmdName, int argc, char *argv[], int foreground);
 static int createNewPipe();
 static void catCmd(int argc, char *argv[]);
@@ -60,7 +61,8 @@ static void wc(int argc, char *argv[]);
 static int wcProc(int argc, char *argv[]);
 static void filter(int argc, char *argv[]);
 static int filterVowelProc(int argc, char *argv[]);
-void resetShell();
+static void resetShell();
+int listAllProcessesProc(int argc, char *argv[]);
 
 static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{"block", (void *)block}},
@@ -68,7 +70,7 @@ static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{"div0", (void *)div0}, {0, 0}},
                                              {{"exit", (void *)exit}},
                                              {{"filter", (void *)filter}, {"fontBig", (void *)fontBig}, {"fontSmall", (void *)fontSmall}},
-                                             {{"getTime", (void *)getTime}, {0, 0}},
+                                             {{0, 0}},
                                              {{"help", (void *)help}, {0, 0}},
                                              {{"invalidOpCode", (void *)invalidOpCode}, {0, 0}},
                                              {{0, 0}},
@@ -95,7 +97,6 @@ static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "exit: Exit the shell\n"
                        "fontBig: Increase the font size\n"
                        "fontSmall: Decrease the font size\n"
-                       "getTime: Get the current time\n"
                        "help: Show this message\n"
                        "invalidOpCode: Execute an invalid operation code\n"
                        "kill: Kill a process\n"
@@ -448,7 +449,11 @@ void exit(int argc, char *argv[])
 
 void div0(int argc, char *argv[])
 {
-    // fontSize = 1;
+    if (argc != 0)
+    {
+        printf("Usage: div0\n");
+        return;
+    }
     divZero();
 }
 
@@ -459,19 +464,29 @@ void fontSmall(int argc, char *argv[])
 
 void clearCmd(int argc, char *argv[])
 {
+    if (argc != 0)
+    {
+        printf("Usage: clear\n");
+        return;
+    }
     clearTerminalCaller(UNUSED);
-}
-
-void getTime(int argc, char *argv[]) // Chequear
-{
-    char clock[20];
-    getTimeCaller(UNUSED, (char *)clock);
-    printf(clock);
 }
 
 void help(int argc, char *argv[])
 {
+    if (argc != 0)
+    {
+        printf("Usage: help\n");
+        return;
+    }
+    toWaitPID = createProcess("help", helpProc, argc, argv, IOPipes);
+}
+
+int helpProc(int argc, char *argv[])
+{
     printf(helpMsg);
+    exitProc(0);
+    return 1;
 }
 
 void invalidOpCode(int argc, char *argv[])
@@ -481,26 +496,51 @@ void invalidOpCode(int argc, char *argv[])
 
 void createTestSync(int argc, char *argv[])
 {
+    if (argc != 2)
+    {
+        printf("Usage: test_sync <n> <useSem>\n");
+        return;
+    }
     toWaitPID = createProcess("test_sync", test_sync, argc, argv, IOPipes);
 }
 
 void createTestMemInfo(int argc, char *argv[])
 {
+    if (argc != 0)
+    {
+        printf("Usage: testMemInfo\n");
+        return;
+    }
     toWaitPID = createProcess("test_mem", test_mem, argc, argv, IOPipes);
 }
 
 void createTestProcesses(int argc, char *argv[])
 {
+    if (argc != 0)
+    {
+        printf("Usage: testProcesses\n");
+        return;
+    }
     toWaitPID = createProcess("test_processes", test_processes, argc, argv, IOPipes);
 }
 
 void createTestPrio(int argc, char *argv[])
 {
+    if (argc != 0)
+    {
+        printf("Usage: testPrio\n");
+        return;
+    }
     toWaitPID = createProcess("test_prio", test_prio, argc, argv, IOPipes);
 }
 
 void createTestMem(int argc, char *argv[])
 {
+    if (argc != 0)
+    {
+        printf("Usage: testMem\n");
+        return;
+    }
     toWaitPID = createProcess("test_mm", test_mm, argc, argv, IOPipes);
 }
 
@@ -521,6 +561,11 @@ int test_wait_shell(int argc, char *argv[])
 }
 
 void listAllProcesses()
+{
+    toWaitPID = createProcess("ps", listAllProcessesProc, 0, NULL, IOPipes);
+}
+
+int listAllProcessesProc(int argc, char *argv[])
 {
     processInformation *toPrint = listProcessesInfo();
     printf("| PID |Priority | State | S.Base           | S.Pointer        | Parent PID | Name\n");
@@ -545,6 +590,8 @@ void listAllProcesses()
         i++;
     }
     freeM(toPrint);
+    exitProc(0);
+    return 1;
 }
 
 void loop(int argc, char *argv[])
@@ -572,12 +619,22 @@ int loopPrinter(int argc, char *argv[])
 
 void kill(int argc, char *argv[])
 {
+    if (argc != 1)
+    {
+        printf("Usage: kill <pid>\n");
+        return;
+    }
     int pid = atoi(argv[0]);
     killProcess(pid);
 }
 
 void nice(int argc, char *argv[])
 {
+    if (argc != 2)
+    {
+        printf("Usage: nice <pid> <priority>\n");
+        return;
+    }
     int pid = atoi(argv[0]);
     int priority = atoi(argv[1]);
     changeProcessPriority(pid, priority);
@@ -585,6 +642,11 @@ void nice(int argc, char *argv[])
 
 void block(int argc, char *argv[])
 {
+    if (argc != 1)
+    {
+        printf("Usage: block <pid>\n");
+        return;
+    }
     int pid = atoi(argv[0]);
     processInformation *info = listProcessesInfo();
     for (int i = 0; info[i].pid != UINT64_MAX; i++)
@@ -606,26 +668,43 @@ void block(int argc, char *argv[])
     freeM(info);
 }
 
-void memStatusPrinter(uint64_t argc, char *argv[])
+void memStatusPrinter(int argc, char *argv[])
+{
+    if (argc != 0)
+    {
+        printf("Usage: mem\n");
+        return;
+    }
+    toWaitPID = createProcess("memStatus", memStatusProc, argc, argv, IOPipes);
+}
+
+int memStatusProc(int argc, char *argv[])
 {
     MemStatus *memStatus = memStatusCaller(UNUSED);
     printf("Total memory: %d B\n", memStatus->total_mem);
-    printf("              %d KB\n", memStatus->total_mem / (1024));
+    printf("              %d KB\n", memStatus->total_mem / 1024);
     printf("              %d MB\n", memStatus->total_mem / (1024 * 1024));
     printf("\n");
     printf("Free memory: %d B\n", memStatus->free_mem);
-    printf("             %d KB\n", memStatus->free_mem / (1024));
+    printf("             %d KB\n", memStatus->free_mem / 1024);
     printf("             %d MB\n", memStatus->free_mem / (1024 * 1024));
     printf("\n");
     printf("Occupied memory: %d B\n", memStatus->occupied_mem);
-    printf("                 %d KB\n", memStatus->occupied_mem / (1024));
+    printf("                 %d KB\n", memStatus->occupied_mem / 1024);
     printf("                 %d MB\n", memStatus->occupied_mem / (1024 * 1024));
 
     freeM(memStatus);
+    exitProc(0);
+    return 1;
 }
 
 void catCmd(int argc, char *argv[])
 {
+    if (argc != 0)
+    {
+        printf("Usage: cat");
+        return;
+    }
     int pid = createProcess("cat", catProc, argc, argv, IOPipes);
     waitPID(pid);
 }
@@ -649,8 +728,7 @@ int catProc(int argc, char *argv[])
 
 void wc(int argc, char *argv[])
 {
-    int pid = createProcess("wc", wcProc, argc, argv, IOPipes);
-    waitPID(pid);
+    toWaitPID = createProcess("wc", wcProc, argc, argv, IOPipes);
 }
 
 int wcProc(int argc, char *argv[])
@@ -697,8 +775,12 @@ int wcProc(int argc, char *argv[])
 
 void filter(int argc, char *argv[])
 {
-    int pid = createProcess("filter", filterVowelProc, argc, argv, IOPipes);
-    waitPID(pid);
+    if (argc != 0)
+    {
+        printf("Usage: filter\n");
+        return;
+    }
+    toWaitPID = createProcess("filter", filterVowelProc, argc, argv, IOPipes);
 }
 
 int filterVowelProc(int argc, char *argv[])
