@@ -59,6 +59,10 @@ static void wc(int argc, char *argv[]);
 static int wcProc(int argc, char *argv[]);
 static void filter(int argc, char *argv[]);
 static int filterVowelProc(int argc, char *argv[]);
+static void philo(int argc, char *argv[]);
+static void philo2(int argc, char *argv[]);
+int philosophersRun(int argc, char *argv[]);
+int runPhilosophers(int argc, char **argv);
 void resetShell();
 
 static command_t commands[LETTERS][WORDS] = {{{0, 0}},
@@ -76,7 +80,7 @@ static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{"mem", (void *)memStatusPrinter}},
                                              {{"nice", (void *)nice}},
                                              {{0, 0}},
-                                             {{"ps", (void *)listAllProcesses}},
+                                             {{"philo", (void *)philo}, {"philo2", (void *)philo2}, {"ps", (void *)listAllProcesses}},
                                              {{0, 0}},
                                              {{0, 0}},
                                              {{0, 0}},
@@ -109,7 +113,9 @@ static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "testSync: Tests synchronization\n"
                        "cat: Reads from keyboard or from output of piped command and prints\n\n"
                        "wc: Counts words, lines and characters\n\n"
-                       "filter: Filters vowels\n";
+                       "filter: Filters vowels\n"
+                       "philo: Run the dining philosophers problem\n"
+                       "philo2: Run the dining philosophers problem with a different approach\n";
 ;
 // static char *waitMsg = "Press any key to continue";
 // ###################################################################
@@ -704,6 +710,16 @@ void filter(int argc, char *argv[])
 {
     int pid = createProcess("filter", filterVowelProc, argc, argv, IOPipes);
     waitPID(pid);
+}
+
+static void philo(int argc, char *argv[])
+{
+    toWaitPID = createProcess("phylos", philosophersRun, argc, argv, IOPipes);
+}
+
+static void philo2(int argc, char *argv[])
+{
+    toWaitPID = createProcess("phylos", runPhilosophers, argc, argv, IOPipes);
 }
 
 int filterVowelProc(int argc, char *argv[])
