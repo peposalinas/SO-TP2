@@ -36,9 +36,10 @@ void terminalInit()
 
 void terminalProcess()
 {
-    while (1)
-    { // VER CONDICION DE LOOP
-        uint8_t c = 0;
+    uint8_t c = 0;
+    while (c != EXIT)
+    {
+        c = 0;
         while (!c)
             read(getRunningInputPipe(), &c, 1);
         switch (c)
@@ -112,6 +113,8 @@ void terminalProcess()
         }
         }
     }
+    clear();
+    exitProc(0);
 }
 
 void resetTerminal()
@@ -219,40 +222,6 @@ void sPrintNewLine()
     reset = 0;
 }
 
-// void printMsgAndWait(const char *msg, uint8_t size)
-// {
-//     if (currentY < height - 2)
-//         currentY++;
-//     else
-//         sMoveScreenUp(2 + size / width);
-//     currentX = 0;
-//     for (uint16_t i = 0; i < size; i++)
-//     {
-//         sPrintChar(msg[i]);
-//         if (currentX == width - 1)
-//         {
-//             currentX = 0;
-//             currentY++;
-//         }
-//         else
-//             currentX++;
-//     }
-//     currentY++;
-//     currentX = 0;
-//     for (uint8_t j = 0; waitMsg[j]; j++)
-//     {
-//         sPrintChar(waitMsg[j]);
-//         currentX++;
-//     }
-//     char c = 0;
-//     while (!(c = getChar()))
-//         ;
-//     for (uint8_t i = 0; i < 2 + size / width; i++)
-//     {
-//         clearLineFrom(0, i);
-//         currentY--;
-//     }
-// }
 void sDeleteChar()
 {
     if (offsets[lineCount - 1] == count - leftSteps)

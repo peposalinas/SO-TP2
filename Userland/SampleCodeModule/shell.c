@@ -125,6 +125,11 @@ int launchShell(int argc, char *argv[])
         }
         }
     }
+    clearTerminalCaller(UNUSED);
+    printf("Goodbye! We hope you enjoyed PinguinOS - v.5.0");
+    waitCaller(UNUSED, 2);
+    putChar(EXIT);
+    exitProc(0);
     return 0;
 }
 
