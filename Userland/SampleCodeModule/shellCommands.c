@@ -166,7 +166,7 @@ int listAllProcessesProc(int argc, char *argv[])
     char stackPointerHex[9];
     int i = 0;
 
-    while (toPrint[i].pid != UINT64_MAX)
+    while (toPrint[i].pid != UINT64_MAX && toPrint[i].name != NULL && toPrint[i].stack != NULL && toPrint[i].stack_pointer != NULL)
     {
         uint64ToHexString((uint64_t)toPrint[i].stack, stackHex, sizeof(stackHex));
         uint64ToHexString((uint64_t)toPrint[i].stack_pointer, stackPointerHex, sizeof(stackPointerHex));

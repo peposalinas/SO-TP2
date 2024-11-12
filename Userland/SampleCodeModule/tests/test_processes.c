@@ -33,7 +33,7 @@ int test_processes(int argc, char *argv[])
         for (rq = 0; rq < max_processes; rq++)
         {
             p_rqs[rq].pid = createStandardProc("endless_loop", endless_loop, 0, argvAux);
-
+            changeProcessPriority(p_rqs[rq].pid, 3);
             if (p_rqs[rq].pid == -1)
             {
                 printf("test_processes: ERROR creating process\n");
