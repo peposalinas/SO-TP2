@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "libc.h"
 
 #define INITIAL_PHILOSOPHERS 5
@@ -62,8 +64,7 @@ int philosophersRun(int argc, char **argv)
     }
 
     char command = '\0';
-    uint8_t aux;
-    while ((command = getChar(&aux)) != QUIT_LETTER)
+    while ((command = getChar()) != QUIT_LETTER)
     {
         switch (command)
         {
@@ -101,7 +102,7 @@ static void addPhilosopher(int index)
     waitSem(MUTEX_SEM);
     if (philosophersAmount == MAX_PHILOSOPHERS)
     {
-        printf("No se pueden agregar más filosofos\n");
+        printf("No se pueden agregar mas filosofos\n");
         postSemMutex(MUTEX_SEM);
         return;
     }

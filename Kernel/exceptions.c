@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <stdint.h>
 #include <syscalls.h>
 #include <interrupts.h>
@@ -5,8 +7,8 @@
 #define ZERO_EXCEPTION_ID 0
 #define INVALID_OPCODE_ID 6
 
-static void zero_division();
-static void invalid_opcode();
+static void zero_division(const uint64_t regs[19]);
+static void invalid_opcode(const uint64_t regs[19]);
 
 void exceptionDispatcher(uint8_t exception, const uint64_t regs[19])
 {

@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "shellCommands.h"
 
 // static uint8_t cNotFoundSize = 51;
@@ -23,8 +25,7 @@ static char *helpMsg = "PinguinOS - v.5.0\n\n"
                        "cat: Reads from keyboard or from output of piped command and prints\n"
                        "wc: Counts words, lines and characters\n"
                        "filter: Filters vowels\n"
-                       "philo: Run the dining philosophers problem\n"
-                       "philo2: Run the dining philosophers problem with a different approach\n\n";
+                       "philo: Run the dining philosophers problem\n\n";
 ;
 
 static int IOPipes[2];
@@ -92,7 +93,7 @@ void help(int argc, char *argv[])
 
 int helpProc(int argc, char *argv[])
 {
-    printf(helpMsg);
+    printf("%s", helpMsg);
     exitProc(0);
     return 1;
 }
@@ -172,12 +173,12 @@ int listAllProcessesProc(int argc, char *argv[])
         uint64ToHexString((uint64_t)toPrint[i].stack_pointer, stackPointerHex, sizeof(stackPointerHex));
 
         printf("|  %d  |    %d    |   %d   |     %s     |     %s     |     %d      | %s\n",
-               (int)toPrint[i].pid,
+               (int32_t)toPrint[i].pid,
                toPrint[i].priority,
                toPrint[i].state,
                stackHex,
                stackPointerHex,
-               (int)toPrint[i].parent_pid,
+               (int32_t)toPrint[i].parent_pid,
                toPrint[i].name);
         i++;
     }
@@ -199,10 +200,10 @@ void loop(int argc, char *argv[])
 int loopPrinter(int argc, char *argv[])
 {
     int seconds = atoi(argv[0]);
+    int32_t pid = getPID();
     while (1)
     {
-        // printf("Second %d\n", seconds);
-        printf("Hello, my PID is %d\n", getPID());
+        printf("Hello, my PID is %d\n", pid);
         waitCaller(UNUSED, seconds);
     }
     exitProc(0);
@@ -273,17 +274,17 @@ void memStatusPrinter(int argc, char *argv[])
 int memStatusProc(int argc, char *argv[])
 {
     MemStatus *memStatus = memStatusCaller(UNUSED);
-    printf("Total memory: %d B\n", memStatus->total_mem);
-    printf("              %d KB\n", memStatus->total_mem / 1024);
-    printf("              %d MB\n", memStatus->total_mem / (1024 * 1024));
+    printf("Total memory: %d B\n", (int32_t)memStatus->total_mem);
+    printf("              %d KB\n", (int32_t)memStatus->total_mem / 1024);
+    printf("              %d MB\n", (int32_t)memStatus->total_mem / (1024 * 1024));
     printf("\n");
-    printf("Free memory: %d B\n", memStatus->free_mem);
-    printf("             %d KB\n", memStatus->free_mem / 1024);
-    printf("             %d MB\n", memStatus->free_mem / (1024 * 1024));
+    printf("Free memory: %d B\n", (int32_t)memStatus->free_mem);
+    printf("             %d KB\n", (int32_t)memStatus->free_mem / 1024);
+    printf("             %d MB\n", (int32_t)memStatus->free_mem / (1024 * 1024));
     printf("\n");
-    printf("Occupied memory: %d B\n", memStatus->occupied_mem);
-    printf("                 %d KB\n", memStatus->occupied_mem / 1024);
-    printf("                 %d MB\n", memStatus->occupied_mem / (1024 * 1024));
+    printf("Occupied memory: %d B\n", (int32_t)memStatus->occupied_mem);
+    printf("                 %d KB\n", (int32_t)memStatus->occupied_mem / 1024);
+    printf("                 %d MB\n", (int32_t)memStatus->occupied_mem / (1024 * 1024));
 
     freeM(memStatus);
     exitProc(0);

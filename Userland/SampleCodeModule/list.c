@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "libc.h"
 #include "list.h"
 
@@ -47,6 +49,10 @@ LinkedList *createLinkedList()
 void insertFirst(LinkedList *list, int data)
 {
     Node *new_node = create_node(data);
+    if (new_node == NULL)
+    {
+        return;
+    }
     new_node->next = list->head;
     list->head = new_node;
     list->size++;

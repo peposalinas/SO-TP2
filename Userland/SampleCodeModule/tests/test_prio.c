@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <stdint.h>
 #include "test_util.h"
 #include "libc.h"
@@ -46,7 +48,6 @@ int test_prio(int argc, char *argv1[])
     for (i = 0; i < TOTAL_PROCESSES; i++)
         blockProcess(pids[i]);
 
-    //@TODO: Analizar si cambiar esto porque por nuestra implementacion despues de cambiar la prioridad no se ejecuta ninguno (la shell es de prioridad 4)
     printf("\nCHANGING PRIORITIES WHILE BLOCKED...\n");
     for (int j = 0; j < WAIT; j++)
         ;

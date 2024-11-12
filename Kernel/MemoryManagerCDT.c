@@ -1,9 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "./include/MemoryManagerADT.h"
 #include "./include/test_util.h"
-
-/*@TODO: Chequear casteos a (char*)
-         Sacar continuous_free_space
-*/
 
 static void declareFreeMem(MemoryManagerADT mm, size_t size);
 static void declareAllocMemory(MemoryManagerADT mm, size_t size);
@@ -21,16 +19,11 @@ struct MemoryManagerCDT
     struct Block *free_blocks;
     void *mem_start;
     size_t total_size;
-    size_t continuous_free_space;
     size_t free_mem;
     size_t occupied_mem;
 };
 
-/*
-@TODO: Modularizar líneas 20-22 / 29-31 (asignado de variables de struct Block)
-       Hace falta managedmemory? O usamos solo 1 parámetro?
-*/
-MemoryManagerADT createMemoryManager(void *const memoryForMemoryManager, void *const managedMemory) //@TODO: Chequear si le tenemos que pasar parámetro size
+MemoryManagerADT createMemoryManager(void *const memoryForMemoryManager, void *const managedMemory)
 {
     MemoryManagerADT mm = (MemoryManagerADT)memoryForMemoryManager;
     mm->mem_start = managedMemory;
@@ -147,14 +140,6 @@ void freeMemory(MemoryManagerADT mm, void *ptr)
         }
     }
 }
-
-// char *memStatus(MemoryManagerADT mm)
-// {
-//     Uso espacio después de todos los bloques
-//     char *mem_status = (char *)(mm->mem_start + TOTAL_MEM);
-//     sprintf(mem_status, "Free memory: %ld bytes\nOccupied memory: %ld bytes", mm->free_mem, mm->occupied_mem);
-//     return mem_status;
-// }
 
 MemStatus *memStatusKernel()
 {

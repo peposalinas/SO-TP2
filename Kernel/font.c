@@ -1,12 +1,13 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 // Created from bdf2c Version 3, (c) 2009, 2010 by Lutz Sammer
-//	License AGPLv3: GNU Affero General Public License version 3
 
 #include <font.h>
 
-	/// character bitmap for each encoding
- const unsigned char __font_bitmap__[] = {
-//  32 $20 'SPACE'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+/// character bitmap for each encoding
+const unsigned char __font_bitmap__[] = {
+	//  32 $20 'SPACE'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -23,8 +24,8 @@
 	________,
 	________,
 	________,
-//  33 $21 'EXCLAMATION'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  33 $21 'EXCLAMATION'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	___XX___,
@@ -41,8 +42,8 @@
 	________,
 	________,
 	________,
-//  34 $22 'QUOTATION'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  34 $22 'QUOTATION'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_XX__XX_,
 	_XX__XX_,
@@ -59,8 +60,8 @@
 	________,
 	________,
 	________,
-//  35 $23 'NUMBER'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  35 $23 'NUMBER'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XX_XX__,
@@ -77,8 +78,8 @@
 	________,
 	________,
 	________,
-//  36 $24 'DOLLAR'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  36 $24 'DOLLAR'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	___X____,
 	_XXXXXX_,
@@ -95,8 +96,8 @@
 	________,
 	________,
 	________,
-//  37 $25 'PERCENT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  37 $25 'PERCENT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_____XX_,
@@ -113,8 +114,8 @@
 	________,
 	________,
 	________,
-//  38 $26 'AMPERSAND'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  38 $26 'AMPERSAND'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	__XXX___,
@@ -131,8 +132,8 @@
 	________,
 	________,
 	________,
-//  39 $27 'APOSTROPHE'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  39 $27 'APOSTROPHE'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	___XX___,
 	___XX___,
@@ -149,8 +150,8 @@
 	________,
 	________,
 	________,
-//  40 $28 'LEFT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  40 $28 'LEFT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	____XXX_,
 	___XX___,
@@ -167,8 +168,8 @@
 	___XX___,
 	____XXX_,
 	________,
-//  41 $29 'RIGHT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  41 $29 'RIGHT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_XXX____,
 	___XX___,
@@ -185,8 +186,8 @@
 	___XX___,
 	_XXX____,
 	________,
-//  42 $2a 'ASTERISK'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  42 $2a 'ASTERISK'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -203,8 +204,8 @@
 	________,
 	________,
 	________,
-//  43 $2b 'PLUS'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  43 $2b 'PLUS'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -221,8 +222,8 @@
 	________,
 	________,
 	________,
-//  44 $2c 'COMMA'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  44 $2c 'COMMA'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -239,8 +240,8 @@
 	________,
 	________,
 	________,
-//  45 $2d 'HYPHEN-MINUS'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  45 $2d 'HYPHEN-MINUS'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -257,8 +258,8 @@
 	________,
 	________,
 	________,
-//  46 $2e 'FULL'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  46 $2e 'FULL'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -275,8 +276,8 @@
 	________,
 	________,
 	________,
-//  47 $2f 'SOLIDUS'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  47 $2f 'SOLIDUS'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	______XX,
 	______XX,
@@ -293,8 +294,8 @@
 	XX______,
 	XX______,
 	________,
-//  48 $30 'DIGIT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  48 $30 'DIGIT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXX__,
@@ -311,8 +312,8 @@
 	________,
 	________,
 	________,
-//  49 $31 'DIGIT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  49 $31 'DIGIT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	___XX___,
@@ -329,8 +330,8 @@
 	________,
 	________,
 	________,
-//  50 $32 'DIGIT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  50 $32 'DIGIT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXX__,
@@ -347,8 +348,8 @@
 	________,
 	________,
 	________,
-//  51 $33 'DIGIT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  51 $33 'DIGIT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXX__,
@@ -365,8 +366,8 @@
 	________,
 	________,
 	________,
-//  52 $34 'DIGIT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  52 $34 'DIGIT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX______,
@@ -383,8 +384,8 @@
 	________,
 	________,
 	________,
-//  53 $35 'DIGIT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  53 $35 'DIGIT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XXXXXXX_,
@@ -401,8 +402,8 @@
 	________,
 	________,
 	________,
-//  54 $36 'DIGIT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  54 $36 'DIGIT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXX__,
@@ -419,8 +420,8 @@
 	________,
 	________,
 	________,
-//  55 $37 'DIGIT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  55 $37 'DIGIT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XXXXXXX_,
@@ -437,8 +438,8 @@
 	________,
 	________,
 	________,
-//  56 $38 'DIGIT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  56 $38 'DIGIT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXX__,
@@ -455,8 +456,8 @@
 	________,
 	________,
 	________,
-//  57 $39 'DIGIT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  57 $39 'DIGIT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXX__,
@@ -473,8 +474,8 @@
 	________,
 	________,
 	________,
-//  58 $3a 'COLON'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  58 $3a 'COLON'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -491,8 +492,8 @@
 	________,
 	________,
 	________,
-//  59 $3b 'SEMICOLON'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  59 $3b 'SEMICOLON'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -509,8 +510,8 @@
 	________,
 	________,
 	________,
-//  60 $3c 'LESS-THAN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  60 $3c 'LESS-THAN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_____XX_,
@@ -527,8 +528,8 @@
 	________,
 	________,
 	________,
-//  61 $3d 'EQUALS'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  61 $3d 'EQUALS'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -545,8 +546,8 @@
 	________,
 	________,
 	________,
-//  62 $3e 'GREATER-THAN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  62 $3e 'GREATER-THAN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XX_____,
@@ -563,8 +564,8 @@
 	________,
 	________,
 	________,
-//  63 $3f 'QUESTION'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  63 $3f 'QUESTION'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXX__,
@@ -581,8 +582,8 @@
 	________,
 	________,
 	________,
-//  64 $40 'COMMERCIAL'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  64 $40 'COMMERCIAL'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -599,8 +600,8 @@
 	________,
 	________,
 	________,
-//  65 $41 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  65 $41 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXX__,
@@ -617,8 +618,8 @@
 	________,
 	________,
 	________,
-//  66 $42 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  66 $42 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XXXXXX__,
@@ -635,8 +636,8 @@
 	________,
 	________,
 	________,
-//  67 $43 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  67 $43 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXXX_,
@@ -653,8 +654,8 @@
 	________,
 	________,
 	________,
-//  68 $44 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  68 $44 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XXXXXX__,
@@ -671,26 +672,8 @@
 	________,
 	________,
 	________,
-//  69 $45 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
-	________,
-	________,
-	_XXXXXX_,
-	XX______,
-	XX______,
-	XX______,
-	XXXXX___,
-	XX______,
-	XX______,
-	XX______,
-	XX______,
-	_XXXXXX_,
-	________,
-	________,
-	________,
-	________,
-//  70 $46 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  69 $45 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXXX_,
@@ -702,13 +685,31 @@
 	XX______,
 	XX______,
 	XX______,
+	_XXXXXX_,
+	________,
+	________,
+	________,
+	________,
+	//  70 $46 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	________,
+	________,
+	_XXXXXX_,
+	XX______,
+	XX______,
+	XX______,
+	XXXXX___,
+	XX______,
+	XX______,
+	XX______,
+	XX______,
 	XX______,
 	________,
 	________,
 	________,
 	________,
-//  71 $47 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  71 $47 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXXX_,
@@ -725,8 +726,8 @@
 	________,
 	________,
 	________,
-//  72 $48 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  72 $48 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX___XX_,
@@ -743,8 +744,8 @@
 	________,
 	________,
 	________,
-//  73 $49 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  73 $49 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXXX_,
@@ -761,8 +762,8 @@
 	________,
 	________,
 	________,
-//  74 $4a 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  74 $4a 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXXX_,
@@ -779,8 +780,8 @@
 	________,
 	________,
 	________,
-//  75 $4b 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  75 $4b 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX___XX_,
@@ -797,8 +798,8 @@
 	________,
 	________,
 	________,
-//  76 $4c 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  76 $4c 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX______,
@@ -815,8 +816,8 @@
 	________,
 	________,
 	________,
-//  77 $4d 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  77 $4d 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX___XX_,
@@ -833,8 +834,8 @@
 	________,
 	________,
 	________,
-//  78 $4e 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  78 $4e 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX___XX_,
@@ -851,8 +852,8 @@
 	________,
 	________,
 	________,
-//  79 $4f 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  79 $4f 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXX__,
@@ -869,8 +870,8 @@
 	________,
 	________,
 	________,
-//  80 $50 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  80 $50 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XXXXXX__,
@@ -887,8 +888,8 @@
 	________,
 	________,
 	________,
-//  81 $51 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  81 $51 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXX__,
@@ -905,8 +906,8 @@
 	____XX__,
 	________,
 	________,
-//  82 $52 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  82 $52 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XXXXXX__,
@@ -923,8 +924,8 @@
 	________,
 	________,
 	________,
-//  83 $53 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  83 $53 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXXX_,
@@ -941,8 +942,8 @@
 	________,
 	________,
 	________,
-//  84 $54 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  84 $54 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XXXXXXXX,
@@ -959,8 +960,8 @@
 	________,
 	________,
 	________,
-//  85 $55 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  85 $55 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX___XX_,
@@ -977,8 +978,8 @@
 	________,
 	________,
 	________,
-//  86 $56 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  86 $56 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX___XX_,
@@ -995,8 +996,8 @@
 	________,
 	________,
 	________,
-//  87 $57 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  87 $57 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX___XX_,
@@ -1013,8 +1014,8 @@
 	________,
 	________,
 	________,
-//  88 $58 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  88 $58 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX___XX_,
@@ -1031,8 +1032,8 @@
 	________,
 	________,
 	________,
-//  89 $59 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  89 $59 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX___XX_,
@@ -1049,8 +1050,8 @@
 	________,
 	________,
 	________,
-//  90 $5a 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  90 $5a 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XXXXXXX_,
@@ -1067,8 +1068,8 @@
 	________,
 	________,
 	________,
-//  91 $5b 'LEFT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  91 $5b 'LEFT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XXXXX_,
 	__XX____,
@@ -1085,8 +1086,8 @@
 	__XX____,
 	__XXXXX_,
 	________,
-//  92 $5c 'REVERSE'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  92 $5c 'REVERSE'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	XX______,
 	XX______,
@@ -1103,8 +1104,8 @@
 	______XX,
 	______XX,
 	________,
-//  93 $5d 'RIGHT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  93 $5d 'RIGHT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_XXXXX__,
 	____XX__,
@@ -1121,8 +1122,8 @@
 	____XX__,
 	_XXXXX__,
 	________,
-//  94 $5e 'CIRCUMFLEX'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  94 $5e 'CIRCUMFLEX'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	___X____,
 	__XXX___,
@@ -1139,8 +1140,8 @@
 	________,
 	________,
 	________,
-//  95 $5f 'LOW'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  95 $5f 'LOW'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1157,8 +1158,8 @@
 	________,
 	XXXXXXX_,
 	________,
-//  96 $60 'GRAVE'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  96 $60 'GRAVE'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XX____,
 	___XX___,
@@ -1175,8 +1176,8 @@
 	________,
 	________,
 	________,
-//  97 $61 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  97 $61 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1193,8 +1194,8 @@
 	________,
 	________,
 	________,
-//  98 $62 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  98 $62 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX______,
@@ -1211,8 +1212,8 @@
 	________,
 	________,
 	________,
-//  99 $63 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	//  99 $63 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1229,8 +1230,8 @@
 	________,
 	________,
 	________,
-// 100 $64 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 100 $64 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_____XX_,
@@ -1247,8 +1248,8 @@
 	________,
 	________,
 	________,
-// 101 $65 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 101 $65 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1265,8 +1266,8 @@
 	________,
 	________,
 	________,
-// 102 $66 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 102 $66 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	___XXXX_,
@@ -1283,8 +1284,8 @@
 	________,
 	________,
 	________,
-// 103 $67 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 103 $67 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1301,8 +1302,8 @@
 	_____XX_,
 	XXXXXX__,
 	________,
-// 104 $68 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 104 $68 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX______,
@@ -1319,8 +1320,8 @@
 	________,
 	________,
 	________,
-// 105 $69 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 105 $69 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	___XX___,
@@ -1337,8 +1338,8 @@
 	________,
 	________,
 	________,
-// 106 $6a 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 106 $6a 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	___XX___,
@@ -1355,8 +1356,8 @@
 	___XX___,
 	_XXX____,
 	________,
-// 107 $6b 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 107 $6b 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX______,
@@ -1373,8 +1374,8 @@
 	________,
 	________,
 	________,
-// 108 $6c 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 108 $6c 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	__XX____,
@@ -1391,8 +1392,8 @@
 	________,
 	________,
 	________,
-// 109 $6d 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 109 $6d 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1409,8 +1410,8 @@
 	________,
 	________,
 	________,
-// 110 $6e 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 110 $6e 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1427,8 +1428,8 @@
 	________,
 	________,
 	________,
-// 111 $6f 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 111 $6f 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1445,8 +1446,8 @@
 	________,
 	________,
 	________,
-// 112 $70 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 112 $70 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1463,8 +1464,8 @@
 	XX______,
 	XX______,
 	________,
-// 113 $71 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 113 $71 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1481,8 +1482,8 @@
 	_____XX_,
 	_____XX_,
 	________,
-// 114 $72 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 114 $72 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1499,8 +1500,8 @@
 	________,
 	________,
 	________,
-// 115 $73 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 115 $73 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1517,8 +1518,8 @@
 	________,
 	________,
 	________,
-// 116 $74 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 116 $74 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	__XX____,
@@ -1535,8 +1536,8 @@
 	________,
 	________,
 	________,
-// 117 $75 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 117 $75 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1553,8 +1554,8 @@
 	________,
 	________,
 	________,
-// 118 $76 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 118 $76 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1571,8 +1572,8 @@
 	________,
 	________,
 	________,
-// 119 $77 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 119 $77 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1589,8 +1590,8 @@
 	________,
 	________,
 	________,
-// 120 $78 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 120 $78 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1607,8 +1608,8 @@
 	________,
 	________,
 	________,
-// 121 $79 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 121 $79 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1625,8 +1626,8 @@
 	_____XX_,
 	XXXXXX__,
 	________,
-// 122 $7a 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 122 $7a 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1643,8 +1644,8 @@
 	________,
 	________,
 	________,
-// 123 $7b 'LEFT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 123 $7b 'LEFT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	____XXX_,
 	___XX___,
@@ -1661,8 +1662,8 @@
 	___XX___,
 	____XXX_,
 	________,
-// 124 $7c 'VERTICAL'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 124 $7c 'VERTICAL'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	___XX___,
@@ -1679,8 +1680,8 @@
 	___XX___,
 	________,
 	________,
-// 125 $7d 'RIGHT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 125 $7d 'RIGHT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_XXX____,
 	___XX___,
@@ -1697,8 +1698,8 @@
 	___XX___,
 	_XXX____,
 	________,
-// 126 $7e 'TILDE'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 126 $7e 'TILDE'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XX__X_,
 	_XXXXXX_,
@@ -1715,8 +1716,8 @@
 	________,
 	________,
 	________,
-// 127 $7f '<control>'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 127 $7f '<control>'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1733,8 +1734,8 @@
 	________,
 	________,
 	________,
-// 160 $a0 'NO-BREAK'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 160 $a0 'NO-BREAK'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1751,8 +1752,8 @@
 	________,
 	________,
 	________,
-// 161 $a1 'INVERTED'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 161 $a1 'INVERTED'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	___XX___,
@@ -1769,8 +1770,8 @@
 	________,
 	________,
 	________,
-// 162 $a2 'CENT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 162 $a2 'CENT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1787,8 +1788,8 @@
 	________,
 	________,
 	________,
-// 163 $a3 'POUND'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 163 $a3 'POUND'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	__XXX___,
@@ -1805,8 +1806,8 @@
 	________,
 	________,
 	________,
-// 164 $a4 'CURRENCY'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 164 $a4 'CURRENCY'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1823,8 +1824,8 @@
 	________,
 	________,
 	________,
-// 165 $a5 'YEN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 165 $a5 'YEN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX____XX,
@@ -1841,8 +1842,8 @@
 	________,
 	________,
 	________,
-// 166 $a6 'BROKEN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 166 $a6 'BROKEN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	___XX___,
@@ -1859,8 +1860,8 @@
 	___XX___,
 	________,
 	________,
-// 167 $a7 'SECTION'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 167 $a7 'SECTION'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XXXX__,
 	_XX__XX_,
@@ -1877,8 +1878,8 @@
 	_XX__XX_,
 	__XXXX__,
 	________,
-// 168 $a8 'DIAERESIS'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 168 $a8 'DIAERESIS'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XX_XX__,
@@ -1895,8 +1896,8 @@
 	________,
 	________,
 	________,
-// 169 $a9 'COPYRIGHT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 169 $a9 'COPYRIGHT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1913,8 +1914,8 @@
 	________,
 	________,
 	________,
-// 170 $aa 'FEMININE'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 170 $aa 'FEMININE'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XXX___,
 	____XX__,
@@ -1931,8 +1932,8 @@
 	________,
 	________,
 	________,
-// 171 $ab 'LEFT-POINTING'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 171 $ab 'LEFT-POINTING'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1949,8 +1950,8 @@
 	________,
 	________,
 	________,
-// 172 $ac 'NOT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 172 $ac 'NOT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1967,8 +1968,8 @@
 	________,
 	________,
 	________,
-// 173 $ad 'SOFT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 173 $ad 'SOFT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -1985,8 +1986,8 @@
 	________,
 	________,
 	________,
-// 174 $ae 'REGISTERED'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 174 $ae 'REGISTERED'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -2003,8 +2004,8 @@
 	________,
 	________,
 	________,
-// 175 $af 'MACRON'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 175 $af 'MACRON'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_XXXXX__,
 	________,
@@ -2021,8 +2022,8 @@
 	________,
 	________,
 	________,
-// 176 $b0 'DEGREE'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 176 $b0 'DEGREE'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XXX___,
 	_XX_XX__,
@@ -2039,8 +2040,8 @@
 	________,
 	________,
 	________,
-// 177 $b1 'PLUS-MINUS'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 177 $b1 'PLUS-MINUS'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -2057,8 +2058,8 @@
 	________,
 	________,
 	________,
-// 178 $b2 'SUPERSCRIPT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 178 $b2 'SUPERSCRIPT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XXX___,
 	_X__XX__,
@@ -2075,8 +2076,8 @@
 	________,
 	________,
 	________,
-// 179 $b3 'SUPERSCRIPT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 179 $b3 'SUPERSCRIPT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	___XXX__,
 	__X__XX_,
@@ -2093,8 +2094,8 @@
 	________,
 	________,
 	________,
-// 180 $b4 'ACUTE'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 180 $b4 'ACUTE'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	____XX__,
 	___XX___,
@@ -2111,8 +2112,8 @@
 	________,
 	________,
 	________,
-// 181 $b5 'MICRO'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 181 $b5 'MICRO'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -2129,8 +2130,8 @@
 	XX______,
 	XX______,
 	________,
-// 182 $b6 'PILCROW'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 182 $b6 'PILCROW'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXXX_,
@@ -2147,8 +2148,8 @@
 	________,
 	________,
 	________,
-// 183 $b7 'MIDDLE'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 183 $b7 'MIDDLE'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -2165,8 +2166,8 @@
 	________,
 	________,
 	________,
-// 184 $b8 'CEDILLA'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 184 $b8 'CEDILLA'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -2183,8 +2184,8 @@
 	___XX___,
 	__XX____,
 	________,
-// 185 $b9 'SUPERSCRIPT'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 185 $b9 'SUPERSCRIPT'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	___XX___,
 	__XXX___,
@@ -2201,8 +2202,8 @@
 	________,
 	________,
 	________,
-// 186 $ba 'MASCULINE'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 186 $ba 'MASCULINE'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XXX___,
 	_XX_XX__,
@@ -2219,8 +2220,8 @@
 	________,
 	________,
 	________,
-// 187 $bb 'RIGHT-POINTING'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 187 $bb 'RIGHT-POINTING'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -2237,8 +2238,8 @@
 	________,
 	________,
 	________,
-// 188 $bc 'VULGAR'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 188 $bc 'VULGAR'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_X______,
 	XX______,
@@ -2255,8 +2256,8 @@
 	_____X__,
 	_____X__,
 	________,
-// 189 $bd 'VULGAR'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 189 $bd 'VULGAR'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_X______,
 	XX______,
@@ -2273,8 +2274,8 @@
 	___X____,
 	___XXXX_,
 	________,
-// 190 $be 'VULGAR'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 190 $be 'VULGAR'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_XX_____,
 	X__X____,
@@ -2291,8 +2292,8 @@
 	_____X__,
 	_____X__,
 	________,
-// 191 $bf 'INVERTED'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 191 $bf 'INVERTED'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	___XX___,
@@ -2309,8 +2310,8 @@
 	________,
 	________,
 	________,
-// 192 $c0 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 192 $c0 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XX____,
 	___XX___,
 	________,
@@ -2327,8 +2328,8 @@
 	________,
 	________,
 	________,
-// 193 $c1 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 193 $c1 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	___XX___,
 	__XX____,
 	________,
@@ -2345,8 +2346,8 @@
 	________,
 	________,
 	________,
-// 194 $c2 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 194 $c2 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XXX___,
 	_XX_XX__,
 	________,
@@ -2363,8 +2364,8 @@
 	________,
 	________,
 	________,
-// 195 $c3 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 195 $c3 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XX__X_,
 	_X__XX__,
 	________,
@@ -2381,8 +2382,8 @@
 	________,
 	________,
 	________,
-// 196 $c4 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 196 $c4 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	_XX_XX__,
 	_XX_XX__,
 	________,
@@ -2399,8 +2400,8 @@
 	________,
 	________,
 	________,
-// 197 $c5 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 197 $c5 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XXX___,
 	_XX_XX__,
 	__XXX___,
@@ -2417,8 +2418,8 @@
 	________,
 	________,
 	________,
-// 198 $c6 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 198 $c6 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXXX_,
@@ -2435,8 +2436,8 @@
 	________,
 	________,
 	________,
-// 199 $c7 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 199 $c7 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXXX_,
@@ -2453,8 +2454,8 @@
 	___XX___,
 	__XX____,
 	________,
-// 200 $c8 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 200 $c8 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XX____,
 	___XX___,
 	________,
@@ -2471,8 +2472,8 @@
 	________,
 	________,
 	________,
-// 201 $c9 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 201 $c9 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	___XX___,
 	__XX____,
 	________,
@@ -2489,8 +2490,8 @@
 	________,
 	________,
 	________,
-// 202 $ca 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 202 $ca 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XXX___,
 	_XX_XX__,
 	________,
@@ -2507,8 +2508,8 @@
 	________,
 	________,
 	________,
-// 203 $cb 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 203 $cb 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	_XX_XX__,
 	_XX_XX__,
 	________,
@@ -2525,8 +2526,8 @@
 	________,
 	________,
 	________,
-// 204 $cc 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 204 $cc 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XX____,
 	___XX___,
 	________,
@@ -2543,8 +2544,8 @@
 	________,
 	________,
 	________,
-// 205 $cd 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 205 $cd 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	____XX__,
 	___XX___,
 	________,
@@ -2561,8 +2562,8 @@
 	________,
 	________,
 	________,
-// 206 $ce 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 206 $ce 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XXX___,
 	_XX_XX__,
 	________,
@@ -2579,8 +2580,8 @@
 	________,
 	________,
 	________,
-// 207 $cf 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 207 $cf 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	_XX__XX_,
 	_XX__XX_,
 	________,
@@ -2597,8 +2598,8 @@
 	________,
 	________,
 	________,
-// 208 $d0 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 208 $d0 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXXX__,
@@ -2615,8 +2616,8 @@
 	________,
 	________,
 	________,
-// 209 $d1 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 209 $d1 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XX__X_,
 	_X__XX__,
 	________,
@@ -2633,8 +2634,8 @@
 	________,
 	________,
 	________,
-// 210 $d2 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 210 $d2 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XX____,
 	___XX___,
 	________,
@@ -2651,8 +2652,8 @@
 	________,
 	________,
 	________,
-// 211 $d3 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 211 $d3 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	___XX___,
 	__XX____,
 	________,
@@ -2669,8 +2670,8 @@
 	________,
 	________,
 	________,
-// 212 $d4 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 212 $d4 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XXX___,
 	_XX_XX__,
 	________,
@@ -2687,8 +2688,8 @@
 	________,
 	________,
 	________,
-// 213 $d5 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 213 $d5 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XX__X_,
 	_X__XX__,
 	________,
@@ -2705,8 +2706,8 @@
 	________,
 	________,
 	________,
-// 214 $d6 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 214 $d6 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	_XX_XX__,
 	_XX_XX__,
 	________,
@@ -2723,8 +2724,8 @@
 	________,
 	________,
 	________,
-// 215 $d7 'MULTIPLICATION'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 215 $d7 'MULTIPLICATION'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -2741,8 +2742,8 @@
 	________,
 	________,
 	________,
-// 216 $d8 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 216 $d8 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	______X_,
 	_XXXXX__,
@@ -2759,8 +2760,8 @@
 	________,
 	________,
 	________,
-// 217 $d9 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 217 $d9 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XX____,
 	___XX___,
 	________,
@@ -2777,8 +2778,8 @@
 	________,
 	________,
 	________,
-// 218 $da 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 218 $da 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	___XX___,
 	__XX____,
 	________,
@@ -2795,8 +2796,8 @@
 	________,
 	________,
 	________,
-// 219 $db 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 219 $db 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	__XXX___,
 	_XX_XX__,
 	________,
@@ -2813,8 +2814,8 @@
 	________,
 	________,
 	________,
-// 220 $dc 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 220 $dc 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	_XX_XX__,
 	_XX_XX__,
 	________,
@@ -2831,8 +2832,8 @@
 	________,
 	________,
 	________,
-// 221 $dd 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 221 $dd 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	___XX___,
 	__XX____,
 	________,
@@ -2849,8 +2850,8 @@
 	________,
 	________,
 	________,
-// 222 $de 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 222 $de 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -2867,8 +2868,8 @@
 	XX______,
 	________,
 	________,
-// 223 $df 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 223 $df 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XXXX___,
@@ -2885,8 +2886,8 @@
 	________,
 	________,
 	________,
-// 224 $e0 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 224 $e0 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_XX_____,
 	__XX____,
@@ -2903,8 +2904,8 @@
 	________,
 	________,
 	________,
-// 225 $e1 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 225 $e1 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	____XX__,
 	___XX___,
@@ -2921,8 +2922,8 @@
 	________,
 	________,
 	________,
-// 226 $e2 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 226 $e2 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	___X____,
 	__XXX___,
@@ -2939,8 +2940,8 @@
 	________,
 	________,
 	________,
-// 227 $e3 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 227 $e3 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XX__X_,
 	_XXXXXX_,
@@ -2957,8 +2958,8 @@
 	________,
 	________,
 	________,
-// 228 $e4 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 228 $e4 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XX_XX__,
@@ -2975,8 +2976,8 @@
 	________,
 	________,
 	________,
-// 229 $e5 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 229 $e5 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XXX___,
 	_XX_XX__,
@@ -2993,8 +2994,8 @@
 	________,
 	________,
 	________,
-// 230 $e6 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 230 $e6 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -3011,8 +3012,8 @@
 	________,
 	________,
 	________,
-// 231 $e7 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 231 $e7 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -3029,8 +3030,8 @@
 	___XX___,
 	__XX____,
 	________,
-// 232 $e8 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 232 $e8 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_XX_____,
 	__XX____,
@@ -3047,8 +3048,8 @@
 	________,
 	________,
 	________,
-// 233 $e9 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 233 $e9 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	____XX__,
 	___XX___,
@@ -3065,8 +3066,8 @@
 	________,
 	________,
 	________,
-// 234 $ea 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 234 $ea 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	___X____,
 	__XXX___,
@@ -3083,8 +3084,8 @@
 	________,
 	________,
 	________,
-// 235 $eb 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 235 $eb 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XX_XX__,
@@ -3101,8 +3102,8 @@
 	________,
 	________,
 	________,
-// 236 $ec 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 236 $ec 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XX____,
 	___XX___,
@@ -3119,8 +3120,8 @@
 	________,
 	________,
 	________,
-// 237 $ed 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 237 $ed 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	____XX__,
 	___XX___,
@@ -3137,8 +3138,8 @@
 	________,
 	________,
 	________,
-// 238 $ee 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 238 $ee 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	___XX___,
 	__XXXX__,
@@ -3155,8 +3156,8 @@
 	________,
 	________,
 	________,
-// 239 $ef 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 239 $ef 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XX__XX_,
@@ -3173,8 +3174,8 @@
 	________,
 	________,
 	________,
-// 240 $f0 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 240 $f0 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	XX_XX___,
 	_XXX____,
@@ -3191,8 +3192,8 @@
 	________,
 	________,
 	________,
-// 241 $f1 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 241 $f1 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XX__X_,
 	_XXXXXX_,
@@ -3209,8 +3210,8 @@
 	________,
 	________,
 	________,
-// 242 $f2 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 242 $f2 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_XX_____,
 	__XX____,
@@ -3227,8 +3228,8 @@
 	________,
 	________,
 	________,
-// 243 $f3 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 243 $f3 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	____XX__,
 	___XX___,
@@ -3245,8 +3246,8 @@
 	________,
 	________,
 	________,
-// 244 $f4 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 244 $f4 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	___X____,
 	__XXX___,
@@ -3263,8 +3264,8 @@
 	________,
 	________,
 	________,
-// 245 $f5 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 245 $f5 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	__XX__X_,
 	_XXXXXX_,
@@ -3281,8 +3282,8 @@
 	________,
 	________,
 	________,
-// 246 $f6 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 246 $f6 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XX_XX__,
@@ -3299,8 +3300,8 @@
 	________,
 	________,
 	________,
-// 247 $f7 'DIVISION'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 247 $f7 'DIVISION'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -3317,8 +3318,8 @@
 	________,
 	________,
 	________,
-// 248 $f8 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 248 $f8 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	________,
@@ -3335,8 +3336,8 @@
 	________,
 	________,
 	________,
-// 249 $f9 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 249 $f9 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	_XX_____,
 	__XX____,
@@ -3353,8 +3354,8 @@
 	________,
 	________,
 	________,
-// 250 $fa 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 250 $fa 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	____XX__,
 	___XX___,
@@ -3371,8 +3372,8 @@
 	________,
 	________,
 	________,
-// 251 $fb 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 251 $fb 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	___X____,
 	__XXX___,
@@ -3389,8 +3390,8 @@
 	________,
 	________,
 	________,
-// 252 $fc 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 252 $fc 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XX_XX__,
@@ -3407,8 +3408,8 @@
 	________,
 	________,
 	________,
-// 253 $fd 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 253 $fd 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	____XX__,
 	___XX___,
@@ -3425,8 +3426,8 @@
 	_____XX_,
 	XXXXXX__,
 	________,
-// 254 $fe 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 254 $fe 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	XX______,
@@ -3443,8 +3444,8 @@
 	XX______,
 	XX______,
 	________,
-// 255 $ff 'LATIN'
-//	width 8, bbx 0, bby -4, bbw 8, bbh 16
+	// 255 $ff 'LATIN'
+	//	width 8, bbx 0, bby -4, bbw 8, bbh 16
 	________,
 	________,
 	_XX_XX__,
@@ -3463,7 +3464,7 @@
 	________,
 };
 
-	/// character width for each encoding
+/// character width for each encoding
 static const unsigned char __font_widths__[] = {
 	8,
 	8,
@@ -3659,7 +3660,7 @@ static const unsigned char __font_widths__[] = {
 	8,
 };
 
-	/// character encoding for each index entry
+/// character encoding for each index entry
 static const unsigned short __font_index__[] = {
 	32,
 	33,
@@ -3855,12 +3856,12 @@ static const unsigned short __font_index__[] = {
 	255,
 };
 
-	/// bitmap font structure
+/// bitmap font structure
 const struct bitmap_font font = {
-	.Width = 8, .Height = 16,
+	.Width = 8,
+	.Height = 16,
 	.Chars = 192,
 	.Widths = __font_widths__,
 	.Index = __font_index__,
 	.Bitmap = __font_bitmap__,
 };
-

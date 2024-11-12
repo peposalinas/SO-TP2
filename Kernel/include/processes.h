@@ -5,7 +5,7 @@
 #include "MemoryManagerADT.h"
 #include "definitions.h"
 
-#define STACK_SIZE 4 * 1024
+#define STACK_SIZE (4 * 1024)
 #define PRIORITY_AMOUNT 5
 #define ALIGN 7
 #define MAX_PIPES_PER_PROCESS 10

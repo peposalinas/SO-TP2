@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "test_util.h"
 #include "libc.h"
 #define MAX_BLOCKS 128
@@ -74,7 +76,7 @@ int endless_loop(int argc, char *argv[])
 
 int endless_loop_print(int argc, char *argv[])
 {
-    int64_t pid = getPID();
+    int32_t pid = getPID();
 
     if (argc != 1)
         exitProc(-1);

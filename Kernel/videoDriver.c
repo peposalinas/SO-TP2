@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <videoDriver.h>
 #include <font.h>
 // tamaño de la ventana emergente
@@ -6,7 +8,7 @@
 #define BYTES_PER_PIXEL 3
 
 // area en bytes de la ventana
-#define POP_UP_AREA POP_UP_HEIGHT *POP_UP_WIDTH *BYTES_PER_PIXEL
+#define POP_UP_AREA (POP_UP_HEIGHT * POP_UP_WIDTH * BYTES_PER_PIXEL)
 
 // posicion del vertice superior izquierdo de la ventana emergente
 #define TOP_LEFT_X 160

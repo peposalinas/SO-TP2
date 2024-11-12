@@ -8,7 +8,7 @@
 #define MB *1024 * 1024
 #define AMOUNT_OF_MB 256
 #define TOTAL_MEM AMOUNT_OF_MB MB
-#define TOTAL_POWERS_OF_2 29 //@TODO: hacer que esto sea log2(TOTAL_MEM)+1
+#define TOTAL_POWERS_OF_2 29
 
 typedef struct MemoryManagerCDT *MemoryManagerADT;
 
@@ -42,15 +42,9 @@ void *allocMemoryKernel(size_t memoryToAllocate);
 void freeMemoryKernel(void *ptr);
 
 /**
- *  Refleja la memoria ocupada y libre del Memory Manager (incluyendo los struct block)
- *  @return string representando lo antedicho
- */
-// char *memStatus(MemoryManagerADT mm); //@TODO: Chequear qué retornamos
-
-/**
  *  Refleja la memoria ocupada y libre del Memory Manager del Kernel (incluyendo los struct block)
  *  @return string representando lo antedicho
  */
-MemStatus *memStatusKernel(); //@TODO: Chequear qué retornamos
+MemStatus *memStatusKernel();
 
 #endif

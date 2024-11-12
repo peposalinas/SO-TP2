@@ -1,6 +1,8 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "pipes.h"
 
-#define PIPE_WRONG(id) (pipeArray[id].inUse == 0 || id < 0 || id >= MAX_PIPES)
+#define PIPE_WRONG(id) ((id) < 0 || (id) >= MAX_PIPES || pipeArray[(id)].inUse == 0)
 
 static int destroyPipe(int id);
 
@@ -11,7 +13,7 @@ uint8_t endOfText = ETX;
 
 int createPipe(int id)
 {
-    if (pipeArray[id].inUse != 0 || id < 0 || id >= MAX_PIPES)
+    if (id < 0 || id >= MAX_PIPES || pipeArray[id].inUse != 0)
     {
         return -1;
     }

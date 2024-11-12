@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <stdint.h>
 #include "test_util.h"
 #include "libc.h"
@@ -5,9 +7,9 @@
 #define SEM_ID 1 // "sem"
 #define TOTAL_PAIR_PROCESSES 3
 
-int64_t global; // shared memory
+int32_t global; // shared memory
 
-void slowInc(int64_t *p, int64_t inc)
+void slowInc(int32_t *p, int64_t inc)
 {
     uint64_t aux = *p;
     yieldProcess(); // This makes the race condition highly probable
@@ -64,7 +66,7 @@ int test_sync(int argc, char *argv[])
 {
     uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
 
-        char *argvDec[] = {argv[0], "-1", argv[1], NULL};
+    char *argvDec[] = {argv[0], "-1", argv[1], NULL};
     char *argvInc[] = {argv[0], "1", argv[1], NULL};
     global = 0;
 

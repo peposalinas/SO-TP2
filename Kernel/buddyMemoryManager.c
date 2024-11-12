@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "MemoryManagerADT.h"
 
 #define SWAP_BLOCKS(block1, block2) \
@@ -30,7 +32,6 @@ static size_t roundUpToPowerOf2(size_t size)
     return power;
 }
 
-// La hago con size_t en vez de double porque siempre la voy a llamar con una potencia de 2
 static size_t log2(size_t x)
 {
     int result = 0;
@@ -204,7 +205,6 @@ void *allocMemory(MemoryManagerADT memoryManager, size_t memoryToAllocate)
     return toReturn == NULL ? NULL : (void *)((char *)toReturn + sizeof(struct Block));
 }
 
-//@TODO: agregar validación de puntero ya asignado
 void freeMemory(MemoryManagerADT mm, void *ptr)
 {
     if (ptr == NULL || (ptr < mm->mem_start || ptr >= (mm->mem_start + mm->total_size)))

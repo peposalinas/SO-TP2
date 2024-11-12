@@ -19,3 +19,6 @@ run.sh
 *.qcow2
 *.vdi
 *.vmdk
+strace_out
+report.tasks
+.config

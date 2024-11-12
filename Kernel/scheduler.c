@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "scheduler.h"
 
 typedef struct process_list
@@ -28,7 +30,7 @@ bool compareProcesses(void *p1, void *p2)
 
 static int checkPID(uint32_t pid)
 {
-    if (pid > MAX_PROCESSES || pid < 0 || scheduler_kernel->processes[pid] == NULL)
+    if (pid >= MAX_PROCESSES || scheduler_kernel->processes[pid] == NULL)
     {
         return -1;
     }

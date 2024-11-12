@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <stdint.h>
 #include <string.h>
 #include <lib.h>
@@ -26,11 +28,6 @@ static void *const sampleCodeModuleAddress = (void *)0x400000;
 static void *const sampleDataModuleAddress = (void *)0x500000;
 
 static int idle(int argc, char *argv[]);
-int64_t test_processes(uint64_t argc, char *argv[]);
-void test_prio(uint64_t argc, char *argvTestPrio[]);
-
-int test_waitpid();
-int test_child();
 
 typedef int (*EntryPoint)();
 
@@ -109,24 +106,6 @@ int main()
 
 	char *argvIdle[2] = {"idle", NULL};
 	schedulerAddStandardProcess("idle", LOWEST_PRIO, idle, 1, argvIdle);
-	// schedulerAddProcess("test_waitpid", HIGHEST_PRIO, test_waitpid, 1, argvIdle);
-
-	// Test_processes
-
-	// char *argvTest[2] = {"10", NULL};
-	// schedulerAddProcess("test", HIGHEST_PRIO, test_processes, 1, argvTest);
-
-	// Fin Test_processes
-
-	// Test_prio
-
-	// char *argvTestPrio[2] = {"test_prio", NULL};
-	// uint64_t test_pid = schedulerAddProcess("test_prio", HIGHEST_PRIO, test_prio, 1, argvTestPrio); // TENEMOS que correrlo en máxima prioridad
-
-	// Fin Test_prio
-
-	// int val = wait_pid(test_pid);
-	// ncPrintDec(val);
 
 	char *argvTerminal[2] = {"terminal", NULL};
 	int terminalPipes[2] = {TERMINAL_PIPE, TERMINAL_PIPE};
@@ -135,9 +114,7 @@ int main()
 	uint64_t sample_code_pid = schedulerAddStandardProcess("sampleCodeModule", DEFAULT_PRIORITY, (EntryPoint)sampleCodeModuleAddress, 1, argvSampleCode);
 	_sti();
 	wait_pid(terminal_pid);
-	wait_pid(sample_code_pid); // Hace falta??? DA UN WARNING
-
-	//  testMM("100000");
+	wait_pid(sample_code_pid);
 
 	return 0;
 }
@@ -147,39 +124,5 @@ int idle(int argc, char *argv[])
 	while (1)
 	{
 	};
-	return 0;
-}
-
-int test_waitpid()
-{
-	char *argvTest[1] = {NULL};
-	ncNewline();
-	ncPrint("Empece (parent): ");
-	ncPrintDec(getRunningPid());
-	ncNewline();
-	ncPrint("Waiting for my child");
-	int pidChild = schedulerAddStandardProcess("test_child", MEDIUM_PRIO, test_child, 1, argvTest);
-	wait_pid(pidChild);
-	ncPrint("My child has finished");
-	exitProcess(0);
-	return 0;
-}
-
-int test_child(int argc, char *argv[])
-{
-	ncNewline();
-	ncPrint("Empece (child)");
-	schedulerYield();
-	ncNewline();
-	for (int i = 0; i < 5; i++)
-	{
-		ncNewline();
-		ncPrintDec(i);
-		ncNewline();
-		bussy_wait(10000000);
-	}
-	ncPrint("Termine (child)");
-	ncNewline();
-	exitProcess(0);
 	return 0;
 }

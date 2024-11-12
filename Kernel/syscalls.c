@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <syscalls.h>
 #include <time.h>
 #include <audioDriver.h>
@@ -75,10 +77,10 @@ uint8_t fontSizeDown()
 
 void getTime(uint8_t pb[])
 {
-	uint8_t buff[64] = {'0'};
+	uint8_t buff[64] = {0};
 	uint8_t t;
 	uint8_t idx = 0;
-	for (uint8_t i = 2; i >= 0; i--)
+	for (int8_t i = 2; i >= 0; i--)
 	{
 		t = getCurrentTime(i);
 		if (i == 2)
@@ -157,7 +159,6 @@ void freeM(void *ptr)
 	freeMemoryKernel(ptr);
 }
 
-//@TODO: implementar
 MemStatus *memStatus()
 {
 	return memStatusKernel();
