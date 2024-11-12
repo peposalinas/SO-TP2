@@ -264,7 +264,7 @@ int schedulerUnblockProcess(uint32_t pid)
 uint64_t schedulerChangePriority(uint64_t pid, int priority)
 {
 
-    if (checkPID(pid) == -1 || priority < 0 || priority >= QTY_PRIORITIES || scheduler_kernel->processes[pid]->state == RUNNING) // VOS DECIS????
+    if (checkPID(pid) == -1 || priority < 0 || priority >= QTY_PRIORITIES || scheduler_kernel->processes[pid]->state == RUNNING)
     {
         return -1;
     }
