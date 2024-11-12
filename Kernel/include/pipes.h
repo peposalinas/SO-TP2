@@ -3,6 +3,8 @@
 #include "semaphores.h"
 #include "definitions.h"
 
+#define PIPE_WRONG(id) ((id) < 0 || (id) >= MAX_PIPES || pipeArray[(id)].inUse == 0)
+
 typedef struct pipe_t
 {
     char buffer[PIPE_SIZE];

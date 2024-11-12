@@ -2,8 +2,6 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <shell.h>
 
-// ###################################################################
-// definiciones para los commandos
 typedef struct command_t
 {
     char *name;
@@ -46,8 +44,6 @@ static command_t commands[LETTERS][WORDS] = {{{0, 0}},
                                              {{0, 0}},
                                              {{0, 0}},
                                              {{"wc", (void *)wc}}};
-
-// ###################################################################
 
 static uint16_t offsets[BUFF_MAX] = {0};
 static char buffer[BUFF_MAX];
@@ -233,7 +229,7 @@ int findAndExecCmd(char *cmdName, int argc, char *argv[], int foreground)
                 {
                     setIOPipes(KEYBOARD_PIPE, TERMINAL_PIPE);
                 }
-
+                setWaitPID(-1);
                 return 1;
             }
         }

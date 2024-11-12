@@ -2,8 +2,6 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "pipes.h"
 
-#define PIPE_WRONG(id) ((id) < 0 || (id) >= MAX_PIPES || pipeArray[(id)].inUse == 0)
-
 static int destroyPipe(int id);
 
 pipe_t pipeArray[MAX_PIPES] = {0};
